@@ -248,7 +248,6 @@ public class DodgeBallGameController : MonoBehaviour
         for (int i = 0; i < list.Count; i++)
         {
             list[i].SetActive(i < numOfLosers);
-            Debug.Log("Purple is dead in SetActiveLosers");
         }
     }
 
@@ -264,7 +263,6 @@ public class DodgeBallGameController : MonoBehaviour
                 numLosers++;
             }
         }
-        Debug.Log("Purple is dead in IncrementActiveLosers");
         SetActiveLosers(list, numLosers + 1);
     }
 
@@ -611,8 +609,8 @@ public class DodgeBallGameController : MonoBehaviour
                 StartCoroutine(GameCountdown());
             }
         }
-        m_NumberOfBluePlayersRemaining = 4;
-        m_NumberOfPurplePlayersRemaining = 4;
+        m_NumberOfBluePlayersRemaining = 1;
+        m_NumberOfPurplePlayersRemaining = 1;
 
         m_GameEnded = false;
         m_NumFlagDrops = 0;

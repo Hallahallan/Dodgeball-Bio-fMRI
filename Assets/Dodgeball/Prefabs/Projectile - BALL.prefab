@@ -206,7 +206,7 @@ MonoBehaviour:
   TeamToIgnore: 0
   thrownBy: {fileID: 0}
   FlashFrequency: 3
-  FlashColor: {r: 1, g: 1, b: 1, a: 1}
+  FlashColor: {r: 0.5, g: 0, b: 0, a: 1}
 --- !u!1 &6461313653667732308
 GameObject:
   m_ObjectHideFlags: 0
