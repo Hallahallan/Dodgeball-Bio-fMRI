@@ -81,8 +81,8 @@ public class DodgeBallGameController : MonoBehaviour
     public GameObject PurpleTeamWonUI;
     public TMP_Text CountDownText;
 
-    private int m_NumberOfBluePlayersRemaining = 4; //current number of blue players remaining in elimination mode
-    private int m_NumberOfPurplePlayersRemaining = 4; //current number of purple players remaining in elimination mode
+    private int m_NumberOfBluePlayersRemaining = 1; //current number of blue players remaining in elimination mode
+    private int m_NumberOfPurplePlayersRemaining = 1; //current number of purple players remaining in elimination mode
     private SimpleMultiAgentGroup m_Team0AgentGroup;
     private SimpleMultiAgentGroup m_Team1AgentGroup;
 
@@ -248,6 +248,7 @@ public class DodgeBallGameController : MonoBehaviour
         for (int i = 0; i < list.Count; i++)
         {
             list[i].SetActive(i < numOfLosers);
+            Debug.Log("Purple is dead in SetActiveLosers");
         }
     }
 
@@ -263,7 +264,8 @@ public class DodgeBallGameController : MonoBehaviour
                 numLosers++;
             }
         }
-        SetActiveLosers(list, Math.Min(numLosers + 1, 3));
+        Debug.Log("Purple is dead in IncrementActiveLosers");
+        SetActiveLosers(list, numLosers + 1);
     }
 
     // Drop flag if agent is holding enemy flag.
@@ -679,6 +681,7 @@ public class DodgeBallGameController : MonoBehaviour
         if (!m_Initialized)
         {
             Initialize();
+            Debug.Log("Continuous update");
         }
     }
 }

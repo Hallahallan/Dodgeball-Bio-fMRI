@@ -26,7 +26,7 @@ namespace Unity.MLAgentsExamples
 
 
         private Vector3 m_startingPos; //the starting position of the target
-        private Agent m_agentTouching; //the agent currently touching the target
+        //private Agent m_agentTouching; //the agent currently touching the target
 
         [System.Serializable]
         public class TriggerEvent : UnityEvent<Collider>
