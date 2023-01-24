@@ -457,6 +457,7 @@ GameObject:
   - component: {fileID: 2362376523542422418}
   - component: {fileID: 2362376523542422416}
   - component: {fileID: 2362376523542422419}
+  - component: {fileID: 8740857157229022143}
   m_Layer: 0
   m_Name: Headband
   m_TagString: Untagged
@@ -527,6 +528,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8740857157229022143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2362376523542422421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c6756fd78245e247badd336fc2ae606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headBand: {fileID: 8740857157229022143}
+  greenBand: {fileID: 2100000, guid: e80a2dd52d1bc34498ea40d936a8fde2, type: 2}
+  yellowBand: {fileID: 2100000, guid: afff01ae05397a645b6360249a280199, type: 2}
+  redBand: {fileID: 2100000, guid: e5ba98543bf4a454ba7ee1752e55df62, type: 2}
 --- !u!1 &2362376523882509948
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,6 +743,9 @@ MonoBehaviour:
   teamID: 0
   ThrowController: {fileID: 3769505969442263798}
   AgentHealth: {fileID: 0}
+  NumberOfTimesPlayerCanBeHit: 5
+  HitPointsRemaining: 0
+  headBand: {fileID: 8740857157229022143}
   AgentShield: {fileID: 0}
   input: {fileID: 4634961037190143001}
   currentNumberOfBalls: 0
@@ -735,7 +755,6 @@ MonoBehaviour:
   TeamFlag: {fileID: 0}
   AgentRb: {fileID: 0}
   HitByParticles: {fileID: 3769505969307490878}
-  HitSoundAudioSource: {fileID: 2362376524419360332}
   BallUIList:
   - {fileID: 3769505970447387363}
   - {fileID: 146715882163576314}
@@ -748,25 +767,17 @@ MonoBehaviour:
   StunnedEffect: {fileID: 3931382057577865717}
   Flag: {fileID: 2382332072725965065}
   StunnedCollider: {fileID: 1138591613525523478}
-  BallPickupAudioClip: {fileID: 8300000, guid: c17e4672c2bb74704a4bad67e9b1538a, type: 3}
-  TauntVoiceAudioClip: {fileID: 0}
-  HurtVoiceAudioClip: {fileID: 8300000, guid: a1c47579c612843f3945e533db730d65, type: 3}
-  BallImpactAudioClip: {fileID: 8300000, guid: 706fc36d9efe9405ab1d1ff638011389, type: 3}
   FlagAnimator: {fileID: 2814025336158868959}
   VictoryDanceAnimation: {fileID: 537257248718719853}
-  NumberOfTimesPlayerCanBeHit: 5
-  HitPointsRemaining: 0
   m_PlayerInitialized: 0
   m_BehaviorParameters: {fileID: 0}
   m_InputH: 0
   m_ThrowInput: 0
   m_DashInput: 0
-  m_IsStunned: 0
   m_StunTime: 0
   m_BallBuffer: {fileID: 0}
   m_OtherAgentsBuffer: {fileID: 0}
   disableInputCollectionInHeuristicCallback: 0
-  ResetSceneIfIDie: 0
 --- !u!114 &2362376524419360311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -880,7 +891,6 @@ MonoBehaviour:
   walkingAnimScale: 0.1
   bodyMesh: {fileID: 2362376525516299093}
   groundCheck: {fileID: 2362376524419360322}
-  isSlowed: 0
 --- !u!114 &2362376524419360322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6229,7 +6239,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5545993361f7ef8479dce19256c84f06, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -10974,7 +10984,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 93c97da0a9a11174ab89575db81f7917, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -21282,7 +21292,6 @@ MonoBehaviour:
   MuzzleFlashObject: {fileID: 0}
   PlaySound: 1
   forceMode: 2
-  GunSFX: {fileID: 0}
   UseScreenShake: 0
   ShakeTransform: 0
   ShakeDuration: 0.05

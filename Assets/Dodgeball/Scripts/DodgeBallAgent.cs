@@ -11,7 +11,6 @@ using Random = UnityEngine.Random;
 
 public class DodgeBallAgent : Agent
 {
-
     [Header("TEAM")]
 
     public int teamID;
@@ -19,6 +18,9 @@ public class DodgeBallAgent : Agent
     public ThrowBall ThrowController;
 
     [Header("HEALTH")] public AgentHealth AgentHealth;
+    public int NumberOfTimesPlayerCanBeHit = 5;
+    public int HitPointsRemaining; //how many more times can we be hit
+    public HeadBand headBand;
 
     [Header("SHIELD")] public ShieldController AgentShield;
 
@@ -55,11 +57,6 @@ public class DodgeBallAgent : Agent
     
     [Header("ANIMATIONS")] public Animator FlagAnimator;
     public Animator VictoryDanceAnimation;
-
-    [HideInInspector]
-    public int NumberOfTimesPlayerCanBeHit = 5;
-    [HideInInspector]
-    public int HitPointsRemaining; //how many more times can we be hit
 
     [Header("OTHER")] public bool m_PlayerInitialized;
     [HideInInspector]
@@ -219,6 +216,23 @@ public class DodgeBallAgent : Agent
             var active = i < numOfBalls;
             BallUIList[i].gameObject.SetActive(active);
             i++;
+        }
+    }
+
+    public void setHeadBandColor(int hp)
+    {
+        // Resources.Load<Material>("pink");
+        switch (hp)  // Headband should change color when hit
+        {
+            case 3:
+                headBand.setGreenBand();
+                break;
+            case 2:
+                headBand.setYellowBand();
+                break;
+            case 1:
+                headBand.setRedBand();
+                break;
         }
     }
 
@@ -591,6 +605,7 @@ public class DodgeBallAgent : Agent
             if (db.TeamToIgnore != -1 && db.TeamToIgnore != m_BehaviorParameters.TeamId) //HIT BY LIVE BALL
             {
                 PlayHitFX();
+                // setActiveHealth();
                 m_GameController.PlayerWasHit(this, db.thrownBy);
                 db.BallIsInPlay(false);
             }
