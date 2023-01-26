@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45140392, g: 0.5008938, b: 0.5723154, a: 1}
+  m_IndirectSpecularColor: {r: 0.45140368, g: 0.50089365, b: 0.5723147, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -14665,7 +14665,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.9920793, y: 1}
+    m_SensorSize: {x: 1.802603, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -14681,7 +14681,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367967954}
-  m_LocalRotation: {x: 8.759799e-11, y: 0.9997235, z: -0.02351441, w: 0.0000000037242598}
+  m_LocalRotation: {x: -2.0885007e-17, y: 0.9997235, z: -0.023514427, w: -8.8793283e-16}
   m_LocalPosition: {x: 16, y: 3.1269999, z: 15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -23227,6 +23227,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4059257948444778664, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4993607472596837027, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: m_Name
@@ -23286,6 +23291,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234456142238178022, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8878816551743214093, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cc1d375350254c0585ef6e96a4ed1e5, type: 3}
@@ -23770,7 +23785,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8697938321410268827}
-  m_LocalRotation: {x: 8.759799e-11, y: 0.9997235, z: -0.02351441, w: 0.0000000037242598}
+  m_LocalRotation: {x: -2.0885007e-17, y: 0.9997235, z: -0.023514427, w: -8.8793283e-16}
   m_LocalPosition: {x: 16, y: 3.1269999, z: 15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

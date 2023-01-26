@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45140404, g: 0.50089407, b: 0.5723157, a: 1}
+  m_IndirectSpecularColor: {r: 0.45140368, g: 0.50089365, b: 0.5723147, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -912,18 +912,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 97764604}
   m_CullTransparentMesh: 0
---- !u!114 &103884826 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3307198850312873416, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
-    type: 3}
-  m_PrefabInstance: {fileID: 725642116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &134432280 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6998761788816983504, guid: 4ecf4a463174f483ca31be8c5678c123,
@@ -2044,18 +2032,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 538359583}
   m_CullTransparentMesh: 1
---- !u!114 &544659462 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1888153802631525504, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
-    type: 3}
-  m_PrefabInstance: {fileID: 725642116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &545571558
 GameObject:
   m_ObjectHideFlags: 0
@@ -2761,18 +2737,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695066531}
   m_CullTransparentMesh: 0
---- !u!114 &704226639 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5099172559618476920, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
-    type: 3}
-  m_PrefabInstance: {fileID: 725642116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &713213190
 GameObject:
   m_ObjectHideFlags: 0
@@ -3255,6 +3219,21 @@ PrefabInstance:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1669244616762355139, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_SensorName
+      value: BufferSensor
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669244616762355139, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservableSize
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669244616762355139, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_MaxNumObservables
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1774237444430219363, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: m_Material
@@ -3284,7 +3263,7 @@ PrefabInstance:
         type: 3}
       propertyPath: impulseSource
       value: 
-      objectReference: {fileID: 544659462}
+      objectReference: {fileID: 0}
     - target: {fileID: 1888153802631525511, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: UseScreenShake
@@ -3309,7 +3288,7 @@ PrefabInstance:
         type: 3}
       propertyPath: impulseSource
       value: 
-      objectReference: {fileID: 1997139178}
+      objectReference: {fileID: 0}
     - target: {fileID: 2190742452806193648, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: UseScreenShake
@@ -3379,7 +3358,7 @@ PrefabInstance:
         type: 3}
       propertyPath: impulseSource
       value: 
-      objectReference: {fileID: 947182309}
+      objectReference: {fileID: 0}
     - target: {fileID: 2528645619171923933, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: UseScreenShake
@@ -3412,9 +3391,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2725496699599259447, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
+      propertyPath: UseVectorObs
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2725496699599259447, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
       propertyPath: HurtVoiceAudioClip
       value: 
       objectReference: {fileID: 8300000, guid: d665b1923fff84cdc8206331ecbf91dc, type: 3}
+    - target: {fileID: 2725496699599259471, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_UseChildSensors
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2725496699599259471, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservableAttributeHandling
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2725496699599259471, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_BrainParameters.NumStackedVectorObservations
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2807304926801441685, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2818958117034701299, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: m_Material
@@ -3449,7 +3453,7 @@ PrefabInstance:
         type: 3}
       propertyPath: impulseSource
       value: 
-      objectReference: {fileID: 103884826}
+      objectReference: {fileID: 0}
     - target: {fileID: 3307198850312873423, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: UseScreenShake
@@ -3504,6 +3508,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Material
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059257948444778664, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133098751746026813, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4135050539489841524, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
@@ -3759,7 +3773,7 @@ PrefabInstance:
         type: 3}
       propertyPath: impulseSource
       value: 
-      objectReference: {fileID: 704226639}
+      objectReference: {fileID: 0}
     - target: {fileID: 5099172559618476927, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: UseScreenShake
@@ -3800,6 +3814,16 @@ PrefabInstance:
       propertyPath: HurtVoiceAudioClip
       value: 
       objectReference: {fileID: 8300000, guid: d665b1923fff84cdc8206331ecbf91dc, type: 3}
+    - target: {fileID: 5793129674659565992, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5793129674659565992, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5895108533257108356, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: m_BehaviorType
@@ -3885,6 +3909,51 @@ PrefabInstance:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6240426935867326899, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_RayLength
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240426935867326899, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_RaysPerDirection
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240426935867326899, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240426935867326899, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240426935867326899, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.data[0]
+      value: blueAgent
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240426935867326899, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.data[1]
+      value: blueAgentFront
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240426935867326899, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.data[2]
+      value: blueAgentFront
+      objectReference: {fileID: 0}
+    - target: {fileID: 6240426935867326899, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.data[3]
+      value: blueAgentFront
+      objectReference: {fileID: 0}
+    - target: {fileID: 6777790449587159088, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6840543617671716912, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: initialized
@@ -3899,7 +3968,7 @@ PrefabInstance:
         type: 3}
       propertyPath: impulseSource
       value: 
-      objectReference: {fileID: 1641734409}
+      objectReference: {fileID: 0}
     - target: {fileID: 6840543617671716912, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: UseScreenShake
@@ -3914,6 +3983,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Volume
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234456142238178022, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8652436317330463248, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8878816551743214093, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cc1d375350254c0585ef6e96a4ed1e5, type: 3}
@@ -4459,18 +4543,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2039461783}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &947182309 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2528645619171923930, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
-    type: 3}
-  m_PrefabInstance: {fileID: 725642116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &962346933
 GameObject:
   m_ObjectHideFlags: 0
@@ -6213,7 +6285,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 2.3794644, y: 1}
+    m_SensorSize: {x: 1.802603, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7209,18 +7281,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1640733138}
   m_CullTransparentMesh: 0
---- !u!114 &1641734409 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6840543617671716919, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
-    type: 3}
-  m_PrefabInstance: {fileID: 725642116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1646169395
 GameObject:
   m_ObjectHideFlags: 0
@@ -8987,18 +9047,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f21684701039c47b5b25da484980805f, type: 3}
---- !u!114 &1997139178 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2190742452806193655, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
-    type: 3}
-  m_PrefabInstance: {fileID: 725642116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1997989679
 GameObject:
   m_ObjectHideFlags: 0
