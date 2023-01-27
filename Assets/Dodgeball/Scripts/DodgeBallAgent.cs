@@ -97,7 +97,9 @@ public class DodgeBallAgent : Agent
 
     public override void Initialize()
     {
-
+        //Disable logging
+        Debug.unityLogger.logEnabled = false; 
+        
         //SETUP STUNNED AS
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
         m_StunnedAudioSource.spatialBlend = 1;
@@ -260,9 +262,11 @@ public class DodgeBallAgent : Agent
             sensor.AddObservation(GetRelativeCoordinates(m_HomeBasePosition));
             sensor.AddObservation(HasEnemyFlag);
         }
-        sensor.AddObservation(0.6969f);
 
-        
+        sensor.AddObservation(0);
+        sensor.AddObservation(0);
+        sensor.AddObservation(0);
+
         // FOLLOWING CODE IS SPECIFIC TO CAPTURE THE FLAG AND MORE THAN 1V1
         /*
         List<DodgeBallGameController.PlayerInfo> teamList;
@@ -323,8 +327,8 @@ public class DodgeBallAgent : Agent
 
         //Location to flag
         sensor.AddObservation(GetRelativeCoordinates(currentFlagPosition));
-        */    
-}
+        */
+    }
 
     //Get normalized position relative to agent's current position.
     private float[] GetRelativeCoordinates(Vector3 pos)
