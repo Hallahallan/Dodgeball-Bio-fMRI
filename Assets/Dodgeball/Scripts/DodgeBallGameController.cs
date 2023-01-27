@@ -5,6 +5,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Random = UnityEngine.Random;
 using TMPro;
+using UnityEditor;
 
 public class DodgeBallGameController : MonoBehaviour
 {
@@ -102,6 +103,9 @@ public class DodgeBallGameController : MonoBehaviour
         [HideInInspector]
         public int TeamID;
     }
+    
+    [Header("Log")]
+    public GameLogger gameLogger;
 
     private bool m_Initialized;
     public List<PlayerInfo> Team0Players;
@@ -326,6 +330,13 @@ public class DodgeBallGameController : MonoBehaviour
     {
         if (m_GameEnded) return;
         m_GameEnded = true;
+        
+        gameLogger = GetComponent<GameLogger>(); 
+        gameLogger.winner = winningTeam; //Who won?
+        gameLogger.playerBlueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
+        gameLogger.playerPurpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
+        gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
+        
         StartCoroutine(ShowWinScreenThenReset(winningTeam, delaySeconds));
     }
 
@@ -475,6 +486,7 @@ public class DodgeBallGameController : MonoBehaviour
                     ThrowAgentGroup.EndGroupEpisode();
                     HitAgentGroup.EndGroupEpisode();
                     print($"Team {throwTeamID} Won");
+                    hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
                     hit.DropAllBalls();
                     if (ShouldPlayEffects)
                     {
