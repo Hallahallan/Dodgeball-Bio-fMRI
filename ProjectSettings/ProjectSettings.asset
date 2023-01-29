@@ -131,6 +131,7 @@ PlayerSettings:
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 11400000, guid: 4d91049841035460f9654c1b5e05c046, type: 2}
+  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -149,6 +150,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.Company.ProductName
+    Standalone: com.NTNU.DodgeBallEnv
   buildNumber:
     Standalone: 0
     iPhone: 0
