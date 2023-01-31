@@ -12,7 +12,7 @@ public class HeadBand : MonoBehaviour
     public void Start()
     {
         //Start with a green band
-        headBand.GetComponent<Renderer> ().material = greenBand;
+        // headBand.GetComponent<Renderer> ().material = greenBand;
     }
     public void setGreenBand()
     {
