@@ -1339,9 +1339,7 @@ MonoBehaviour:
   m_SensorName: AgemtRayPerceptionSensor
   m_DetectableTags:
   - blueAgent
-  - purpleAgent
   - blueAgentFront
-  - purpleAgentFront
   m_RaysPerDirection: 20
   m_MaxRayDegrees: 100
   m_SphereCastRadius: 0.64
@@ -1349,7 +1347,7 @@ MonoBehaviour:
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  m_ObservationStacks: 3
+  m_ObservationStacks: 1
   rayHitColor: {r: 0, g: 1, b: 0.15447211, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
@@ -22793,8 +22791,6 @@ MonoBehaviour:
   m_DetectableTags:
   - wall
   - bush
-  - blueFlag
-  - purpleFlag
   m_RaysPerDirection: 10
   m_MaxRayDegrees: 100
   m_SphereCastRadius: 0.64
@@ -22802,7 +22798,7 @@ MonoBehaviour:
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  m_ObservationStacks: 3
+  m_ObservationStacks: 1
   rayHitColor: {r: 0.072806835, g: 0, b: 1, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 1.2
@@ -23496,7 +23492,7 @@ MonoBehaviour:
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  m_ObservationStacks: 3
+  m_ObservationStacks: 1
   rayHitColor: {r: 0.92176676, g: 0, b: 1, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 1.2
@@ -23712,7 +23708,7 @@ MonoBehaviour:
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 1025
-  m_ObservationStacks: 3
+  m_ObservationStacks: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0

@@ -94,7 +94,9 @@ public class DodgeBallAgent : Agent
 
     public override void Initialize()
     {
-
+        //Disable logging
+        Debug.unityLogger.logEnabled = false; 
+        
         //SETUP STUNNED AS
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
         m_StunnedAudioSource.spatialBlend = 1;
@@ -107,7 +109,6 @@ public class DodgeBallAgent : Agent
 
         var bufferSensors = GetComponentsInChildren<BufferSensorComponent>();
         m_OtherAgentsBuffer = bufferSensors[0];
-
         m_CubeMovement = GetComponent<AgentCubeMovement>();
         m_BehaviorParameters = gameObject.GetComponent<BehaviorParameters>();
 
@@ -256,7 +257,8 @@ public class DodgeBallAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         AddReward(m_BallHoldBonus * (float)currentNumberOfBalls);
-        if (UseVectorObs)
+
+        if (true) // This seems to be set to false at times
         {
             sensor.AddObservation(ThrowController.coolDownWait); //Held DBs Normalized
             sensor.AddObservation(Stunned);
@@ -265,16 +267,22 @@ public class DodgeBallAgent : Agent
             sensor.AddObservation(ballOneHot); //Held DBs Normalized
             sensor.AddObservation((float)HitPointsRemaining / (float)NumberOfTimesPlayerCanBeHit); //Remaining Hit Points Normalized
 
+            
             sensor.AddObservation(Vector3.Dot(AgentRb.velocity, AgentRb.transform.forward));
             sensor.AddObservation(Vector3.Dot(AgentRb.velocity, AgentRb.transform.right));
             sensor.AddObservation(transform.InverseTransformDirection(m_HomeDirection));
             sensor.AddObservation(m_DashCoolDownReady);  // Remaining cooldown, capped at 1
             // Location to base
             sensor.AddObservation(GetRelativeCoordinates(m_HomeBasePosition));
-
             sensor.AddObservation(HasEnemyFlag);
         }
 
+        sensor.AddObservation(0);
+        sensor.AddObservation(0);
+        sensor.AddObservation(0);
+
+        // FOLLOWING CODE IS SPECIFIC TO CAPTURE THE FLAG AND MORE THAN 1V1
+        /*
         List<DodgeBallGameController.PlayerInfo> teamList;
         List<DodgeBallGameController.PlayerInfo> opponentsList;
         if (m_BehaviorParameters.TeamId == 0)
@@ -287,7 +295,7 @@ public class DodgeBallAgent : Agent
             teamList = m_GameController.Team1Players;
             opponentsList = m_GameController.Team0Players;
         }
-
+        
         foreach (var info in teamList)
         {
             if (info.Agent != this && info.Agent.gameObject.activeInHierarchy)
@@ -316,8 +324,10 @@ public class DodgeBallAgent : Agent
                 AddReward(m_OpponentHasFlagPenalty); // If anyone on the opposing team has a flag
             }
         }
+        
         var portionOfEnemiesRemaining = (float)numEnemiesRemaining / (float)opponentsList.Count;
 
+        
         //Different observation for different mode. Enemy Has Flag is only relevant to CTF
         if (m_GameController.GameMode == DodgeBallGameController.GameModeType.CaptureTheFlag)
         {
@@ -327,9 +337,11 @@ public class DodgeBallAgent : Agent
         {
             sensor.AddObservation(numEnemiesRemaining);
         }
+        
 
         //Location to flag
         sensor.AddObservation(GetRelativeCoordinates(currentFlagPosition));
+        */
     }
 
     //Get normalized position relative to agent's current position.
