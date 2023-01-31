@@ -282,66 +282,66 @@ public class DodgeBallAgent : Agent
         sensor.AddObservation(0);
 
         // FOLLOWING CODE IS SPECIFIC TO CAPTURE THE FLAG AND MORE THAN 1V1
-        /*
-        List<DodgeBallGameController.PlayerInfo> teamList;
-        List<DodgeBallGameController.PlayerInfo> opponentsList;
-        if (m_BehaviorParameters.TeamId == 0)
-        {
-            teamList = m_GameController.Team0Players;
-            opponentsList = m_GameController.Team1Players;
-        }
-        else
-        {
-            teamList = m_GameController.Team1Players;
-            opponentsList = m_GameController.Team0Players;
-        }
         
-        foreach (var info in teamList)
-        {
-            if (info.Agent != this && info.Agent.gameObject.activeInHierarchy)
-            {
-                m_OtherAgentsBuffer.AppendObservation(GetOtherAgentData(info));
-            }
-            if (info.Agent.HasEnemyFlag) // If anyone on my team has the enemy flag
-            {
-                AddReward(m_TeamHasFlagBonus);
-            }
-        }
-        //Only opponents who picked up the flag are visible
-        var currentFlagPosition = TeamFlag.transform.position;
-        int numEnemiesRemaining = 0;
-        bool enemyHasFlag = false;
-        foreach (var info in opponentsList)
-        {
-            if (info.Agent.gameObject.activeInHierarchy)
-            {
-                numEnemiesRemaining++;
-            }
-            if (info.Agent.HasEnemyFlag)
-            {
-                enemyHasFlag = true;
-                currentFlagPosition = info.Agent.transform.position;
-                AddReward(m_OpponentHasFlagPenalty); // If anyone on the opposing team has a flag
-            }
-        }
-        
-        var portionOfEnemiesRemaining = (float)numEnemiesRemaining / (float)opponentsList.Count;
+         List<DodgeBallGameController.PlayerInfo> teamList;
+         List<DodgeBallGameController.PlayerInfo> opponentsList;
+         if (m_BehaviorParameters.TeamId == 0)
+         {
+             teamList = m_GameController.Team0Players;
+             opponentsList = m_GameController.Team1Players;
+         }
+         else
+         {
+             teamList = m_GameController.Team1Players;
+             opponentsList = m_GameController.Team0Players;
+         }
+         
+         foreach (var info in teamList)
+         {
+             if (info.Agent != this && info.Agent.gameObject.activeInHierarchy)
+             {
+                 m_OtherAgentsBuffer.AppendObservation(GetOtherAgentData(info));
+             }
+             if (info.Agent.HasEnemyFlag) // If anyone on my team has the enemy flag
+             {
+                 AddReward(m_TeamHasFlagBonus);
+             }
+         }
+         //Only opponents who picked up the flag are visible
+         var currentFlagPosition = TeamFlag.transform.position;
+         int numEnemiesRemaining = 0;
+         bool enemyHasFlag = false;
+         foreach (var info in opponentsList)
+         {
+             if (info.Agent.gameObject.activeInHierarchy)
+             {
+                 numEnemiesRemaining++;
+             }
+             if (info.Agent.HasEnemyFlag)
+             {
+                 enemyHasFlag = true;
+                 currentFlagPosition = info.Agent.transform.position;
+                 AddReward(m_OpponentHasFlagPenalty); // If anyone on the opposing team has a flag
+             }
+         }
+         
+         var portionOfEnemiesRemaining = (float)numEnemiesRemaining / (float)opponentsList.Count;
 
-        
-        //Different observation for different mode. Enemy Has Flag is only relevant to CTF
-        if (m_GameController.GameMode == DodgeBallGameController.GameModeType.CaptureTheFlag)
-        {
-            sensor.AddObservation(enemyHasFlag);
-        }
-        else
-        {
-            sensor.AddObservation(numEnemiesRemaining);
-        }
-        
+         
+         //Different observation for different mode. Enemy Has Flag is only relevant to CTF
+         if (m_GameController.GameMode == DodgeBallGameController.GameModeType.CaptureTheFlag)
+         {
+             sensor.AddObservation(enemyHasFlag);
+         }
+         else
+         {
+             sensor.AddObservation(numEnemiesRemaining);
+         }
+         
 
-        //Location to flag
-        sensor.AddObservation(GetRelativeCoordinates(currentFlagPosition));
-        */
+         //Location to flag
+         sensor.AddObservation(GetRelativeCoordinates(currentFlagPosition));
+        
     }
 
     //Get normalized position relative to agent's current position.
