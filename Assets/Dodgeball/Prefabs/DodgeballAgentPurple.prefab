@@ -22793,8 +22793,6 @@ MonoBehaviour:
   m_DetectableTags:
   - wall
   - bush
-  - BlueFlag
-  - PurpleFlag
   m_RaysPerDirection: 10
   m_MaxRayDegrees: 100
   m_SphereCastRadius: 0.64
