@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4079690138678197003
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 734259947475718076, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540946427745322839, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540946427745322839, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540946427745322839, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.data[2]
+      value: blueFlag
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.127
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360329, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_Name
+      value: DodgeballAgentBlueNEAT
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360333, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: TeamFlag
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362376524419360333, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: HomeBaseLocation
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3930381481048949247, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3930677547192317129, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5214269509853753484, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283312304214932761, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283312304214932761, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283312304214932761, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: m_DetectableTags.Array.data[1]
+      value: purpleAgentFront
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 36ed6b311c61f4b5bac2e2a72c68657f, type: 3}

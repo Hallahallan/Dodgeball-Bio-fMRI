@@ -22808,7 +22808,9 @@ MonoBehaviour:
   m_SensorName: AgemtRayPerceptionSensor
   m_DetectableTags:
   - purpleAgent
+  - blueAgent
   - purpleAgentFront
+  - blueAgentFront
   m_RaysPerDirection: 20
   m_MaxRayDegrees: 100
   m_SphereCastRadius: 0.64
@@ -23034,6 +23036,8 @@ MonoBehaviour:
   m_DetectableTags:
   - wall
   - bush
+  - purpleFlag
+  - blueFlag
   m_RaysPerDirection: 10
   m_MaxRayDegrees: 100
   m_SphereCastRadius: 0.64
