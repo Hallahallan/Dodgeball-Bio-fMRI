@@ -59,6 +59,8 @@ namespace MLAgents
         public AgentCubeGroundCheck groundCheck;
         private float inputH;
         private float inputV;
+        private float x;
+        private float y;
         DodgeBallAgentInput m_Input;
 
         private DodgeBallAgent m_Agent;
@@ -113,8 +115,10 @@ namespace MLAgents
             if (!ReferenceEquals(null, m_Input))
             {
                 rotate = m_Input.rotateInput;
-                inputH = m_Input.moveInput.x;
-                inputV = m_Input.moveInput.y;
+                inputH = Input.GetAxis("TethyxHorizontal"); //For movement with Tethyx Joystick
+                inputV = Input.GetAxis("TethyxVertical"); //For movement with Tethyx Joystick
+                // inputH = m_Input.moveInput.x; // For movement with WASD
+                // inputV = m_Input.moveInput.y; // For movement with WASD
             }
             var movDir = transform.TransformDirection(new Vector3(inputH, 0, inputV));
             RunOnGround(movDir);
