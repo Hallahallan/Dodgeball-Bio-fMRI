@@ -95,7 +95,7 @@ public class DodgeBallAgent : Agent
     public override void Initialize()
     {
         //Disable logging
-        Debug.unityLogger.logEnabled = false; 
+        //Debug.unityLogger.logEnabled = false; 
         
         //SETUP STUNNED AS
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
@@ -276,10 +276,7 @@ public class DodgeBallAgent : Agent
             sensor.AddObservation(GetRelativeCoordinates(m_HomeBasePosition));
             sensor.AddObservation(HasEnemyFlag);
         }
-
-        sensor.AddObservation(0);
-        sensor.AddObservation(0);
-        sensor.AddObservation(0);
+        
 
         // FOLLOWING CODE IS SPECIFIC TO CAPTURE THE FLAG AND MORE THAN 1V1
         

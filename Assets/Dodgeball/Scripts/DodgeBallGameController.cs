@@ -460,7 +460,7 @@ public class DodgeBallGameController : MonoBehaviour
         var HitAgentGroup = hitTeamID == 1 ? m_Team1AgentGroup : m_Team0AgentGroup;
         var ThrowAgentGroup = hitTeamID == 1 ? m_Team0AgentGroup : m_Team1AgentGroup;
         float hitBonus = GameMode == GameModeType.Elimination ? EliminationHitBonus : CTFHitBonus;
-
+        
         // Always drop the flag
         if (DropFlagImmediately)
         {
@@ -481,10 +481,11 @@ public class DodgeBallGameController : MonoBehaviour
                 // The current agent was just killed and is the final agent
                 if (m_NumberOfBluePlayersRemaining == 0 || m_NumberOfPurplePlayersRemaining == 0 || hit.gameObject == PlayerGameObject)
                 {
-                    ThrowAgentGroup.AddGroupReward(2.0f - m_TimeBonus * (m_ResetTimer / MaxEnvironmentSteps));
-                    HitAgentGroup.AddGroupReward(-1.0f);
-                    ThrowAgentGroup.EndGroupEpisode();
+                    thrower.AddReward(2.0f - m_TimeBonus * (m_ResetTimer / MaxEnvironmentSteps));
+                    hit.AddReward(-1.0f);
                     HitAgentGroup.EndGroupEpisode();
+                    ThrowAgentGroup.EndGroupEpisode();
+                    
                     print($"Team {throwTeamID} Won");
                     hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
                     hit.DropAllBalls();
@@ -493,7 +494,10 @@ public class DodgeBallGameController : MonoBehaviour
                         // Don't poof the last agent
                         StartCoroutine(TumbleThenPoof(hit, false));
                     }
-                    EndGame(throwTeamID);
+                    hit.gameObject.SetActive(false);
+                    thrower.gameObject.SetActive(false);
+                    //EndGame(throwTeamID);
+                    //GetComponent<Unity.MLAgents.Policies.BehaviorParameters>().BehaviorType;
                 }
                 // The current agent was just killed but there are other agents
                 else
