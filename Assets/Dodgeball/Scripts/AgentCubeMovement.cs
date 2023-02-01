@@ -42,10 +42,11 @@ namespace MLAgents
         public float MouseSensitivity = 1;
         // public float mouseSmoothing = 0.5f;
         public float MouseSmoothTime = 0.05f;
-        private float m_Yaw;
-        private float m_SmoothYaw;
-        private float m_YawSmoothV;
+        // private float m_Yaw; // USED FOR AIMING WITH MOUSE
+        // private float m_SmoothYaw; // USED FOR AIMING WITH MOUSE
+        // private float m_YawSmoothV; // USED FOR AIMING WITH MOUSE
         Quaternion originalRotation;
+        public float rotateSpeed = 100f; // Amount the player should turn while holding the turn button
 
         [Header("FALLING FORCE")]
         //force applied to agent while falling
@@ -61,7 +62,7 @@ namespace MLAgents
         public AgentCubeGroundCheck groundCheck;
         private float inputH;
         private float inputV;
-        private const string ShootTethyx = "TethyxFire";
+        private const string ShootTethyx = "TethyxFire"; //Constant string for finding the trigger button on tethyx
         DodgeBallAgentInput m_Input;
 
         private DodgeBallAgent m_Agent;
@@ -84,14 +85,25 @@ namespace MLAgents
                 angle -= 360F;
             return Mathf.Clamp(angle, min, max);
         }
-
-        public void Look(float xRot = 0)
-        {
-            m_Yaw += xRot * MouseSensitivity;
-            float smoothYawOld = m_SmoothYaw;
-            m_SmoothYaw = Mathf.SmoothDampAngle(m_SmoothYaw, m_Yaw, ref m_YawSmoothV, MouseSmoothTime);
-            rb.MoveRotation(rb.rotation * Quaternion.AngleAxis(Mathf.DeltaAngle(smoothYawOld, m_SmoothYaw), transform.up));
+        
+        public void LookZX() {
+            float rotateAmount = 0f;
+            if (Input.GetKey(KeyCode.Z)) {
+                rotateAmount = -1f;
+            } else if (Input.GetKey(KeyCode.X)) {
+                rotateAmount = 1f;
+            }
+            transform.Rotate(Vector3.up, rotateAmount * rotateSpeed * Time.deltaTime);
         }
+        
+        // USED FOR AIMING WITH MOUSE
+        // public void Look(float xRot = 0)
+        // {
+        //     m_Yaw += xRot * MouseSensitivity;
+        //     float smoothYawOld = m_SmoothYaw;
+        //     m_SmoothYaw = Mathf.SmoothDampAngle(m_SmoothYaw, m_Yaw, ref m_YawSmoothV, MouseSmoothTime);
+        //     rb.MoveRotation(rb.rotation * Quaternion.AngleAxis(Mathf.DeltaAngle(smoothYawOld, m_SmoothYaw), transform.up));
+        // }
 
         void FixedUpdate()
         {
@@ -123,7 +135,8 @@ namespace MLAgents
             }
             var movDir = transform.TransformDirection(new Vector3(inputH, 0, inputV));
             RunOnGround(movDir);
-            Look(rotate);
+            // Look(rotate); // USED FOR AIMING WITH MOUSE
+            LookZX();
 
             if (m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_dashPressed))
             {
