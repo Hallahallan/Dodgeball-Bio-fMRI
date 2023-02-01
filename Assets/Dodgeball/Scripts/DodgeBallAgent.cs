@@ -390,7 +390,8 @@ public class DodgeBallAgent : Agent
 
         //HANDLE ROTATION
         // m_CubeMovement.Look(m_Rotate);
-        m_CubeMovement.LookZX();
+        // m_CubeMovement.LookZX();
+        m_CubeMovement.LookT();
 
         //HANDLE XZ MOVEMENT
         var moveDir = transform.TransformDirection(new Vector3(m_InputH, 0, m_InputV));
