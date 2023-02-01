@@ -1,4 +1,6 @@
 //Standardized movement controller for the Agent Cube
+
+using Unity.Barracuda;
 using Unity.MLAgents;
 using UnityEngine;
 
@@ -59,8 +61,7 @@ namespace MLAgents
         public AgentCubeGroundCheck groundCheck;
         private float inputH;
         private float inputV;
-        private float x;
-        private float y;
+        private const string ShootTethyx = "TethyxFire";
         DodgeBallAgentInput m_Input;
 
         private DodgeBallAgent m_Agent;
@@ -128,7 +129,7 @@ namespace MLAgents
             {
                 Dash(rb.transform.TransformDirection(new Vector3(inputH, 0, inputV)));
             }
-            if (m_Agent && m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_throwPressed))
+            if ((m_Agent && m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_throwPressed)) || Input.GetButtonDown(ShootTethyx))
             {
                 m_Agent.ThrowTheBall();
             }
