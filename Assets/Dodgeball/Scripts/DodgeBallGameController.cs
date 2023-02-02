@@ -6,6 +6,7 @@ using Unity.MLAgents;
 using Random = UnityEngine.Random;
 using TMPro;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 public class DodgeBallGameController : MonoBehaviour
 {
@@ -483,8 +484,7 @@ public class DodgeBallGameController : MonoBehaviour
                 {
                     thrower.AddReward(2.0f - m_TimeBonus * (m_ResetTimer / MaxEnvironmentSteps));
                     hit.AddReward(-1.0f);
-                    HitAgentGroup.EndGroupEpisode();
-                    ThrowAgentGroup.EndGroupEpisode();
+
                     
                     print($"Team {throwTeamID} Won");
                     hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
@@ -496,8 +496,21 @@ public class DodgeBallGameController : MonoBehaviour
                     }
                     hit.gameObject.SetActive(false);
                     thrower.gameObject.SetActive(false);
-                    //EndGame(throwTeamID);
-                    //GetComponent<Unity.MLAgents.Policies.BehaviorParameters>().BehaviorType;
+
+                    if (FindObjectsOfType<DodgeBallAgent>().Length == 0)
+                    {
+                        //Resources.FindObjectsOfTypeAll<DodgeBallAgent>();
+                        // Go through all the controllers and end the game accordingly when there are no agents left.
+                        var gameControllers = FindObjectsOfType<DodgeBallGameController>();
+                        foreach (var controller in gameControllers)
+                        {
+                            if (controller != this)
+                            {
+                                controller.ResetScene();
+                            }
+                        }
+                        ResetScene();
+                    }
                 }
                 // The current agent was just killed but there are other agents
                 else
