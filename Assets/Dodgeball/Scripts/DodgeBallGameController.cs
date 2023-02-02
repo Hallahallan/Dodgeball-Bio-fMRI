@@ -484,7 +484,6 @@ public class DodgeBallGameController : MonoBehaviour
                 {
                     thrower.AddReward(2.0f - m_TimeBonus * (m_ResetTimer / MaxEnvironmentSteps));
                     hit.AddReward(-1.0f);
-
                     
                     print($"Team {throwTeamID} Won");
                     hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
@@ -494,22 +493,24 @@ public class DodgeBallGameController : MonoBehaviour
                         // Don't poof the last agent
                         StartCoroutine(TumbleThenPoof(hit, false));
                     }
+                    
+                    hit.EndEpisode();
+                    thrower.EndEpisode();
                     hit.gameObject.SetActive(false);
                     thrower.gameObject.SetActive(false);
-
+                    
                     if (FindObjectsOfType<DodgeBallAgent>().Length == 0)
                     {
-                        //Resources.FindObjectsOfTypeAll<DodgeBallAgent>();
                         // Go through all the controllers and end the game accordingly when there are no agents left.
                         var gameControllers = FindObjectsOfType<DodgeBallGameController>();
                         foreach (var controller in gameControllers)
                         {
-                            if (controller != this)
+                            if (controller != this) // Not this script
                             {
-                                controller.ResetScene();
+                                controller.ResetScene();    // Reset all other levels
                             }
                         }
-                        ResetScene();
+                        ResetScene();   // Reset this level
                     }
                 }
                 // The current agent was just killed but there are other agents
