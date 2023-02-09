@@ -482,7 +482,7 @@ public class DodgeBallGameController : MonoBehaviour
                 // The current agent was just killed and is the final agent
                 if (m_NumberOfBluePlayersRemaining == 0 || m_NumberOfPurplePlayersRemaining == 0 || hit.gameObject == PlayerGameObject)
                 {
-                    thrower.AddReward(2.0f - m_TimeBonus * (m_ResetTimer / MaxEnvironmentSteps));
+                    thrower.AddReward(2.0f - m_TimeBonus * (float)m_ResetTimer / MaxEnvironmentSteps);
                     hit.AddReward(-1.0f);
                     
                     print($"Team {throwTeamID} Won");
