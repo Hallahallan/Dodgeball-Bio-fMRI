@@ -111,6 +111,10 @@ namespace MLAgents
         public void LookT()
         {
             float tethyxInput = Input.GetAxis("TethyxHorizontal");
+            if (tethyxInput <= 0)
+            {
+                tethyxInput *= 2;
+            }
             m_Yaw += tethyxInput * 3;
             float smoothYawOld = m_SmoothYaw;
             m_SmoothYaw = Mathf.SmoothDampAngle(m_SmoothYaw, m_Yaw, ref m_YawSmoothV, MouseSmoothTime);
