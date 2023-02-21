@@ -107,6 +107,7 @@ public class DodgeBallGameController : MonoBehaviour
     [Header("Log")]
     public GameLogger gameLogger;
 
+    private bool fMRI_Initialized;
     private bool m_Initialized;
     public List<PlayerInfo> Team0Players;
     public List<PlayerInfo> Team1Players;
@@ -177,6 +178,8 @@ public class DodgeBallGameController : MonoBehaviour
             }
         }
         m_Initialized = true;
+        fMRI_Initialized = false;   // Will be initialized when fMRI is ready
+        
         ResetScene();
     }
 
@@ -202,7 +205,7 @@ public class DodgeBallGameController : MonoBehaviour
     void FixedUpdate()
     {
         if (!m_Initialized) return;
-        
+
         //RESET SCENE IF WE MaxEnvironmentSteps
         m_ResetTimer += 1;
         if (m_ResetTimer >= MaxEnvironmentSteps)
@@ -697,6 +700,17 @@ public class DodgeBallGameController : MonoBehaviour
         if (!m_Initialized)
         {
             Initialize();
+        }
+        
+        if (!fMRI_Initialized && Input.GetKeyDown(KeyCode.S))   // User has started the game
+        {
+            fMRI_Initialized = true;
+            Time.timeScale = 1.0f;
+        }
+        else if (!fMRI_Initialized && !Input.GetKeyDown(KeyCode.S))
+        {
+            Time.timeScale = 0.0f;
+            return;
         }
     }
 }
