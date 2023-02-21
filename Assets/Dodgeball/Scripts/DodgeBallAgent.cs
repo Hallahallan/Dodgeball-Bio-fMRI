@@ -95,7 +95,7 @@ public class DodgeBallAgent : Agent
     public override void Initialize()
     {
         //Disable logging
-        //Debug.unityLogger.logEnabled = false; 
+        Debug.unityLogger.logEnabled = false; 
         
         //SETUP STUNNED AS
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
