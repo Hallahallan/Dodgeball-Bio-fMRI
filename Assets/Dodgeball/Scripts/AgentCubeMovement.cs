@@ -41,7 +41,7 @@ namespace MLAgents
         [Header("BODY ROTATION")]
         public float MouseSensitivity = 1;
         // public float JoySensitivity = 100000f;
-        // public float mouseSmoothing = 0.5f;
+        public float mouseSmoothing = 0.5f;
         public float MouseSmoothTime = 0.05f;
         private float m_Yaw; // USED FOR AIMING WITH MOUSE
         private float m_SmoothYaw; // USED FOR AIMING WITH MOUSE
@@ -99,13 +99,13 @@ namespace MLAgents
         // }
         
         // USED FOR AIMING WITH MOUSE
-        // public void Look(float xRot = 0)
-        // {
-        //     m_Yaw += xRot * MouseSensitivity;
-        //     float smoothYawOld = m_SmoothYaw;
-        //     m_SmoothYaw = Mathf.SmoothDampAngle(m_SmoothYaw, m_Yaw, ref m_YawSmoothV, MouseSmoothTime);
-        //     rb.MoveRotation(rb.rotation * Quaternion.AngleAxis(Mathf.DeltaAngle(smoothYawOld, m_SmoothYaw), transform.up));
-        // }
+        public void Look(float xRot = 0)
+        {
+            m_Yaw += xRot * MouseSensitivity;
+            float smoothYawOld = m_SmoothYaw;
+            m_SmoothYaw = Mathf.SmoothDampAngle(m_SmoothYaw, m_Yaw, ref m_YawSmoothV, MouseSmoothTime);
+            rb.MoveRotation(rb.rotation * Quaternion.AngleAxis(Mathf.DeltaAngle(smoothYawOld, m_SmoothYaw), transform.up));
+        }
         
         // USED FOR AIMING WITH THE TETHYX JOYSTICK
         public void LookT()
@@ -156,7 +156,7 @@ namespace MLAgents
             }
             var movDir = transform.TransformDirection(new Vector3(inputH, 0, inputV));
             RunOnGround(movDir);
-            // Look(rotate); // USED FOR AIMING WITH MOUSE
+            Look(rotate); // USED FOR AIMING WITH MOUSE
             LookT();
             // LookZX();
 
