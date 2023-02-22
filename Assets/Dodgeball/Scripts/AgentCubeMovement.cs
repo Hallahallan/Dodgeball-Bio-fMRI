@@ -114,12 +114,12 @@ namespace MLAgents
             float tethyxInput = Input.GetAxis("TethyxHorizontal");
             
             // Upper deazone + then compensating the speed to achieve same max rotational speed.
-            tethyxInput = Mathf.Clamp(tethyxInput, -0.4f, 0.4f);
+            tethyxInput = Mathf.Clamp(tethyxInput, -0.3f, 0.4f);
             tethyxInput *= 1.5f;
             
             if (tethyxInput <= 0)
             {
-                tethyxInput *= 2;
+                tethyxInput *= 2.2f;
             }
             
             m_Yaw += tethyxInput * 3;
@@ -159,7 +159,7 @@ namespace MLAgents
                  * accounted for.
                  */
                 
-                // inputH = Input.GetAxis("TethyxHorizontal"); //For movement with Tethyx Joystick
+                // inputH = Input.GetAxis("TethyxHaorizontal"); //For movement with Tethyx Joystick
                 inputV = Input.GetAxis("TethyxVertical"); //For movement with Tethyx Joystick
                 
                 inputH = m_Input.moveInput.x; // For movement with WASD

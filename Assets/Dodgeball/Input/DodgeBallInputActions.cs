@@ -350,6 +350,15 @@ public partial class @DodgeBallInputActions : IInputActionCollection2, IDisposab
         m_UI_Controls = m_UI.FindAction("Controls", throwIfNotFound: true);
         m_UI_Restart = m_UI.FindAction("Restart", throwIfNotFound: true);
     }
+    
+    /*
+     * ""controls"" : [
+                        {
+                            ""name"" : ""tethyxHorizontal"",
+                            ""processors"" : ""AxisDeadzone(min=0.15, max=0.6)
+                        }
+                    ]
+     */
 
     public void Dispose()
     {

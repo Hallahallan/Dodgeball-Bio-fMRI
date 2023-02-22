@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Dodgeball/Scenes/TitleScreen.unity
     guid: 672594697b6cb407a8916064efa3b0b7
-  - enabled: 0
+  - enabled: 1
     path: Assets/Dodgeball/Scenes/Elimination.unity
     guid: ec62cd1f220c34c02a90888cf6c16410
   - enabled: 0
@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Dodgeball/Scenes/BaseLineBushes.unity
     guid: f2cc1d0af76ecf3489a5e3474a10d7f2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Dodgeball/Scenes/BaseLineClean.unity
     guid: ac1bc2f006acab54d9f6802f17c18b6a
   m_configObjects:
