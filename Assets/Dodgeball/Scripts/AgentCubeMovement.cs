@@ -1,5 +1,6 @@
 //Standardized movement controller for the Agent Cube
 
+using System;
 using Unity.Barracuda;
 using Unity.MLAgents;
 using UnityEngine;
@@ -111,10 +112,16 @@ namespace MLAgents
         public void LookT()
         {
             float tethyxInput = Input.GetAxis("TethyxHorizontal");
+            
+            // Upper deazone + then compensating the speed to achieve same max rotational speed.
+            tethyxInput = Mathf.Clamp(tethyxInput, -0.4f, 0.4f);
+            tethyxInput *= 1.5f;
+            
             if (tethyxInput <= 0)
             {
                 tethyxInput *= 2;
             }
+            
             m_Yaw += tethyxInput * 3;
             float smoothYawOld = m_SmoothYaw;
             m_SmoothYaw = Mathf.SmoothDampAngle(m_SmoothYaw, m_Yaw, ref m_YawSmoothV, MouseSmoothTime);
