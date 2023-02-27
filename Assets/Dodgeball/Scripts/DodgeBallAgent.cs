@@ -83,6 +83,17 @@ public class DodgeBallAgent : Agent
     public BufferSensorComponent m_OtherAgentsBuffer;
     float[] ballOneHot = new float[5];
 
+    // Eye tracking variables
+    private GameObject thisObject;  // Agent object for eye tracking
+    private int haveStarted = 0;
+    public Rect myCurrentObjectRect;
+    public Rect myPreviousObjectRect;
+    public int previousUpdateTime;
+    public int currentUpdateTime;
+    public string ttW;
+    public Boolean eyeTrackingActive = false;
+    public Vector2 direction { get; private set; }
+
     //is the current step a decision step for the agent
     private bool m_IsDecisionStep;
 
@@ -95,8 +106,14 @@ public class DodgeBallAgent : Agent
     public override void Initialize()
     {
         //Disable logging
-        Debug.unityLogger.logEnabled = false; 
+        Debug.unityLogger.logEnabled = true; 
         
+        // Find object for eye tracking
+        if (eyeTrackingActive)
+        {
+            thisObject = GameObject.Find("AgentCubePurple");
+        }
+
         //SETUP STUNNED AS
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
         m_StunnedAudioSource.spatialBlend = 1;
@@ -663,5 +680,54 @@ public class DodgeBallAgent : Agent
         var discreteActionsOut = actionsOut.DiscreteActions;
         discreteActionsOut[0] = input.CheckIfInputSinceLastFrame(ref input.m_throwPressed) ? 1 : 0; //dash
         discreteActionsOut[1] = input.CheckIfInputSinceLastFrame(ref input.m_dashPressed) ? 1 : 0; //dash
+    }
+    
+    void Update()
+    {
+        if (eyeTrackingActive)
+        {
+            myCurrentObjectRect = EyeLinkWebLinkUtil.getScreenRectFromGameObject(thisObject);
+
+            if (myCurrentObjectRect != myPreviousObjectRect)
+            {
+                currentUpdateTime = (int)Math.Round(Time.realtimeSinceStartup * 1000 + EyeLinkWebLinkUtil.timeOffset);
+                if (haveStarted == 1)
+                {
+                    ttW = Convert.ToString(EyeLinkWebLinkUtil.iasZeroPoint - previousUpdateTime) + " " + Convert.ToString(EyeLinkWebLinkUtil.iasZeroPoint - currentUpdateTime) +
+                          " !V IAREA RECTANGLE 1 " + Convert.ToString(myPreviousObjectRect.xMin - 25) + " " + Convert.ToString(myPreviousObjectRect.yMin - 25) +
+                          " " + Convert.ToString(myPreviousObjectRect.xMax + 25) + " " + Convert.ToString(myPreviousObjectRect.yMax + 25) + " paddle";
+                    EyeLinkWebLinkUtil.writeIASLine(ttW);
+
+                }
+                myPreviousObjectRect = myCurrentObjectRect;
+                previousUpdateTime = currentUpdateTime;
+
+                if (haveStarted == 0)
+                {
+                    haveStarted = 1;
+                }
+
+            }
+            
+            var eyeData = EyeLinkWebLinkUtil.getSampleData();
+            
+            if (eyeData[0] < myCurrentObjectRect.x)
+            {
+                direction = Vector2.left;
+                //ttW = "Moving Left";
+                //EyeLinkWebLinkUtil.writeIASLine(ttW);
+            }
+
+            else if (eyeData[0] > (myCurrentObjectRect.x + myCurrentObjectRect.width))
+            {
+                direction = Vector2.right;
+            }
+            else
+            {
+                direction = Vector2.zero;
+            }
+            
+            print(direction);
+        }
     }
 }
