@@ -7,6 +7,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Policies;
+using UnityEngine.Windows;
 using Random = UnityEngine.Random;
 
 public class DodgeBallAgent : Agent
@@ -95,13 +96,14 @@ public class DodgeBallAgent : Agent
     public override void Initialize()
     {
         //Disable logging
-        Debug.unityLogger.logEnabled = false; 
+        Debug.unityLogger.logEnabled = true; 
         
         //SETUP STUNNED AS
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
         m_StunnedAudioSource.spatialBlend = 1;
         m_StunnedAudioSource.maxDistance = 250;
-
+        
+        
         //SETUP IMPACT AS
         m_BallImpactAudioSource = gameObject.AddComponent<AudioSource>();
         m_BallImpactAudioSource.spatialBlend = 1;
@@ -111,7 +113,8 @@ public class DodgeBallAgent : Agent
         m_OtherAgentsBuffer = bufferSensors[0];
         m_CubeMovement = GetComponent<AgentCubeMovement>();
         m_BehaviorParameters = gameObject.GetComponent<BehaviorParameters>();
-
+        
+       
         AgentRb = GetComponent<Rigidbody>();
         input = GetComponent<DodgeBallAgentInput>();
         m_GameController = GetComponentInParent<DodgeBallGameController>();
@@ -123,6 +126,7 @@ public class DodgeBallAgent : Agent
         {
             m_StartingPos = transform.position;
             m_StartingRot = transform.rotation;
+           
             //If we don't have a home base, just use the starting position.
             if (HomeBaseLocation is null)
             {
@@ -295,6 +299,7 @@ public class DodgeBallAgent : Agent
          
          foreach (var info in teamList)
          {
+             Debug.Log(info.Agent.gameObject.activeInHierarchy);
              if (info.Agent != this && info.Agent.gameObject.activeInHierarchy)
              {
                  m_OtherAgentsBuffer.AppendObservation(GetOtherAgentData(info));
