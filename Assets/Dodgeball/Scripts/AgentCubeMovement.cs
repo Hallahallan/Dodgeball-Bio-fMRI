@@ -113,14 +113,16 @@ namespace MLAgents
         {
             float tethyxInput = Input.GetAxis("TethyxHorizontal");
             
+            tethyxInput *= 1.5f;
+            //OUTCOMMENTED FOR TESTING, THESE ARE 7T EXCLUSIVE ADAPTIONS
+            /*
             // Upper deazone + then compensating the speed to achieve same max rotational speed.
             tethyxInput = Mathf.Clamp(tethyxInput, -0.3f, 0.4f);
-            tethyxInput *= 1.5f;
-            
             if (tethyxInput <= 0)
             {
                 tethyxInput *= 2.2f;
             }
+            */
             
             m_Yaw += tethyxInput * 3;
             float smoothYawOld = m_SmoothYaw;

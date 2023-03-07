@@ -113,7 +113,7 @@ public partial class @DodgeBallInputActions : IInputActionCollection2, IDisposab
                 {
                     ""name"": ""left"",
                     ""id"": ""5eb9d69e-8df8-443c-93f4-447eeb52b75f"",
-                    ""path"": ""<Keyboard>/b"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -124,7 +124,7 @@ public partial class @DodgeBallInputActions : IInputActionCollection2, IDisposab
                 {
                     ""name"": ""right"",
                     ""id"": ""3b4de59c-d93c-4072-b11e-711ea8534593"",
-                    ""path"": ""<Keyboard>/a"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
