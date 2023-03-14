@@ -299,7 +299,6 @@ public class DodgeBallAgent : Agent
          
          foreach (var info in teamList)
          {
-             Debug.Log(info.Agent.gameObject.activeInHierarchy);
              if (info.Agent != this && info.Agent.gameObject.activeInHierarchy)
              {
                  m_OtherAgentsBuffer.AppendObservation(GetOtherAgentData(info));

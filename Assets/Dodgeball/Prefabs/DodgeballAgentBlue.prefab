@@ -153,7 +153,7 @@ MonoBehaviour:
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 1025
-  m_ObservationStacks: 1
+  m_ObservationStacks: 3
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
@@ -718,7 +718,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 272cedb31f0274d58a4ee22f294ca325, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: DodgeBall
   TeamId: 0
   m_UseChildSensors: 1
@@ -843,7 +843,9 @@ MonoBehaviour:
   dashCoolDownTimer: 0
   agentIdleDragVelCoeff: 1
   MouseSensitivity: 10
+  mouseSmoothing: 0.5
   MouseSmoothTime: 0.01
+  rotateSpeed: 100
   agentFallingSpeed: 80
   AnimateBodyMesh: 1
   walkingBounceCurve:
@@ -22808,7 +22810,9 @@ MonoBehaviour:
   m_SensorName: AgemtRayPerceptionSensor
   m_DetectableTags:
   - purpleAgent
+  - blueAgent
   - purpleAgentFront
+  - blueAgentFront
   m_RaysPerDirection: 20
   m_MaxRayDegrees: 100
   m_SphereCastRadius: 0.64
@@ -22816,7 +22820,7 @@ MonoBehaviour:
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  m_ObservationStacks: 1
+  m_ObservationStacks: 3
   rayHitColor: {r: 0, g: 1, b: 0.15447211, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
@@ -23041,7 +23045,7 @@ MonoBehaviour:
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  m_ObservationStacks: 1
+  m_ObservationStacks: 3
   rayHitColor: {r: 0.072806835, g: 0, b: 1, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 1.2
@@ -23596,7 +23600,7 @@ MonoBehaviour:
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  m_ObservationStacks: 1
+  m_ObservationStacks: 3
   rayHitColor: {r: 0.92176676, g: 0, b: 1, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 1.2
