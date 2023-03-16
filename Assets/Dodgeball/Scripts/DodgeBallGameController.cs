@@ -105,7 +105,7 @@ public class DodgeBallGameController : MonoBehaviour
         public int TeamID;
     }
     
-    [Header("Log")]
+    [Header("Gamelog")]
     public GameLogger gameLogger;
 
     //private bool fMRI_Initialized;
@@ -337,8 +337,8 @@ public class DodgeBallGameController : MonoBehaviour
         
         gameLogger = GetComponent<GameLogger>(); 
         gameLogger.winner = winningTeam; //Who won?
-        gameLogger.playerBlueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
-        gameLogger.playerPurpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
+        gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
+        gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
         gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
         
         StartCoroutine(ShowWinScreenThenReset(winningTeam, delaySeconds));

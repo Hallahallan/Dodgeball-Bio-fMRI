@@ -49,6 +49,9 @@ namespace MLAgents
         private float m_YawSmoothV; // USED FOR AIMING WITH MOUSE
         Quaternion originalRotation;
         public float rotateSpeed = 100f; // Amount the player should turn while holding the turn button
+        
+        [Header("Gamelog")]
+        public GameLogger gameLogger;
 
         [Header("FALLING FORCE")]
         //force applied to agent while falling
@@ -161,7 +164,7 @@ namespace MLAgents
                  * accounted for.
                  */
                 
-                // inputH = Input.GetAxis("TethyxHaorizontal"); //For movement with Tethyx Joystick
+                // inputH = Input.GetAxis("TethyxHorizontal"); //For movement with Tethyx Joystick
                 inputV = Input.GetAxis("TethyxVertical"); //For movement with Tethyx Joystick
                 
                 inputH = m_Input.moveInput.x; // For movement with WASD
@@ -177,9 +180,10 @@ namespace MLAgents
             {
                 Dash(rb.transform.TransformDirection(new Vector3(inputH, 0, inputV)));
             }
-            if ((m_Agent && m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_throwPressed)) || Input.GetButtonDown(ShootTethyx))
+            if ((m_Agent && m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_throwPressed)) || Input.GetButtonDown(ShootTethyx)) //For shooting with tethyx
             {
                 m_Agent.ThrowTheBall();
+                // gameLogger.LogPlayerData(1);
             }
         }
 

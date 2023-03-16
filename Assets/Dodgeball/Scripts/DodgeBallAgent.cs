@@ -58,6 +58,9 @@ public class DodgeBallAgent : Agent
     
     [Header("ANIMATIONS")] public Animator FlagAnimator;
     public Animator VictoryDanceAnimation;
+    
+    [Header("Gamelog")]
+    public GameLogger m_gameLogger;
 
     [Header("OTHER")] public bool m_PlayerInitialized;
     [HideInInspector]
@@ -118,6 +121,8 @@ public class DodgeBallAgent : Agent
         AgentRb = GetComponent<Rigidbody>();
         input = GetComponent<DodgeBallAgentInput>();
         m_GameController = GetComponentInParent<DodgeBallGameController>();
+        
+        m_gameLogger = GetComponent<GameLogger>(); 
 
         //Make sure ThrowController is set up to play sounds
         ThrowController.PlaySound = m_GameController.ShouldPlayEffects;
@@ -299,7 +304,6 @@ public class DodgeBallAgent : Agent
          
          foreach (var info in teamList)
          {
-             Debug.Log(info.Agent.gameObject.activeInHierarchy);
              if (info.Agent != this && info.Agent.gameObject.activeInHierarchy)
              {
                  m_OtherAgentsBuffer.AppendObservation(GetOtherAgentData(info));
@@ -425,6 +429,13 @@ public class DodgeBallAgent : Agent
             ActiveBallsQueue.Dequeue();
             currentNumberOfBalls--;
             SetActiveBalls(currentNumberOfBalls);
+            
+            //Log data
+            if (m_BehaviorParameters.TeamId == 0)
+            {
+                m_gameLogger.blueBalls = currentNumberOfBalls;
+                m_gameLogger.LogPlayerData(1); //Log throw
+            }
         }
     }
 
@@ -641,6 +652,7 @@ public class DodgeBallAgent : Agent
         {
             m_BallImpactAudioSource.PlayOneShot(m_GameController.BallPickupClip, .1f);
         }
+
         //update counter
         currentNumberOfBalls++;
         SetActiveBalls(currentNumberOfBalls);
@@ -649,7 +661,13 @@ public class DodgeBallAgent : Agent
         ActiveBallsQueue.Enqueue(db);
         db.BallIsInPlay(true);
         db.gameObject.SetActive(false);
-    }
+
+        //Log data
+        if (m_BehaviorParameters.TeamId == 0) {
+            m_gameLogger.blueBalls = currentNumberOfBalls;
+            m_gameLogger.LogPlayerData(2); //2 = ball pickup
+        }
+}
 
     //Used for human input
     public override void Heuristic(in ActionBuffers actionsOut)
