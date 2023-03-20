@@ -13,7 +13,6 @@ using Random = UnityEngine.Random;
 public class DodgeBallAgent : Agent
 {
     [Header("TEAM")]
-
     public int teamID;
     private AgentCubeMovement m_CubeMovement;
     public ThrowBall ThrowController;
