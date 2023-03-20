@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MLAgents;
 using UnityEngine;
 using Unity.MLAgents;
@@ -91,7 +92,7 @@ public class DodgeBallAgent : Agent
     public int previousUpdateTime;
     public int currentUpdateTime;
     public string ttW;
-    public Boolean eyeTrackingActive = false;
+    public Boolean eyeTrackingActive = true;
     public Vector2 direction { get; private set; }
 
     //is the current step a decision step for the agent
@@ -106,13 +107,10 @@ public class DodgeBallAgent : Agent
     public override void Initialize()
     {
         //Disable logging
-        Debug.unityLogger.logEnabled = true; 
+        Debug.unityLogger.logEnabled = true;
         
-        // Find object for eye tracking
-        if (eyeTrackingActive)
-        {
-            thisObject = GameObject.Find("AgentCubePurple");
-        }
+        thisObject = GameObject.FindObjectsOfType<GameObject>().Where(obj => obj.name == "AgentCube")
+            .Where(obj => obj.tag == "purpleAgent").ToArray()[0];
 
         //SETUP STUNNED AS
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
@@ -294,9 +292,9 @@ public class DodgeBallAgent : Agent
             sensor.AddObservation(HasEnemyFlag);
         }
 
-        sensor.AddObservation(0);
-        sensor.AddObservation(0);
-        sensor.AddObservation(0);
+        //sensor.AddObservation(0);
+        //sensor.AddObservation(0);
+        //sensor.AddObservation(0);
 
         // FOLLOWING CODE IS SPECIFIC TO CAPTURE THE FLAG AND MORE THAN 1V1
         
@@ -684,7 +682,7 @@ public class DodgeBallAgent : Agent
     
     void Update()
     {
-        if (eyeTrackingActive)
+        if (true)
         {
             myCurrentObjectRect = EyeLinkWebLinkUtil.getScreenRectFromGameObject(thisObject);
 
@@ -695,7 +693,7 @@ public class DodgeBallAgent : Agent
                 {
                     ttW = Convert.ToString(EyeLinkWebLinkUtil.iasZeroPoint - previousUpdateTime) + " " + Convert.ToString(EyeLinkWebLinkUtil.iasZeroPoint - currentUpdateTime) +
                           " !V IAREA RECTANGLE 1 " + Convert.ToString(myPreviousObjectRect.xMin - 25) + " " + Convert.ToString(myPreviousObjectRect.yMin - 25) +
-                          " " + Convert.ToString(myPreviousObjectRect.xMax + 25) + " " + Convert.ToString(myPreviousObjectRect.yMax + 25) + " paddle";
+                          " " + Convert.ToString(myPreviousObjectRect.xMax + 25) + " " + Convert.ToString(myPreviousObjectRect.yMax + 25) + " enemy";
                     EyeLinkWebLinkUtil.writeIASLine(ttW);
 
                 }
@@ -706,28 +704,7 @@ public class DodgeBallAgent : Agent
                 {
                     haveStarted = 1;
                 }
-
             }
-            
-            var eyeData = EyeLinkWebLinkUtil.getSampleData();
-            
-            if (eyeData[0] < myCurrentObjectRect.x)
-            {
-                direction = Vector2.left;
-                //ttW = "Moving Left";
-                //EyeLinkWebLinkUtil.writeIASLine(ttW);
-            }
-
-            else if (eyeData[0] > (myCurrentObjectRect.x + myCurrentObjectRect.width))
-            {
-                direction = Vector2.right;
-            }
-            else
-            {
-                direction = Vector2.zero;
-            }
-            
-            print(direction);
         }
     }
 }
