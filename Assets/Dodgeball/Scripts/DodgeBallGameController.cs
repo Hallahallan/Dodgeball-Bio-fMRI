@@ -18,8 +18,7 @@ public class DodgeBallGameController : MonoBehaviour
         Training,
         Movie,
     }
-    public SceneType CurrentSceneType = SceneType.Training;
-
+    public SceneType CurrentSceneType = SceneType.Game;
     public bool ShouldPlayEffects
     {
         get
@@ -334,13 +333,7 @@ public class DodgeBallGameController : MonoBehaviour
     {
         if (m_GameEnded) return;
         m_GameEnded = true;
-        
-        gameLogger = GetComponent<GameLogger>(); 
-        gameLogger.winner = winningTeam; //Who won?
-        gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
-        gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
-        gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
-        
+
         StartCoroutine(ShowWinScreenThenReset(winningTeam, delaySeconds));
     }
 
@@ -465,6 +458,9 @@ public class DodgeBallGameController : MonoBehaviour
         var ThrowAgentGroup = hitTeamID == 1 ? m_Team0AgentGroup : m_Team1AgentGroup;
         float hitBonus = GameMode == GameModeType.Elimination ? EliminationHitBonus : CTFHitBonus;
         
+        //Get the game logger
+        gameLogger = GetComponent<GameLogger>();
+
         // Always drop the flag
         if (DropFlagImmediately)
         {
@@ -490,6 +486,17 @@ public class DodgeBallGameController : MonoBehaviour
                     
                     print($"Team {throwTeamID} Won");
                     hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
+                    
+                    //Log the hit  
+                    if (hit.teamID == 0) {logHit(hit, thrower, 4);}
+                    else if (hit.teamID == 1) { logHit(hit, thrower, 3);}
+                    
+                    //Log the results of the game
+                    gameLogger.winner = thrower.teamID; //Who won?
+                    gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
+                    gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
+                    gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
+                    
                     hit.DropAllBalls();
                     if (ShouldPlayEffects)
                     {
@@ -535,12 +542,25 @@ public class DodgeBallGameController : MonoBehaviour
         else
         {
             hit.HitPointsRemaining--;
+            
+            //Log the hit  
+            if (hit.teamID == 0) { logHit(hit, thrower, 4);}
+            else if (hit.teamID == 1) {logHit(hit, thrower, 3);}
+
             //Sets headband color after hit has been taken
             hit.setHeadBandColor(hit.HitPointsRemaining);
             thrower.AddReward(hitBonus);
         }
     }
-    
+
+    public void logHit(DodgeBallAgent hit, DodgeBallAgent thrower, int n)
+    {
+        gameLogger.hit = hit.teamID;
+        gameLogger.thrower = thrower.teamID;
+        gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining;
+        gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining;
+        gameLogger.LogPlayerData(n);
+    }
     
 
     //Call this method when an agent picks up an enemy flag.

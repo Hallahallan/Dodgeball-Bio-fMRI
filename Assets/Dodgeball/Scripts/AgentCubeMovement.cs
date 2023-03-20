@@ -165,10 +165,10 @@ namespace MLAgents
                  */
                 
                 // inputH = Input.GetAxis("TethyxHorizontal"); //For movement with Tethyx Joystick
-                inputV = Input.GetAxis("TethyxVertical"); //For movement with Tethyx Joystick
+                // inputV = Input.GetAxis("TethyxVertical"); //For movement with Tethyx Joystick
                 
                 inputH = m_Input.moveInput.x; // For movement with WASD
-                // inputV = m_Input.moveInput.y; // For movement with WASD
+                inputV = m_Input.moveInput.y; // For movement with WASD
             }
             var movDir = transform.TransformDirection(new Vector3(inputH, 0, inputV));
             RunOnGround(movDir);
