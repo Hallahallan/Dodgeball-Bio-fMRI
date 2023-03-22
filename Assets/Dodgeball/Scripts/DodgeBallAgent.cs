@@ -30,6 +30,14 @@ public class DodgeBallAgent : Agent
     [Header("INVENTORY")]
     public int currentNumberOfBalls;
     public List<DodgeBall> currentlyHeldBalls;
+    
+    [Header("WAYPOINTS")]
+    [SerializeField]
+    private Transform waypointsContainer;
+    private List<Transform> waypoints;
+    private int currentWaypointIndex = 0;
+    private float waypointReachDistance = 1f;
+    private float agentSpeed = 5f;
 
     public bool UseVectorObs;
     public Transform HomeBaseLocation;
@@ -698,7 +706,44 @@ public class DodgeBallAgent : Agent
     {
         // Implement your custom rule-based logic to determine action values
         // Set the action values in the actionsOut.ActionSegment<float> variable
+
+        if (waypoints == null || waypoints.Count == 0)
+        {
+            InitializeWaypoints();
+        }
         
-        
+        Vector3 targetPosition = waypoints[currentWaypointIndex].position;
+        MoveRuleBasedAgent(targetPosition, actionsOut);
+
+        if (Vector3.Distance(transform.position, targetPosition) < waypointReachDistance)
+        {
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
+        }
+    }
+    
+    private void InitializeWaypoints()
+    {
+        // Code to initialize the waypoints list
+        waypoints = new List<Transform>();
+        for ( int i = 0; i < waypointsContainer.childCount; i++ )
+        {
+            waypoints.Add( new GameObject().transform );
+        }
+    }
+    
+    private void MoveRuleBasedAgent(Vector3 targetPosition, in ActionBuffers actionsOut)
+    {
+        Vector3 direction = (targetPosition - transform.position).normalized;
+
+        // Assuming the first two elements of the continuous actions represent the agent's movement
+        float[] actions = new float[actionsOut.ContinuousActions.Length];
+        actions[0] = direction.x * agentSpeed;
+        actions[1] = direction.z * agentSpeed;
+
+        // Copy the temporary actions array to the actionsOut buffer
+        for (int i = 0; i < actionsOut.ContinuousActions.Length; i++)
+        {
+            actionsOut.ContinuousActions.Array[actionsOut.ContinuousActions.Offset + i] = actions[i];
+        }
     }
 }
