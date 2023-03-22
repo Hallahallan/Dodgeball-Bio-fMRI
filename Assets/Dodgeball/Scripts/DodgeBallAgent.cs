@@ -62,8 +62,8 @@ public class DodgeBallAgent : Agent
     public GameLogger m_gameLogger;
 
     [Header("OTHER")] public bool m_PlayerInitialized;
-    [HideInInspector]
     public BehaviorParameters m_BehaviorParameters;
+    public bool useRuleBasedAgent = false;
 
     public float m_InputH;
     private Vector3 m_HomeBasePosition;
@@ -666,7 +666,7 @@ public class DodgeBallAgent : Agent
             m_gameLogger.blueBalls = currentNumberOfBalls;
             m_gameLogger.LogPlayerData(2); //2 = ball pickup
         }
-}
+    }
 
     //Used for human input
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -675,12 +675,30 @@ public class DodgeBallAgent : Agent
         {
             return;
         }
-        var contActionsOut = actionsOut.ContinuousActions;
-        contActionsOut[0] = input.moveInput.y;
-        contActionsOut[1] = input.moveInput.x;
-        contActionsOut[2] = input.rotateInput * 3; //rotate
-        var discreteActionsOut = actionsOut.DiscreteActions;
-        discreteActionsOut[0] = input.CheckIfInputSinceLastFrame(ref input.m_throwPressed) ? 1 : 0; //dash
-        discreteActionsOut[1] = input.CheckIfInputSinceLastFrame(ref input.m_dashPressed) ? 1 : 0; //dash
+
+        //Use rule-based agent if enabled
+        if (useRuleBasedAgent)
+        {
+            RuleBasedHeuristic(actionsOut);
+        }
+        else
+        {
+            var contActionsOut = actionsOut.ContinuousActions;
+            contActionsOut[0] = input.moveInput.y;
+            contActionsOut[1] = input.moveInput.x;
+            contActionsOut[2] = input.rotateInput * 3; //rotate
+            var discreteActionsOut = actionsOut.DiscreteActions;
+            discreteActionsOut[0] = input.CheckIfInputSinceLastFrame(ref input.m_throwPressed) ? 1 : 0; //dash
+            discreteActionsOut[1] = input.CheckIfInputSinceLastFrame(ref input.m_dashPressed) ? 1 : 0; //dash
+        }
+    }
+    
+    
+    private void RuleBasedHeuristic(in ActionBuffers actionsOut)
+    {
+        // Implement your custom rule-based logic to determine action values
+        // Set the action values in the actionsOut.ActionSegment<float> variable
+        
+        
     }
 }

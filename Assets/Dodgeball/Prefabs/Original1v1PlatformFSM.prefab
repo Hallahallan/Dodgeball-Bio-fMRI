@@ -206,8 +206,11 @@ MonoBehaviour:
   blueLives: 0
   purpleLives: 0
   blueBalls: 0
+  hit: 0
+  thrower: 0
   fileNameResults: 
   fileNamePlayerData: 
+  winstr: 
 --- !u!1 &4992381618204286452
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,8 +865,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4992381619783006336}
-  m_LocalRotation: {x: -0, y: -0.3307765, z: -0, w: 0.94370914}
-  m_LocalPosition: {x: -42.082542, y: 0, z: -11.841625}
+  m_LocalRotation: {x: -0, y: 0.65161526, z: -0, w: 0.7585497}
+  m_LocalPosition: {x: 0.5427522, y: 0, z: -11.109617}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4992381619307072025}
@@ -887,7 +890,7 @@ MonoBehaviour:
   m_UpdateMethod: 0
   m_PositionUnits: 1
   m_Speed: 6
-  m_Position: 56.942043
+  m_Position: 122.62484
 --- !u!1 &4992381620090839605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,8 +1119,11 @@ MonoBehaviour:
   blueLives: 0
   purpleLives: 0
   blueBalls: 0
+  hit: 0
+  thrower: 0
   fileNameResults: 
   fileNamePlayerData: 
+  winstr: 
 --- !u!1 &4993900793834755649
 GameObject:
   m_ObjectHideFlags: 0
@@ -3634,6 +3640,11 @@ PrefabInstance:
       propertyPath: HomeBaseLocation
       value: 
       objectReference: {fileID: 885686042237693064}
+    - target: {fileID: 115153164802481590, guid: 8ce98933b2e552b45846ce366d743f5d,
+        type: 3}
+      propertyPath: useRuleBasedAgent
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 115153164802481596, guid: 8ce98933b2e552b45846ce366d743f5d,
         type: 3}
       propertyPath: allowHumanInputAndDisableAgentHeuristicInput
@@ -3694,6 +3705,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 115153164802481614, guid: 8ce98933b2e552b45846ce366d743f5d,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 115153164802481614, guid: 8ce98933b2e552b45846ce366d743f5d,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6990557894678178272, guid: 8ce98933b2e552b45846ce366d743f5d,
         type: 3}
       propertyPath: m_Enabled
@@ -3713,6 +3734,11 @@ PrefabInstance:
         type: 3}
       propertyPath: RunTowardsTarget
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6990557894678178272, guid: 8ce98933b2e552b45846ce366d743f5d,
+        type: 3}
+      propertyPath: RotateTowardsTarget
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6990557894678178272, guid: 8ce98933b2e552b45846ce366d743f5d,
         type: 3}

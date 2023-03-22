@@ -43,6 +43,8 @@ public class GameLogger : MonoBehaviour
             writer.WriteLine(logMessage);
         }
     }
+    
+    // // Log when the application is closed
     // private void OnApplicationQuit()
     // {
     //     string logMessage = "Application Closed at: " + DateTime.Now.ToString();
