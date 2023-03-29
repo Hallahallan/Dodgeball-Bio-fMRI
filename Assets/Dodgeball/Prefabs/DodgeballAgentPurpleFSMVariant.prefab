@@ -772,7 +772,7 @@ GameObject:
   - component: {fileID: 6990557895650846690}
   - component: {fileID: 6990557894678178272}
   m_Layer: 0
-  m_Name: DodgeballAgentPurple
+  m_Name: DodgeballAgentPurpleFSMVariant
   m_TagString: purpleAgent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -796,7 +796,6 @@ Transform:
   - {fileID: 261154422157538960}
   - {fileID: 5584362023673188647}
   - {fileID: 4549686597667494900}
-  - {fileID: 8087638793787220756}
   - {fileID: 1611457239460319867}
   - {fileID: 7978115415032355042}
   - {fileID: 1624309404298993314}
@@ -878,6 +877,7 @@ MonoBehaviour:
   input: {fileID: 6990557895650846690}
   currentNumberOfBalls: 0
   currentlyHeldBalls: []
+  waypointsContainer: {fileID: 0}
   UseVectorObs: 1
   HomeBaseLocation: {fileID: 0}
   TeamFlag: {fileID: 0}
@@ -897,9 +897,12 @@ MonoBehaviour:
   StunnedCollider: {fileID: 1611457239460319867}
   FlagAnimator: {fileID: 5401863399974773532}
   VictoryDanceAnimation: {fileID: 7807778508822777961}
+  m_gameLogger: {fileID: 0}
   m_PlayerInitialized: 0
   m_BehaviorParameters: {fileID: 0}
+  useRuleBasedAgent: 0
   m_InputH: 0
+  rotationSpeed: 5
   m_ThrowInput: 0
   m_DashInput: 0
   m_StunTime: 0
@@ -971,7 +974,10 @@ MonoBehaviour:
   dashCoolDownTimer: 0
   agentIdleDragVelCoeff: 1
   MouseSensitivity: 10
+  mouseSmoothing: 0.5
   MouseSmoothTime: 0.01
+  rotateSpeed: 100
+  gameLogger: {fileID: 0}
   agentFallingSpeed: 80
   AnimateBodyMesh: 1
   walkingBounceCurve:
@@ -1322,7 +1328,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 115153164802481597}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8273535567710100274
 MonoBehaviour:
@@ -1339,9 +1345,7 @@ MonoBehaviour:
   m_SensorName: AgemtRayPerceptionSensor
   m_DetectableTags:
   - blueAgent
-  - purpleAgent
   - blueAgentFront
-  - purpleAgentFront
   m_RaysPerDirection: 20
   m_MaxRayDegrees: 100
   m_SphereCastRadius: 0.64
@@ -22775,7 +22779,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 115153164802481597}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8371812656169274153
 MonoBehaviour:
@@ -22834,7 +22838,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 115153164802481597}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &2298329801696132401
 BoxCollider:
@@ -22849,50 +22853,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2, z: 1.3}
   m_Center: {x: 0, y: 0.1, z: 0.05}
---- !u!1 &3374420577319251243
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8087638793787220756}
-  - component: {fileID: 6990391393968894384}
-  m_Layer: 0
-  m_Name: FrontCollider
-  m_TagString: purpleAgentFront
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8087638793787220756
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3374420577319251243}
-  m_LocalRotation: {x: -0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 0.2}
-  m_Children: []
-  m_Father: {fileID: 115153164802481597}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6990391393968894384
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3374420577319251243}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3881474140121212352
 GameObject:
   m_ObjectHideFlags: 0
@@ -23469,7 +23429,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 115153164802481597}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &6654159723180753041
 MonoBehaviour:
@@ -23685,7 +23645,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 115153164802481597}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &197735117412198676
 MonoBehaviour:
@@ -23776,7 +23736,7 @@ PrefabInstance:
     - target: {fileID: 2773938721269379786, guid: 6497b2453d78b46c1a90082cba559efd,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2773938721269379786, guid: 6497b2453d78b46c1a90082cba559efd,
         type: 3}

@@ -36,8 +36,12 @@ public class DodgeBallAgent : Agent
     private Transform waypointsContainer;
     private List<Transform> waypoints;
     private int currentWaypointIndex = 0;
-    private float waypointReachDistance = 1f;
+    private float waypointReachDistance = 7f;
     private float agentSpeed = 5f;
+    
+    [Header("SENSORS")]
+    public RayPerceptionSensor wallRaycastSensor;
+    public RayPerceptionSensor backRaycastSensor;
 
     public bool UseVectorObs;
     public Transform HomeBaseLocation;
@@ -78,6 +82,7 @@ public class DodgeBallAgent : Agent
     private Vector3 m_HomeDirection;
     private float m_InputV;
     private float m_Rotate;
+    public float rotationSpeed = 5f;
     public float m_ThrowInput;
     public float m_DashInput;
     private bool m_FirstInitialize = true;
@@ -675,8 +680,7 @@ public class DodgeBallAgent : Agent
             m_gameLogger.LogPlayerData(2); //2 = ball pickup
         }
     }
-
-    //Used for human input
+    
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         if (disableInputCollectionInHeuristicCallback || m_IsStunned)
@@ -689,6 +693,7 @@ public class DodgeBallAgent : Agent
         {
             RuleBasedHeuristic(actionsOut);
         }
+        //Used for human input
         else
         {
             var contActionsOut = actionsOut.ContinuousActions;
@@ -714,10 +719,14 @@ public class DodgeBallAgent : Agent
         
         Vector3 targetPosition = waypoints[currentWaypointIndex].position;
         MoveRuleBasedAgent(targetPosition, actionsOut);
+        
+        // // Check distance from waypoint
+        // float distanceToWaypoint = Vector3.Distance(transform.position, targetPosition);
+        // Debug.Log($"Distance to waypoint {currentWaypointIndex}: {distanceToWaypoint}");
 
         if (Vector3.Distance(transform.position, targetPosition) < waypointReachDistance)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; // Denne er spice
         }
     }
     
@@ -725,25 +734,45 @@ public class DodgeBallAgent : Agent
     {
         // Code to initialize the waypoints list
         waypoints = new List<Transform>();
-        for ( int i = 0; i < waypointsContainer.childCount; i++ )
+        for (int i = 0; i < waypointsContainer.childCount; i++)
         {
-            waypoints.Add( new GameObject().transform );
+            waypoints.Add(waypointsContainer.GetChild(i));
         }
     }
     
     private void MoveRuleBasedAgent(Vector3 targetPosition, in ActionBuffers actionsOut)
     {
+        
+        // //SPINNY CODE
+        // Vector3 direction = (targetPosition - transform.position).normalized;
+        // float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        // m_CubeMovement.Look(targetRotation);
+        // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
+        // m_CubeMovement.RunOnGround(moveDir);
+
+        //WORKING CODE
         Vector3 direction = (targetPosition - transform.position).normalized;
-
-        // Assuming the first two elements of the continuous actions represent the agent's movement
-        float[] actions = new float[actionsOut.ContinuousActions.Length];
-        actions[0] = direction.x * agentSpeed;
-        actions[1] = direction.z * agentSpeed;
-
-        // Copy the temporary actions array to the actionsOut buffer
-        for (int i = 0; i < actionsOut.ContinuousActions.Length; i++)
+        float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        
+        // Obstacle avoidance
+        RaycastHit hit;
+        float obstacleAvoidanceDistance = 4f;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidanceDistance))
         {
-            actionsOut.ContinuousActions.Array[actionsOut.ContinuousActions.Offset + i] = actions[i];
+            Debug.Log("Raycast hit: " + hit.collider.gameObject.name + ", tag: " + hit.collider.gameObject.tag);
+            Debug.Log("Raycast distance" + hit.distance);
+            if (hit.collider.gameObject.CompareTag("wall") || hit.collider.gameObject.CompareTag("bush"))
+            {
+                transform.rotation = Quaternion.Euler(0, targetRotation + 90, 0);
+            }
         }
+
+        // HANDLE ROTATION
+        float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
+        transform.rotation = Quaternion.Euler(0, smoothRotation, 0);
+        
+        // HANDLE XZ MOVEMENT
+        var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
+        m_CubeMovement.RunOnGround(moveDir);
     }
 }
