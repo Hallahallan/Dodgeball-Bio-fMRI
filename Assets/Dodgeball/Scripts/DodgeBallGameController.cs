@@ -548,7 +548,7 @@ public class DodgeBallGameController : MonoBehaviour
             else if (hit.teamID == 1) {logHit(hit, thrower, 3);}
 
             //Sets headband color after hit has been taken
-            hit.setHeadBandColor(hit.HitPointsRemaining);
+            hit.SetHeadBandColor(hit.HitPointsRemaining);
             thrower.AddReward(hitBonus);
         }
     }
@@ -703,7 +703,7 @@ public class DodgeBallGameController : MonoBehaviour
         foreach (var item in Team0Players)
         {
             item.Agent.HitPointsRemaining = PlayerMaxHitPoints;
-            item.Agent.setHeadBandColor(PlayerMaxHitPoints); //Expensive because DBGC.cs -> DBA.cs -> HeadBand.cs
+            item.Agent.SetHeadBandColor(PlayerMaxHitPoints); //Expensive because DBGC.cs -> DBA.cs -> HeadBand.cs
             item.Agent.gameObject.SetActive(true);
             item.Agent.ResetAgent();
             m_Team0AgentGroup.RegisterAgent(item.Agent);
@@ -711,7 +711,7 @@ public class DodgeBallGameController : MonoBehaviour
         foreach (var item in Team1Players)
         {
             item.Agent.HitPointsRemaining = PlayerMaxHitPoints;
-            item.Agent.setHeadBandColor(PlayerMaxHitPoints); // ^
+            item.Agent.SetHeadBandColor(PlayerMaxHitPoints); // ^
             item.Agent.gameObject.SetActive(true);
             item.Agent.ResetAgent();
             m_Team1AgentGroup.RegisterAgent(item.Agent);

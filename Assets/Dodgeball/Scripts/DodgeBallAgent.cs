@@ -39,8 +39,8 @@ public class DodgeBallAgent : Agent
     private List<Transform> waypoints;
     private List<Transform> cornerWaypoints;
     private int currentWaypointIndex = 0;
-    private float waypointReachDistance = 5f;
-    private float agentSpeed = 5f;
+    private float waypointReachDistance = 7f;
+    private float agentSpeed = 4f;
     
     [Header("SENSORS")]
     public RayPerceptionSensor wallRaycastSensor;
@@ -244,7 +244,7 @@ public class DodgeBallAgent : Agent
         }
     }
 
-    public void setHeadBandColor(int hp)
+    public void SetHeadBandColor(int hp)
     {
         // Resources.Load<Material>("pink");
         switch (hp)  // Headband should change color when hit
@@ -736,8 +736,8 @@ public class DodgeBallAgent : Agent
         if (IsAgentInCorner())
         {
             currentWaypointIndex = UnityEngine.Random.Range(0, waypoints.Count);
-            Debug.Log($"Agent is in a corner. New waypoint index: {currentWaypointIndex}");
         }
+        Debug.Log($"Current waypoint index: {currentWaypointIndex}");
     }
     
     private void InitializeWaypoints()
@@ -749,6 +749,16 @@ public class DodgeBallAgent : Agent
             waypoints.Add(waypointsContainer.GetChild(i));
         }
         
+        // // Shuffle the waypoints list
+        // int waypointsCount = waypoints.Count;
+        // for (int i = 0; i < waypointsCount - 1; i++)
+        // {
+        //     int randomIndex = UnityEngine.Random.Range(i, waypointsCount);
+        //     Transform temp = waypoints[i];
+        //     waypoints[i] = waypoints[randomIndex];
+        //     waypoints[randomIndex] = temp;
+        // }
+
         // Code to initialize the corner waypoints list
         cornerWaypoints = new List<Transform>();
         for (int i = 0; i < cornerWaypointsContainer.childCount; i++)
