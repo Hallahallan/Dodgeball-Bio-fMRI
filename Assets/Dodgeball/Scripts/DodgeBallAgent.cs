@@ -34,9 +34,12 @@ public class DodgeBallAgent : Agent
     [Header("WAYPOINTS")]
     [SerializeField]
     private Transform waypointsContainer;
+    [SerializeField]
+    private Transform cornerWaypointsContainer;
     private List<Transform> waypoints;
+    private List<Transform> cornerWaypoints;
     private int currentWaypointIndex = 0;
-    private float waypointReachDistance = 7f;
+    private float waypointReachDistance = 5f;
     private float agentSpeed = 5f;
     
     [Header("SENSORS")]
@@ -726,7 +729,14 @@ public class DodgeBallAgent : Agent
 
         if (Vector3.Distance(transform.position, targetPosition) < waypointReachDistance)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; // Denne er spice
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; 
+        }
+        
+        // Check if the agent is in a corner and update the current waypoint index
+        if (IsAgentInCorner())
+        {
+            currentWaypointIndex = UnityEngine.Random.Range(0, waypoints.Count);
+            Debug.Log($"Agent is in a corner. New waypoint index: {currentWaypointIndex}");
         }
     }
     
@@ -738,6 +748,68 @@ public class DodgeBallAgent : Agent
         {
             waypoints.Add(waypointsContainer.GetChild(i));
         }
+        
+        // Code to initialize the corner waypoints list
+        cornerWaypoints = new List<Transform>();
+        for (int i = 0; i < cornerWaypointsContainer.childCount; i++)
+        {
+            cornerWaypoints.Add(cornerWaypointsContainer.GetChild(i));
+        }
+    }
+    
+    private bool IsAgentInCorner()
+    {
+        foreach (Transform corner in cornerWaypoints)
+        {
+            if (Vector3.Distance(transform.position, corner.position) < waypointReachDistance)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private Vector3 DetectEnemyPlayer(Vector3 targetDirection, float detectionRadius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        float minDistance = float.MaxValue;
+        Vector3 closestEnemyDirection = targetDirection;
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("blueAgent") || hitCollider.CompareTag("blueAgentFront"))
+            {
+                float distanceToEnemy = Vector3.Distance(transform.position, hitCollider.transform.position);
+                if (distanceToEnemy < minDistance)
+                {
+                    minDistance = distanceToEnemy;
+                    closestEnemyDirection = (hitCollider.transform.position - transform.position).normalized;
+                }
+            }
+        }
+        return closestEnemyDirection;
+    }
+    
+    private Vector3 DetectBall(Vector3 targetDirection, float detectionRadius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        float minDistance = float.MaxValue;
+        Vector3 closestBallDirection = targetDirection;
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("dodgeBallPickup"))
+            {
+                float distanceToBall = Vector3.Distance(transform.position, hitCollider.transform.position);
+                if (distanceToBall < minDistance)
+                {
+                    minDistance = distanceToBall;
+                    closestBallDirection = (hitCollider.transform.position - transform.position).normalized;
+                }
+            }
+        }
+
+        return closestBallDirection;
     }
     
     private void MoveRuleBasedAgent(Vector3 targetPosition, in ActionBuffers actionsOut)
@@ -749,23 +821,34 @@ public class DodgeBallAgent : Agent
         // m_CubeMovement.Look(targetRotation);
         // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         // m_CubeMovement.RunOnGround(moveDir);
-
-        //WORKING CODE
+        
+        // Movement
         Vector3 direction = (targetPosition - transform.position).normalized;
         float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         
-        // Obstacle avoidance
-        RaycastHit hit;
-        float obstacleAvoidanceDistance = 4f;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidanceDistance))
+        // Detect enemy player and get updated target direction if enemy is within radius
+        float enemyDetectionRadius = 10f;
+        direction = DetectEnemyPlayer(direction, enemyDetectionRadius);
+    
+        // Detect ball and get updated target direction if ball is within a smaller radius and if not max balls held
+        if (currentNumberOfBalls < 3)
         {
-            Debug.Log("Raycast hit: " + hit.collider.gameObject.name + ", tag: " + hit.collider.gameObject.tag);
-            Debug.Log("Raycast distance" + hit.distance);
-            if (hit.collider.gameObject.CompareTag("wall") || hit.collider.gameObject.CompareTag("bush"))
-            {
-                transform.rotation = Quaternion.Euler(0, targetRotation + 90, 0);
-            }
+            float ballDetectionRadius = 5f;
+            direction = DetectBall(direction, ballDetectionRadius);
         }
+        
+        targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        
+        // // Obstacle avoidance
+        // RaycastHit hit;
+        // float obstacleAvoidanceDistance = 4f;
+        // if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidanceDistance))
+        // {
+        //     if (hit.collider.gameObject.CompareTag("wall") || hit.collider.gameObject.CompareTag("bush"))
+        //     {
+        //         transform.rotation = Quaternion.Euler(0, targetRotation + 90, 0);
+        //     }
+        // }
 
         // HANDLE ROTATION
         float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
