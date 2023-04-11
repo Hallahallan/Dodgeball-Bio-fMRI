@@ -637,7 +637,7 @@ MonoBehaviour:
   - {fileID: 4992381619607141542}
   - {fileID: 3926577881414703524}
   - {fileID: 4789004926113525579}
-  NumberOfBallsToSpawn: 5
+  NumberOfBallsToSpawn: 3
   PlayerMaxHitPoints: 3
   DropFlagImmediately: 1
   FlagMustBeHomeToScore: 1
