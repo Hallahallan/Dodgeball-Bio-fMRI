@@ -804,20 +804,21 @@ public class DodgeBallAgent : Agent
         // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         // m_CubeMovement.RunOnGround(moveDir);
 
-        // Movement
+        //WORKING CODE
         Vector3 direction = (targetPosition - transform.position).normalized;
         float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         
-        // Detect enemy player and get updated target direction if enemy is within radius
-        float enemyDetectionRadius = 10f;
-        direction = DetectEnemyPlayer(direction, enemyDetectionRadius);
-        
-        // Detect ball and get updated target direction if ball is within a smaller radius
-        // and the agent is not holding the maximum number of balls
-        if (currentNumberOfBalls < 4)
+        // Obstacle avoidance
+        RaycastHit hit;
+        float obstacleAvoidanceDistance = 4f;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidanceDistance))
         {
-            float ballDetectionRadius = 4f;
-            direction = DetectBall(direction, ballDetectionRadius);
+            Debug.Log("Raycast hit: " + hit.collider.gameObject.name + ", tag: " + hit.collider.gameObject.tag);
+            Debug.Log("Raycast distance" + hit.distance);
+            if (hit.collider.gameObject.CompareTag("wall") || hit.collider.gameObject.CompareTag("bush"))
+            {
+                transform.rotation = Quaternion.Euler(0, targetRotation + 90, 0);
+            }
         }
         
         targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;

@@ -1024,8 +1024,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4992381619783006336}
-  m_LocalRotation: {x: -0, y: 0.55568755, z: -0, w: 0.8313913}
-  m_LocalPosition: {x: 1.8354424, y: 0, z: -10.753708}
+  m_LocalRotation: {x: -0, y: -0.937695, z: -0, w: 0.3474595}
+  m_LocalPosition: {x: -35.43196, y: 0, z: -9.6964855}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4992381619307072025}
@@ -1049,7 +1049,7 @@ MonoBehaviour:
   m_UpdateMethod: 0
   m_PositionUnits: 1
   m_Speed: 6
-  m_Position: 123.97272
+  m_Position: 48.788708
 --- !u!1 &4992381620090839605
 GameObject:
   m_ObjectHideFlags: 0
@@ -4068,6 +4068,11 @@ PrefabInstance:
     - target: {fileID: 6990557894678178272, guid: 8ce98933b2e552b45846ce366d743f5d,
         type: 3}
       propertyPath: OnlyShootIfCanSeeTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6990557895650846690, guid: 8ce98933b2e552b45846ce366d743f5d,
+        type: 3}
+      propertyPath: DisableInput
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
