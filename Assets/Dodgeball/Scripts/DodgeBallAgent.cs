@@ -40,8 +40,8 @@ public class DodgeBallAgent : Agent
     private float agentSpeed = 5f;
     
     [Header("SENSORS")]
-    public RayPerceptionSensorCo ballRaycastSensor;
-    public RayPerceptionSensor agentRaycastSensor;
+    public RayPerceptionSensor wallRaycastSensor;
+    public RayPerceptionSensor backRaycastSensor;
 
     public bool UseVectorObs;
     public Transform HomeBaseLocation;
@@ -133,9 +133,6 @@ public class DodgeBallAgent : Agent
         AgentRb = GetComponent<Rigidbody>();
         input = GetComponent<DodgeBallAgentInput>();
         m_GameController = GetComponentInParent<DodgeBallGameController>();
-        
-        ballRaycastSensor = transform.Find("BallRaycastSensor").GetComponent<RayPerceptionSensor>();
-        agentRaycastSensor = transform.Find("AgentRaycastSensor").GetComponent<RayPerceptionSensor>();
         
         m_gameLogger = GetComponent<GameLogger>(); 
 
@@ -660,12 +657,6 @@ public class DodgeBallAgent : Agent
             }
         }
     }
-    
-    private bool IsInventoryFull()
-    {
-        // Replace this with your actual inventory check logic
-        return false; // Assuming inventory is not full by default
-    }
 
     void PickUpBall(DodgeBall db)
     {
@@ -715,34 +706,6 @@ public class DodgeBallAgent : Agent
         }
     }
     
-    private Transform GetFirstDetectedObjectWithTag(GameObject sensor, string tag)
-    {
-        Transform nearestObject = null;
-        float minDistance = float.MaxValue;
-
-        Vector3[] rayDirections = sensor.GetComponent<RayPerceptionSensor>().Ra
-
-        for (int i = 0; i < rayDirections.Length; i++)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(sensor.transform.position, rayDirections[i]);
-
-            foreach (RaycastHit hit in hits)
-            {
-                if (hit.collider.gameObject.CompareTag(tag))
-                {
-                    float distance = Vector3.Distance(hit.collider.transform.position, sensor.transform.position);
-
-                    if (distance < minDistance)
-                    {
-                        minDistance = distance;
-                        nearestObject = hit.collider.transform;
-                    }
-                }
-            }
-        }
-
-        return nearestObject;
-    }
     
     private void RuleBasedHeuristic(in ActionBuffers actionsOut)
     {
@@ -753,33 +716,17 @@ public class DodgeBallAgent : Agent
         {
             InitializeWaypoints();
         }
-    
-        Vector3 targetPosition = waypoints[currentWaypointIndex].position;
         
-        // Check for balls only if the inventory is not full
-        if (!IsInventoryFull())
-        {
-            Transform detectedBall = GetFirstDetectedObjectWithTag(ballRaycastSensor, "dodgeBallPickup");
-            if (detectedBall != null)
-            {
-                targetPosition = detectedBall.position;
-            }
-        }
-        else
-        {
-            // Check for opponent agent
-            Transform nearestOpponent = GetFirstDetectedObjectWithTag(agentRaycastSensor, "blueAgent");
-            if (nearestOpponent != null)
-            {
-                targetPosition = nearestOpponent.position;
-            }
-        }
-
+        Vector3 targetPosition = waypoints[currentWaypointIndex].position;
         MoveRuleBasedAgent(targetPosition, actionsOut);
-    
+        
+        // // Check distance from waypoint
+        // float distanceToWaypoint = Vector3.Distance(transform.position, targetPosition);
+        // Debug.Log($"Distance to waypoint {currentWaypointIndex}: {distanceToWaypoint}");
+
         if (Vector3.Distance(transform.position, targetPosition) < waypointReachDistance)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; // Denne er spice
         }
     }
     
@@ -802,16 +749,18 @@ public class DodgeBallAgent : Agent
         // m_CubeMovement.Look(targetRotation);
         // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         // m_CubeMovement.RunOnGround(moveDir);
-        
-        //Movement
+
+        //WORKING CODE
         Vector3 direction = (targetPosition - transform.position).normalized;
         float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         
         // Obstacle avoidance
         RaycastHit hit;
-        float obstacleAvoidanceDistance = 2f;
+        float obstacleAvoidanceDistance = 4f;
         if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidanceDistance))
         {
+            Debug.Log("Raycast hit: " + hit.collider.gameObject.name + ", tag: " + hit.collider.gameObject.tag);
+            Debug.Log("Raycast distance" + hit.distance);
             if (hit.collider.gameObject.CompareTag("wall") || hit.collider.gameObject.CompareTag("bush"))
             {
                 transform.rotation = Quaternion.Euler(0, targetRotation + 90, 0);
