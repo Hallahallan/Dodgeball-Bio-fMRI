@@ -683,10 +683,10 @@ public class DodgeBallAgent : Agent
     
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        if (disableInputCollectionInHeuristicCallback || m_IsStunned)
-        {
-            return;
-        }
+        // if (disableInputCollectionInHeuristicCallback || m_IsStunned)
+        // {
+        //     return;
+        // }
 
         //Use rule-based agent if enabled
         if (useRuleBasedAgent)
@@ -750,26 +750,21 @@ public class DodgeBallAgent : Agent
         }
     }
     
-    private Vector3 DetectEnemyPlayer(Vector3 targetDirection, float detectionRadius)
+    private Vector3 DetectEnemyPlayer(Vector3 direction, float detectionRadius)
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
-        float minDistance = float.MaxValue;
-        Vector3 closestEnemyDirection = targetDirection;
+        Vector3 updatedDirection = direction;
 
         foreach (Collider hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("blueAgent") || hitCollider.CompareTag("blueAgentFront"))
             {
-                float distanceToEnemy = Vector3.Distance(transform.position, hitCollider.transform.position);
-                if (distanceToEnemy < minDistance)
-                {
-                    minDistance = distanceToEnemy;
-                    closestEnemyDirection = (hitCollider.transform.position - transform.position).normalized;
-                }
+                updatedDirection = (hitCollider.transform.position - transform.position).normalized;
+                break;
             }
         }
 
-        return closestEnemyDirection;
+        return updatedDirection;
     }
     
     private Vector3 DetectBall(Vector3 targetDirection, float detectionRadius)
@@ -804,29 +799,27 @@ public class DodgeBallAgent : Agent
         // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         // m_CubeMovement.RunOnGround(moveDir);
 
-        //WORKING CODE
+        // Movement
         Vector3 direction = (targetPosition - transform.position).normalized;
-        float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        
-        // Obstacle avoidance
-        RaycastHit hit;
-        float obstacleAvoidanceDistance = 4f;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidanceDistance))
+    
+        // Detect enemy player and get updated target direction if enemy is within radius
+        float enemyDetectionRadius = 10f;
+        direction = DetectEnemyPlayer(direction, enemyDetectionRadius);
+    
+        // Detect ball and get updated target direction if ball is within a smaller radius
+        if (currentNumberOfBalls < 4)
         {
-            Debug.Log("Raycast hit: " + hit.collider.gameObject.name + ", tag: " + hit.collider.gameObject.tag);
-            Debug.Log("Raycast distance" + hit.distance);
-            if (hit.collider.gameObject.CompareTag("wall") || hit.collider.gameObject.CompareTag("bush"))
-            {
-                transform.rotation = Quaternion.Euler(0, targetRotation + 90, 0);
-            }
+            float ballDetectionRadius = 5f;
+            direction = DetectBall(direction, ballDetectionRadius);
         }
-        
-        targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+    
+        // Calculate targetRotation based on the updated direction
+        float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
         // HANDLE ROTATION
         float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
         transform.rotation = Quaternion.Euler(0, smoothRotation, 0);
-        
+    
         // HANDLE XZ MOVEMENT
         var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         m_CubeMovement.RunOnGround(moveDir);
