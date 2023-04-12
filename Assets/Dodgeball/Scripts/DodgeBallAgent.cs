@@ -738,6 +738,60 @@ public class DodgeBallAgent : Agent
         {
             waypoints.Add(waypointsContainer.GetChild(i));
         }
+        
+        // Shuffle the waypoints list
+        int waypointsCount = waypoints.Count;
+        for (int i = 0; i < waypointsCount - 1; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(i, waypointsCount);
+            Transform temp = waypoints[i];
+            waypoints[i] = waypoints[randomIndex];
+            waypoints[randomIndex] = temp;
+        }
+    }
+    
+    private Vector3 DetectEnemyPlayer(Vector3 targetDirection, float detectionRadius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        float minDistance = float.MaxValue;
+        Vector3 closestEnemyDirection = targetDirection;
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("blueAgent") || hitCollider.CompareTag("blueAgentFront"))
+            {
+                float distanceToEnemy = Vector3.Distance(transform.position, hitCollider.transform.position);
+                if (distanceToEnemy < minDistance)
+                {
+                    minDistance = distanceToEnemy;
+                    closestEnemyDirection = (hitCollider.transform.position - transform.position).normalized;
+                }
+            }
+        }
+
+        return closestEnemyDirection;
+    }
+    
+    private Vector3 DetectBall(Vector3 targetDirection, float detectionRadius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        float minDistance = float.MaxValue;
+        Vector3 closestBallDirection = targetDirection;
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("dodgeBallPickup"))
+            {
+                float distanceToBall = Vector3.Distance(transform.position, hitCollider.transform.position);
+                if (distanceToBall < minDistance)
+                {
+                    minDistance = distanceToBall;
+                    closestBallDirection = (hitCollider.transform.position - transform.position).normalized;
+                }
+            }
+        }
+
+        return closestBallDirection;
     }
     
     private void MoveRuleBasedAgent(Vector3 targetPosition, in ActionBuffers actionsOut)
@@ -750,22 +804,23 @@ public class DodgeBallAgent : Agent
         // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         // m_CubeMovement.RunOnGround(moveDir);
 
-        //WORKING CODE
+        // Movement
         Vector3 direction = (targetPosition - transform.position).normalized;
         float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         
-        // Obstacle avoidance
-        RaycastHit hit;
-        float obstacleAvoidanceDistance = 4f;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidanceDistance))
+        // Detect enemy player and get updated target direction if enemy is within radius
+        float enemyDetectionRadius = 10f;
+        direction = DetectEnemyPlayer(direction, enemyDetectionRadius);
+        
+        // Detect ball and get updated target direction if ball is within a smaller radius
+        // and the agent is not holding the maximum number of balls
+        if (currentNumberOfBalls < 4)
         {
-            Debug.Log("Raycast hit: " + hit.collider.gameObject.name + ", tag: " + hit.collider.gameObject.tag);
-            Debug.Log("Raycast distance" + hit.distance);
-            if (hit.collider.gameObject.CompareTag("wall") || hit.collider.gameObject.CompareTag("bush"))
-            {
-                transform.rotation = Quaternion.Euler(0, targetRotation + 90, 0);
-            }
+            float ballDetectionRadius = 4f;
+            direction = DetectBall(direction, ballDetectionRadius);
         }
+        
+        targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
         // HANDLE ROTATION
         float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
