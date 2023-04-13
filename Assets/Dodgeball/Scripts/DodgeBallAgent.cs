@@ -446,7 +446,11 @@ public class DodgeBallAgent : Agent
             if (m_BehaviorParameters.TeamId == 0)
             {
                 m_gameLogger.blueBalls = currentNumberOfBalls;
-                m_gameLogger.LogPlayerData(1); //Log throw
+                m_gameLogger.LogPlayerData(1); //Log player throw
+            }
+            else if(m_BehaviorParameters.TeamId == 1)
+            {
+                m_gameLogger.LogPlayerData(5); //Log enemy throw
             }
         }
     }
@@ -677,7 +681,7 @@ public class DodgeBallAgent : Agent
         //Log data
         if (m_BehaviorParameters.TeamId == 0) {
             m_gameLogger.blueBalls = currentNumberOfBalls;
-            m_gameLogger.LogPlayerData(2); //2 = ball pickup
+            m_gameLogger.LogPlayerData(2); 
         }
     }
     

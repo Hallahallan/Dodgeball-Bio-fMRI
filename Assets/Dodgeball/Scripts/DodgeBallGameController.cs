@@ -559,6 +559,7 @@ public class DodgeBallGameController : MonoBehaviour
         gameLogger.thrower = thrower.teamID;
         gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining;
         gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining;
+        gameLogger.blueBalls = Team0Players[0].Agent.currentNumberOfBalls;
         gameLogger.LogPlayerData(n);
     }
     
