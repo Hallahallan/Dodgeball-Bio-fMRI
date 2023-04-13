@@ -729,8 +729,10 @@ public class DodgeBallGameController : MonoBehaviour
             Team1Flag.gameObject.SetActive(false);
         }
 
-        SetActiveLosers(blueLosersList, 0);
         SetActiveLosers(purpleLosersList, 0);
+        
+        gameLogger = GetComponent<GameLogger>();
+        gameLogger.LogPlayerData(6);
     }
 
     // Update is called once per frame

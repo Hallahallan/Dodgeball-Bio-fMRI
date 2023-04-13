@@ -105,6 +105,9 @@ public class GameLogger : MonoBehaviour
                 case 5:
                     eventType = "EnemyThrewBall";
                     break;
+                case 6:
+                    eventType = "ResetScene";
+                    break;
             }
 
             // Update all the latest values every time
