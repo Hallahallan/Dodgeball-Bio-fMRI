@@ -2,14 +2,21 @@ using System;
 using UnityEngine;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Build.Content;
 using UnityEngine.Serialization;
 
 public class GameLogger : MonoBehaviour
 {
+    
+    public DodgeBallGameController gameController;
+    
     public int winner;
     public int blueLives;
     public int purpleLives;
     public int blueBalls;
+    private int _latestBlueBalls = 0;
+    private int _latestBlueLives = 3;
+    private int _latestPurpleLives = 3;
     public int hit;
     public int thrower;
     public string fileNameResults;
@@ -72,25 +79,41 @@ public class GameLogger : MonoBehaviour
         
         using (StreamWriter writer = File.AppendText(path))
         {
-            switch(n)
+            // Write column names if the file is empty
+            if (new FileInfo(path).Length == 0)
             {
-                //Player shoots
+                writer.WriteLine("Timestamp,EventType,BallsLeft,PlayerLives,EnemyLives");
+                writer.WriteLine($"{timestamp},{"Init"},{0},{3},{3}");
+
+            }
+            
+            string eventType = "";
+            switch (n)
+            {
                 case 1:
-                    writer.WriteLine("Threw ball at: " + timestamp + ", Balls left: " + blueBalls);
+                    eventType = "PlayerThrewBall";
                     break;
-                //Player picks up ball
                 case 2:
-                    writer.WriteLine("Picked up ball at: " + timestamp + ", Balls left: " + blueBalls);
+                    eventType = "PickedUpBall";
                     break;
-                //Player takes damage
                 case 3:
-                    writer.WriteLine("Hit enemy at: " + timestamp + ", Enemy lives left " + purpleLives);
+                    eventType = "HitEnemy";
                     break;
-                //Player deals damage
                 case 4:
-                    writer.WriteLine("Took damage at: " + timestamp + ", Player lives left " + blueLives);
+                    eventType = "TookDamage";
+                    break;
+                case 5:
+                    eventType = "EnemyThrewBall";
                     break;
             }
+
+            // Update all the latest values every time
+            _latestBlueBalls = gameController.Team0Players[0].Agent.currentNumberOfBalls;
+            _latestBlueLives = gameController.Team0Players[0].Agent.HitPointsRemaining;
+            _latestPurpleLives = gameController.Team1Players[0].Agent.HitPointsRemaining;
+            // _latestCornerStatus = gameController.Team1Players[1].Agent.IsInCorner; // Add for enemy in corner, remember to add to writer.Writelines both here and above
+
+            writer.WriteLine($"{timestamp},{eventType},{_latestBlueBalls},{_latestBlueLives},{_latestPurpleLives}");
         }
     }
 }
