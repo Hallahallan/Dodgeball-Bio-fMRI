@@ -2311,27 +2311,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 725642116}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &645265134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 645265121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 001f9653b9e8f0f4c8f9c42023af93ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  winner: 0
-  blueLives: 0
-  purpleLives: 0
-  playerShoot: 0
-  playerPickup: 0
-  playerTakeDmg: 0
-  playerDealDmg: 0
-  fileNameResults: 
-  fileNameInput: 
 --- !u!114 &645749014 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3554969124762547083, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
@@ -4713,6 +4692,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cc1d375350254c0585ef6e96a4ed1e5, type: 3}
+--- !u!114 &725642117 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4993607472596837024, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+    type: 3}
+  m_PrefabInstance: {fileID: 725642116}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4e6866f79a244638b13a98771252105, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &733867250 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 537e3e0c522884cb8aae126557fbd981,
@@ -7733,7 +7724,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 2.4675767, y: 1}
+    m_SensorSize: {x: 2.4734726, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7749,7 +7740,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367967954}
-  m_LocalRotation: {x: 2.0848121e-17, y: 0.9962975, z: -0.085972905, w: 4.408007e-16}
+  m_LocalRotation: {x: -6.4054806e-10, y: 0.9962975, z: -0.0859729, w: -0.0000000074229956}
   m_LocalPosition: {x: 16, y: 3.7600002, z: 13.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -8237,15 +8228,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 001f9653b9e8f0f4c8f9c42023af93ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameController: {fileID: 725642117}
   winner: 0
   blueLives: 0
   purpleLives: 0
-  playerShoot: 0
-  playerPickup: 0
-  playerTakeDmg: 0
-  playerDealDmg: 0
+  blueBalls: 0
+  hit: 0
+  thrower: 0
   fileNameResults: 
-  fileNameInput: 
+  fileNamePlayerData: 
+  winstr: 
 --- !u!1 &1457463690
 GameObject:
   m_ObjectHideFlags: 0
@@ -12069,7 +12061,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8697938321410268827}
-  m_LocalRotation: {x: 2.0848121e-17, y: 0.9962975, z: -0.085972905, w: 4.408007e-16}
+  m_LocalRotation: {x: -6.4054806e-10, y: 0.9962975, z: -0.0859729, w: -0.0000000074229956}
   m_LocalPosition: {x: 16, y: 3.7600002, z: 13.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
