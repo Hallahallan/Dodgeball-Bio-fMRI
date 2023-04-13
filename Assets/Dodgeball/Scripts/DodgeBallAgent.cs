@@ -241,7 +241,7 @@ public class DodgeBallAgent : Agent
         }
     }
 
-    public void setHeadBandColor(int hp)
+    public void SetHeadBandColor(int hp)
     {
         // Resources.Load<Material>("pink");
         switch (hp)  // Headband should change color when hit
@@ -288,7 +288,6 @@ public class DodgeBallAgent : Agent
             sensor.AddObservation(ballOneHot); //Held DBs Normalized
             sensor.AddObservation((float)HitPointsRemaining / (float)NumberOfTimesPlayerCanBeHit); //Remaining Hit Points Normalized
 
-            
             sensor.AddObservation(Vector3.Dot(AgentRb.velocity, AgentRb.transform.forward));
             sensor.AddObservation(Vector3.Dot(AgentRb.velocity, AgentRb.transform.right));
             sensor.AddObservation(transform.InverseTransformDirection(m_HomeDirection));
@@ -709,8 +708,7 @@ public class DodgeBallAgent : Agent
             discreteActionsOut[1] = input.CheckIfInputSinceLastFrame(ref input.m_dashPressed) ? 1 : 0; //dash
         }
     }
-    
-    
+
     private void RuleBasedHeuristic(in ActionBuffers actionsOut)
     {
         // Implement your custom rule-based logic to determine action values
@@ -819,17 +817,6 @@ public class DodgeBallAgent : Agent
     
         // Calculate targetRotation based on the updated direction
         float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        
-        // Obstacle avoidance
-        RaycastHit hit;
-        float obstacleAvoidanceDistance = 2f;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidanceDistance))
-        {
-            if (hit.collider.gameObject.CompareTag("wall") || hit.collider.gameObject.CompareTag("bush"))
-            {
-                transform.rotation = Quaternion.Euler(0, targetRotation + 90, 0);
-            }
-        }
 
         // HANDLE ROTATION
         float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
