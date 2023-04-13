@@ -517,7 +517,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b0da1813c36914e678ba57f2790424e1, type: 2}
+  - {fileID: 2100000, guid: 246facd8810fbbe4381af6c359a45481, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -878,6 +878,7 @@ MonoBehaviour:
   input: {fileID: 6990557895650846690}
   currentNumberOfBalls: 0
   currentlyHeldBalls: []
+  waypointsContainer: {fileID: 0}
   UseVectorObs: 1
   HomeBaseLocation: {fileID: 0}
   TeamFlag: {fileID: 0}
@@ -897,9 +898,12 @@ MonoBehaviour:
   StunnedCollider: {fileID: 1611457239460319867}
   FlagAnimator: {fileID: 5401863399974773532}
   VictoryDanceAnimation: {fileID: 7807778508822777961}
+  m_gameLogger: {fileID: 0}
   m_PlayerInitialized: 0
   m_BehaviorParameters: {fileID: 0}
+  useRuleBasedAgent: 0
   m_InputH: 0
+  rotationSpeed: 5
   m_ThrowInput: 0
   m_DashInput: 0
   m_StunTime: 0
@@ -971,7 +975,10 @@ MonoBehaviour:
   dashCoolDownTimer: 0
   agentIdleDragVelCoeff: 1
   MouseSensitivity: 10
+  mouseSmoothing: 0.5
   MouseSmoothTime: 0.01
+  rotateSpeed: 100
+  gameLogger: {fileID: 0}
   agentFallingSpeed: 80
   AnimateBodyMesh: 1
   walkingBounceCurve:
