@@ -4882,6 +4882,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8364318264098195072, guid: 8653081ca76ee5c4ab6f5662b6b0abec,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 363751682}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8653081ca76ee5c4ab6f5662b6b0abec, type: 3}
 --- !u!224 &1100333040 stripped
@@ -6296,7 +6301,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 2.4675767, y: 1}
+    m_SensorSize: {x: 2.4680684, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -6312,7 +6317,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367967954}
-  m_LocalRotation: {x: -2.0848121e-17, y: 0.9962975, z: -0.085972905, w: -4.408007e-16}
+  m_LocalRotation: {x: 2.6241823e-25, y: 0.9962975, z: -0.08597288, w: 5.3644145e-23}
   m_LocalPosition: {x: 16, y: 3.7600002, z: 14.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10593,7 +10598,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8697938321410268827}
-  m_LocalRotation: {x: -2.0848121e-17, y: 0.9962975, z: -0.085972905, w: -4.408007e-16}
+  m_LocalRotation: {x: 2.6241823e-25, y: 0.9962975, z: -0.08597288, w: 5.3644145e-23}
   m_LocalPosition: {x: 16, y: 3.7600002, z: 14.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
