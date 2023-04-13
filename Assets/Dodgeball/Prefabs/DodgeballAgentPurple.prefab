@@ -771,6 +771,7 @@ GameObject:
   - component: {fileID: 115153164802481591}
   - component: {fileID: 6990557895650846690}
   - component: {fileID: 6990557894678178272}
+  - component: {fileID: 591241111085697253}
   m_Layer: 0
   m_Name: DodgeballAgentPurple
   m_TagString: purpleAgent
@@ -902,6 +903,7 @@ MonoBehaviour:
   m_PlayerInitialized: 0
   m_BehaviorParameters: {fileID: 0}
   useRuleBasedAgent: 0
+  useStillAgent: 0
   m_InputH: 0
   rotationSpeed: 5
   m_ThrowInput: 0
@@ -1226,6 +1228,28 @@ MonoBehaviour:
   RotateTowardsTarget: 1
   OnlyShootIfCanSeeTarget: 0
   m_Agent: {fileID: 0}
+--- !u!114 &591241111085697253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115153164802481586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 001f9653b9e8f0f4c8f9c42023af93ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameController: {fileID: 0}
+  winner: 0
+  blueLives: 0
+  purpleLives: 0
+  blueBalls: 0
+  hit: 0
+  thrower: 0
+  fileNameResults: 
+  fileNamePlayerData: 
+  winstr: 
 --- !u!1 &115153164857879341
 GameObject:
   m_ObjectHideFlags: 0

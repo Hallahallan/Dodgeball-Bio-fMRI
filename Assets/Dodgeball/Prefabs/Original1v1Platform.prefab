@@ -1094,10 +1094,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 001f9653b9e8f0f4c8f9c42023af93ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameController: {fileID: 4993607472596837024}
   winner: 0
-  playerBlueLives: 0
-  playerPurpleLives: 0
-  fileName: 
+  blueLives: 0
+  purpleLives: 0
+  blueBalls: 0
+  hit: 0
+  thrower: 0
+  fileNameResults: 
+  fileNamePlayerData: 
+  winstr: 
 --- !u!1 &4993900793834755649
 GameObject:
   m_ObjectHideFlags: 0
@@ -3572,6 +3578,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 591241111085697253, guid: b3d09458f82504dacbb8e7ee52763d1b,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 4993607472596837024}
     - target: {fileID: 1718764263605991940, guid: b3d09458f82504dacbb8e7ee52763d1b,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -9221,6 +9232,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4996977579723193051}
     m_Modifications:
+    - target: {fileID: 365774746508827441, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
+        type: 3}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 4993607472596837024}
     - target: {fileID: 2362376524419360326, guid: 36ed6b311c61f4b5bac2e2a72c68657f,
         type: 3}
       propertyPath: m_RootOrder

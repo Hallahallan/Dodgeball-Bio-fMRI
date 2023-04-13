@@ -76,6 +76,7 @@ public class DodgeBallAgent : Agent
     [Header("OTHER")] public bool m_PlayerInitialized;
     public BehaviorParameters m_BehaviorParameters;
     public bool useRuleBasedAgent = false;
+    public bool useStillAgent = false;
 
     public float m_InputH;
     private Vector3 m_HomeBasePosition;
@@ -696,6 +697,11 @@ public class DodgeBallAgent : Agent
         {
             RuleBasedHeuristic(actionsOut);
         }
+
+        if (useStillAgent)
+        {
+            stillAgentHeuristic(actionsOut);
+        }
         //Used for human input
         else
         {
@@ -709,6 +715,10 @@ public class DodgeBallAgent : Agent
         }
     }
 
+    private void stillAgentHeuristic(in ActionBuffers actionsOut)
+    {
+        return;
+    }
     private void RuleBasedHeuristic(in ActionBuffers actionsOut)
     {
         // Implement your custom rule-based logic to determine action values
