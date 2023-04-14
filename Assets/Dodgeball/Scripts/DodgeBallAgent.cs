@@ -738,7 +738,7 @@ public class DodgeBallAgent : Agent
 
         if (Vector3.Distance(transform.position, targetPosition) < waypointReachDistance)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; // Denne er spice
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; 
         }
     }
     

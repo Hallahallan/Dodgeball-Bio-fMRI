@@ -62,6 +62,12 @@ public class DodgeBallGameController : MonoBehaviour
     [Header("LOSER PLATFORM")]
     public List<GameObject> blueLosersList;
     public List<GameObject> purpleLosersList;
+    
+    [Header("CORNERS")]
+    [SerializeField]
+    private Transform cornersContainer;
+    private List<Transform> corners;
+    private float cornerReachDistance = 3f;
 
     [Header("UI Audio")]
     public AudioClip FlagHitClip;
@@ -168,6 +174,7 @@ public class DodgeBallGameController : MonoBehaviour
 
         SetActiveLosers(blueLosersList, 0);
         SetActiveLosers(purpleLosersList, 0);
+        InitializeCorners();
 
         //Poof Particles
         if (usePoofParticlesOnElimination)
@@ -563,6 +570,28 @@ public class DodgeBallGameController : MonoBehaviour
         gameLogger.LogPlayerData(n);
     }
     
+    private void InitializeCorners()
+    {
+        // Code to initialize the waypoints list
+        corners = new List<Transform>();
+        for (int i = 0; i < cornersContainer.childCount; i++)
+        {
+            corners.Add(cornersContainer.GetChild(i));
+        }
+    }
+    
+    public int GetAgentCornerIndex(Transform agentTransform)
+    {
+        for (int i = 0; i < corners.Count; i++)
+        {
+            float distance = Vector3.Distance(agentTransform.position, corners[i].position);
+            if (distance < cornerReachDistance)
+            {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
 
     //Call this method when an agent picks up an enemy flag.
     public void FlagWasTaken(DodgeBallAgent agent)

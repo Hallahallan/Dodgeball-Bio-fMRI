@@ -50,24 +50,10 @@ public class GameLogger : MonoBehaviour
             writer.WriteLine(logMessage);
         }
     }
-    
-    // // Log when the application is closed
-    // private void OnApplicationQuit()
-    // {
-    //     string logMessage = "Application Closed at: " + DateTime.Now.ToString();
-    //     // Create the "Logs" folder if it doesn't already exist
-    //     string folderPath = Path.Combine(Application.dataPath, "Dodgeball/Logs/Results");
-    //     if (!Directory.Exists(folderPath))
-    //     {
-    //         Directory.CreateDirectory(folderPath);
-    //     }
-    //     string path = Path.Combine(folderPath, fileNameResults);
-    //     File.AppendAllText(path, logMessage + Environment.NewLine);
-    // }
 
+    // Player data logger for analyzing game events paired with timestamps and fMRI data
     public void LogPlayerData(int n)
     {
-        
         string timestamp = System.DateTime.Now.ToString("HH:mm:ss.fff");
         string folderPath = Path.Combine(Application.dataPath, "DodgeBall/Logs/PlayerData"); //Creates folder path
         //If folder path doesn't exist, create it
@@ -77,14 +63,19 @@ public class GameLogger : MonoBehaviour
         }
         string path = Path.Combine(folderPath, fileNamePlayerData);
         
+        // Get the purple agent transform using GameController
+        Transform purpleAgentTransform = gameController.Team1Players[0].Agent.transform;
+
+        // Get the corner index the purple agent is in
+        int cornerIndex = gameController.GetAgentCornerIndex(purpleAgentTransform);
+
         using (StreamWriter writer = File.AppendText(path))
         {
             // Write column names if the file is empty
             if (new FileInfo(path).Length == 0)
             {
-                writer.WriteLine("Timestamp,EventType,BallsLeft,PlayerLives,EnemyLives");
-                writer.WriteLine($"{timestamp},{"Init"},{0},{3},{3}");
-
+                writer.WriteLine("Timestamp,EventType,BallsLeft,PlayerLives,EnemyLives,Corner");
+                writer.WriteLine($"{timestamp},{"Init"},{0},{3},{3},{cornerIndex}");
             }
             
             string eventType = "";
@@ -114,9 +105,8 @@ public class GameLogger : MonoBehaviour
             _latestBlueBalls = gameController.Team0Players[0].Agent.currentNumberOfBalls;
             _latestBlueLives = gameController.Team0Players[0].Agent.HitPointsRemaining;
             _latestPurpleLives = gameController.Team1Players[0].Agent.HitPointsRemaining;
-            // _latestCornerStatus = gameController.Team1Players[1].Agent.IsInCorner; // Add for enemy in corner, remember to add to writer.Writelines both here and above
 
-            writer.WriteLine($"{timestamp},{eventType},{_latestBlueBalls},{_latestBlueLives},{_latestPurpleLives}");
+            writer.WriteLine($"{timestamp},{eventType},{_latestBlueBalls},{_latestBlueLives},{_latestPurpleLives},{cornerIndex}");
         }
     }
 }
