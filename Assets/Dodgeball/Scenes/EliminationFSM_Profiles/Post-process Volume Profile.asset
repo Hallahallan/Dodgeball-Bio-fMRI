@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8618827863609428157
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: SobelOutline
+  m_EditorClassIdentifier: Assembly-CSharp:VertexFragment:SobelOutline
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  thickness:
+    overrideState: 1
+    value: 1
+  depthMultiplier:
+    overrideState: 1
+    value: 1
+  depthBias:
+    overrideState: 1
+    value: 1
+  normalMultiplier:
+    overrideState: 1
+    value: 1
+  normalBias:
+    overrideState: 1
+    value: 10
+  color:
+    overrideState: 0
+    value: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &-6242904461597152875
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: SobelOutlineEffect
+  m_EditorClassIdentifier: Assembly-CSharp::SobelOutlineEffect
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  edgeThreshold:
+    overrideState: 1
+    value: 0.099
+  edgeColor:
+    overrideState: 1
+    value:
+      r: 0
+      g: 0
+      b: 0
+      a: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
+  m_Name: Post-process Volume Profile
+  m_EditorClassIdentifier: 
+  settings:
+  - {fileID: -8618827863609428157}
