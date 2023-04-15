@@ -3782,7 +3782,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Purple Wins!
+  m_text: Pink Wins!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -3792,7 +3792,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4291325325
-  m_fontColor: {r: 0.5541859, g: 0.42738053, b: 0.78431374, a: 1}
+  m_fontColor: {r: 1, g: 0, b: 0.5372549, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6068,7 +6068,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367967954}
-  m_LocalRotation: {x: -5.0387695e-32, y: 0.9962975, z: -0.08597289, w: 7.0126946e-31}
+  m_LocalRotation: {x: -6.4054806e-10, y: 0.9962975, z: -0.0859729, w: -0.0000000074229956}
   m_LocalPosition: {x: 16, y: 3.7600002, z: 14.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10260,7 +10260,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8697938321410268827}
-  m_LocalRotation: {x: -5.0387695e-32, y: 0.9962975, z: -0.08597289, w: 7.0126946e-31}
+  m_LocalRotation: {x: -6.4054806e-10, y: 0.9962975, z: -0.0859729, w: -0.0000000074229956}
   m_LocalPosition: {x: 16, y: 3.7600002, z: 14.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
