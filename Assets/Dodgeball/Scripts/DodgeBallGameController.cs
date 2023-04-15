@@ -340,7 +340,8 @@ public class DodgeBallGameController : MonoBehaviour
     {
         if (m_GameEnded) return;
         m_GameEnded = true;
-
+        
+        Debug.Log("INSIDE SHOWWINSCREEN");
         StartCoroutine(ShowWinScreenThenReset(winningTeam, delaySeconds));
     }
 
@@ -361,6 +362,8 @@ public class DodgeBallGameController : MonoBehaviour
 
     public IEnumerator ShowWinScreenThenReset(int winningTeam, float delaySeconds)
     {
+        Debug.Log(winningTeam);
+        Debug.Log(delaySeconds);
         GameObject winTextGO = winningTeam == 0 ? BlueTeamWonUI : PurpleTeamWonUI;
         AudioClip clipToUse1 = winningTeam == 0 ? WinSoundFX1 : LoseSoundFX1;
         AudioClip clipToUse2 = winningTeam == 0 ? WinSoundFX2 : LoseSoundFX2;
@@ -409,6 +412,7 @@ public class DodgeBallGameController : MonoBehaviour
         yield return new WaitForSeconds(2f - totalTimeSpent);
 
         winTextGO.SetActive(false);
+        Debug.Log("WINNER: " + winningTeam + " HIDE WIN SCREEN");
         ResetScene();
     }
 
@@ -507,15 +511,19 @@ public class DodgeBallGameController : MonoBehaviour
                     hit.DropAllBalls();
                     if (ShouldPlayEffects)
                     {
-                        // Don't poof the last agent
+                        // Don't poof the last agent in the scene
                         StartCoroutine(TumbleThenPoof(hit, false));
                     }
-                    
+
                     hit.EndEpisode();
                     thrower.EndEpisode();
-                    hit.gameObject.SetActive(false);
-                    thrower.gameObject.SetActive(false);
                     
+                    if (!ShouldPlayEffects)
+                    {
+                        hit.gameObject.SetActive(false);
+                        thrower.gameObject.SetActive(false);
+                    }
+
                     if (FindObjectsOfType<DodgeBallAgent>().Length == 0)
                     {
                         // Go through all the controllers and end the game accordingly when there are no agents left.
@@ -526,23 +534,11 @@ public class DodgeBallGameController : MonoBehaviour
                             {
                                 controller.ResetScene();    // Reset all other levels
                             }
+                            
                         }
-                        ResetScene();   // Reset this level
+                        // ResetScene();   // Reset this level
                     }
-                }
-                // The current agent was just killed but there are other agents
-                else
-                {
-                    // Additional effects for game mode
-                    if (ShouldPlayEffects)
-                    {
-                        StartCoroutine(TumbleThenPoof(hit));
-                    }
-                    else
-                    {
-                        hit.gameObject.SetActive(false);
-                    }
-                    hit.DropAllBalls();
+                    EndGame(throwTeamID);
                 }
             }
         }
