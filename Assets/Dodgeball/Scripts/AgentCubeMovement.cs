@@ -67,7 +67,8 @@ namespace MLAgents
         public AgentCubeGroundCheck groundCheck;
         private float inputH;
         private float inputV;
-        private const string ShootTethyx = "TethyxFire"; //Constant string for finding the trigger button on tethyx
+        private const string ShootTethyx = "TethyxFire"; //Constant string for finding the shoot button on tethyx
+        private const string DashTethyx = "TethyxDash"; //Constant string for finding the dash button on tethyx
         DodgeBallAgentInput m_Input;
 
         private DodgeBallAgent m_Agent;
@@ -176,7 +177,7 @@ namespace MLAgents
             LookT();
             // LookZX();
 
-            if (m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_dashPressed))
+            if (m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_dashPressed) || Input.GetButtonDown(DashTethyx)) //For dashing with tethyx
             {
                 Dash(rb.transform.TransformDirection(new Vector3(inputH, 0, inputV)));
             }
