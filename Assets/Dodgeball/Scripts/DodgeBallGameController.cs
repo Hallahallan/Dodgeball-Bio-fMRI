@@ -341,7 +341,6 @@ public class DodgeBallGameController : MonoBehaviour
         if (m_GameEnded) return;
         m_GameEnded = true;
         
-        Debug.Log("INSIDE SHOWWINSCREEN");
         StartCoroutine(ShowWinScreenThenReset(winningTeam, delaySeconds));
     }
 
@@ -362,8 +361,6 @@ public class DodgeBallGameController : MonoBehaviour
 
     public IEnumerator ShowWinScreenThenReset(int winningTeam, float delaySeconds)
     {
-        Debug.Log(winningTeam);
-        Debug.Log(delaySeconds);
         GameObject winTextGO = winningTeam == 0 ? BlueTeamWonUI : PurpleTeamWonUI;
         AudioClip clipToUse1 = winningTeam == 0 ? WinSoundFX1 : LoseSoundFX1;
         AudioClip clipToUse2 = winningTeam == 0 ? WinSoundFX2 : LoseSoundFX2;

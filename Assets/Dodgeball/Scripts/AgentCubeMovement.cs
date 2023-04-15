@@ -119,7 +119,7 @@ namespace MLAgents
             tethyxInput *= 1.5f;
             //OUTCOMMENTED FOR TESTING, THESE ARE 7T EXCLUSIVE ADAPTIONS
             /*
-            // Upper deazone + then compensating the speed to achieve same max rotational speed.
+            // Upper deadzone + then compensating the speed to achieve same max rotational speed.
             tethyxInput = Mathf.Clamp(tethyxInput, -0.3f, 0.4f);
             if (tethyxInput <= 0)
             {
@@ -165,10 +165,10 @@ namespace MLAgents
                  */
                 
                 // inputH = Input.GetAxis("TethyxHorizontal"); //For movement with Tethyx Joystick
-                // inputV = Input.GetAxis("TethyxVertical"); //For movement with Tethyx Joystick
+                inputV = Input.GetAxis("TethyxVertical"); //For movement with Tethyx Joystick
                 
                 inputH = m_Input.moveInput.x; // For movement with WASD
-                inputV = m_Input.moveInput.y; // For movement with WASD
+                // inputV = m_Input.moveInput.y; // For movement with WASD
             }
             var movDir = transform.TransformDirection(new Vector3(inputH, 0, inputV));
             RunOnGround(movDir);
@@ -183,7 +183,6 @@ namespace MLAgents
             if ((m_Agent && m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_throwPressed)) || Input.GetButtonDown(ShootTethyx)) //For shooting with tethyx
             {
                 m_Agent.ThrowTheBall();
-                // gameLogger.LogPlayerData(1);
             }
         }
 
