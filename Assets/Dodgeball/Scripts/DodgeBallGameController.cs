@@ -409,7 +409,6 @@ public class DodgeBallGameController : MonoBehaviour
         yield return new WaitForSeconds(2f - totalTimeSpent);
 
         winTextGO.SetActive(false);
-        Debug.Log("WINNER: " + winningTeam + " HIDE WIN SCREEN");
         ResetScene();
     }
 
