@@ -113,7 +113,7 @@ public class DodgeBallGameController : MonoBehaviour
     [Header("Gamelog")]
     public GameLogger gameLogger;
 
-    //private bool fMRI_Initialized;
+    private bool fMRI_Initialized;
     private bool m_Initialized;
     public List<PlayerInfo> Team0Players;
     public List<PlayerInfo> Team1Players;
@@ -185,7 +185,7 @@ public class DodgeBallGameController : MonoBehaviour
             }
         }
         m_Initialized = true;
-        //fMRI_Initialized = false;   // Will be initialized when fMRI is ready
+        fMRI_Initialized = false;   // Will be initialized when fMRI is ready
         
         ResetScene();
     }
@@ -765,8 +765,6 @@ public class DodgeBallGameController : MonoBehaviour
             Initialize();
         }
         
-        //OUTCOMMENTED FOR TESTING PURPOSES, THIS IS 7T EXCLUSIVE CODE
-        /*
         if (!fMRI_Initialized && Input.GetKeyDown(KeyCode.S))   // User has started the game
         {
             fMRI_Initialized = true;
@@ -777,6 +775,5 @@ public class DodgeBallGameController : MonoBehaviour
             Time.timeScale = 0.0f;
             return;
         }
-        */
     }
 }

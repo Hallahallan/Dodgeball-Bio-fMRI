@@ -117,16 +117,13 @@ namespace MLAgents
             float tethyxInput = Input.GetAxis("TethyxHorizontal");
             
             tethyxInput *= 1.5f;
-            //OUTCOMMENTED FOR TESTING, THESE ARE 7T EXCLUSIVE ADAPTIONS
-            /*
             // Upper deadzone + then compensating the speed to achieve same max rotational speed.
             tethyxInput = Mathf.Clamp(tethyxInput, -0.3f, 0.4f);
             if (tethyxInput <= 0)
             {
                 tethyxInput *= 2.2f;
             }
-            */
-            
+
             m_Yaw += tethyxInput * 3;
             float smoothYawOld = m_SmoothYaw;
             m_SmoothYaw = Mathf.SmoothDampAngle(m_SmoothYaw, m_Yaw, ref m_YawSmoothV, MouseSmoothTime);
