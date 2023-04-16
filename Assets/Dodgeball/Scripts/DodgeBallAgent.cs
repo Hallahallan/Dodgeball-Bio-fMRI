@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MLAgents;
 using UnityEngine;
 using Unity.MLAgents;
@@ -100,6 +101,17 @@ public class DodgeBallAgent : Agent
     public BufferSensorComponent m_OtherAgentsBuffer;
     float[] ballOneHot = new float[5];
 
+    // Eye tracking variables
+    private GameObject thisObject;  // Agent object for eye tracking
+    private int haveStarted = 0;
+    public Rect myCurrentObjectRect;
+    public Rect myPreviousObjectRect;
+    public int previousUpdateTime;
+    public int currentUpdateTime;
+    public string ttW;
+    public Boolean eyeTrackingActive = true;
+    public Vector2 direction { get; private set; }
+
     //is the current step a decision step for the agent
     private bool m_IsDecisionStep;
 
@@ -112,8 +124,11 @@ public class DodgeBallAgent : Agent
     public override void Initialize()
     {
         //Disable logging
-        Debug.unityLogger.logEnabled = false; 
+        Debug.unityLogger.logEnabled = true;
         
+        thisObject = GameObject.FindObjectsOfType<GameObject>().Where(obj => obj.name == "AgentCube")
+            .Where(obj => obj.tag == "purpleAgent").ToArray()[0];
+
         //SETUP STUNNED AS
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
         m_StunnedAudioSource.spatialBlend = 1;
@@ -297,7 +312,10 @@ public class DodgeBallAgent : Agent
             sensor.AddObservation(GetRelativeCoordinates(m_HomeBasePosition));
             sensor.AddObservation(HasEnemyFlag);
         }
-        
+
+        //sensor.AddObservation(0);
+        //sensor.AddObservation(0);
+        //sensor.AddObservation(0);
 
         // FOLLOWING CODE IS SPECIFIC TO CAPTURE THE FLAG AND MORE THAN 1V1
         
@@ -848,5 +866,33 @@ public class DodgeBallAgent : Agent
         // HANDLE XZ MOVEMENT
         var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         m_CubeMovement.RunOnGround(moveDir);
+    }
+    
+    void Update()
+    {
+        if (true)
+        {
+            myCurrentObjectRect = EyeLinkWebLinkUtil.getScreenRectFromGameObject(thisObject);
+
+            if (myCurrentObjectRect != myPreviousObjectRect)
+            {
+                currentUpdateTime = (int)Math.Round(Time.realtimeSinceStartup * 1000 + EyeLinkWebLinkUtil.timeOffset);
+                if (haveStarted == 1)
+                {
+                    ttW = Convert.ToString(EyeLinkWebLinkUtil.iasZeroPoint - previousUpdateTime) + " " + Convert.ToString(EyeLinkWebLinkUtil.iasZeroPoint - currentUpdateTime) +
+                          " !V IAREA RECTANGLE 1 " + Convert.ToString(myPreviousObjectRect.xMin - 25) + " " + Convert.ToString(myPreviousObjectRect.yMin - 25) +
+                          " " + Convert.ToString(myPreviousObjectRect.xMax + 25) + " " + Convert.ToString(myPreviousObjectRect.yMax + 25) + " enemy";
+                    EyeLinkWebLinkUtil.writeIASLine(ttW);
+
+                }
+                myPreviousObjectRect = myCurrentObjectRect;
+                previousUpdateTime = currentUpdateTime;
+
+                if (haveStarted == 0)
+                {
+                    haveStarted = 1;
+                }
+            }
+        }
     }
 }
