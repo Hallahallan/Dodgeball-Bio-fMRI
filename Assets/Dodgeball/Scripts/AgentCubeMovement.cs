@@ -49,6 +49,9 @@ namespace MLAgents
         private float m_YawSmoothV; // USED FOR AIMING WITH MOUSE
         Quaternion originalRotation;
         public float rotateSpeed = 100f; // Amount the player should turn while holding the turn button
+        
+        [Header("Gamelog")]
+        public GameLogger gameLogger;
 
         [Header("FALLING FORCE")]
         //force applied to agent while falling
@@ -64,7 +67,8 @@ namespace MLAgents
         public AgentCubeGroundCheck groundCheck;
         private float inputH;
         private float inputV;
-        private const string ShootTethyx = "TethyxFire"; //Constant string for finding the trigger button on tethyx
+        private const string ShootTethyx = "TethyxFire"; //Constant string for finding the shoot button on tethyx
+        private const string DashTethyx = "TethyxDash"; //Constant string for finding the dash button on tethyx
         DodgeBallAgentInput m_Input;
 
         private DodgeBallAgent m_Agent;
@@ -114,16 +118,13 @@ namespace MLAgents
             float tethyxInput = Input.GetAxis("TethyxHorizontal");
             
             tethyxInput *= 1.5f;
-            //OUTCOMMENTED FOR TESTING, THESE ARE 7T EXCLUSIVE ADAPTIONS
-            /*
-            // Upper deazone + then compensating the speed to achieve same max rotational speed.
+            // Upper deadzone + then compensating the speed to achieve same max rotational speed.
             tethyxInput = Mathf.Clamp(tethyxInput, -0.3f, 0.4f);
             if (tethyxInput <= 0)
             {
                 tethyxInput *= 2.2f;
             }
-            */
-            
+
             m_Yaw += tethyxInput * 3;
             float smoothYawOld = m_SmoothYaw;
             m_SmoothYaw = Mathf.SmoothDampAngle(m_SmoothYaw, m_Yaw, ref m_YawSmoothV, MouseSmoothTime);
@@ -161,7 +162,7 @@ namespace MLAgents
                  * accounted for.
                  */
                 
-                // inputH = Input.GetAxis("TethyxHaorizontal"); //For movement with Tethyx Joystick
+                // inputH = Input.GetAxis("TethyxHorizontal"); //For movement with Tethyx Joystick
                 inputV = Input.GetAxis("TethyxVertical"); //For movement with Tethyx Joystick
                 
                 inputH = m_Input.moveInput.x; // For movement with WASD
@@ -173,11 +174,11 @@ namespace MLAgents
             LookT();
             // LookZX();
 
-            if (m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_dashPressed))
+            if (m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_dashPressed) || Input.GetButtonDown(DashTethyx)) //For dashing with tethyx
             {
                 Dash(rb.transform.TransformDirection(new Vector3(inputH, 0, inputV)));
             }
-            if ((m_Agent && m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_throwPressed)) || Input.GetButtonDown(ShootTethyx))
+            if ((m_Agent && m_Input.CheckIfInputSinceLastFrame(ref m_Input.m_throwPressed)) || Input.GetButtonDown(ShootTethyx)) //For shooting with tethyx
             {
                 m_Agent.ThrowTheBall();
             }

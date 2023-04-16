@@ -18,8 +18,7 @@ public class DodgeBallGameController : MonoBehaviour
         Training,
         Movie,
     }
-    public SceneType CurrentSceneType = SceneType.Training;
-
+    public SceneType CurrentSceneType = SceneType.Game;
     public bool ShouldPlayEffects
     {
         get
@@ -63,6 +62,12 @@ public class DodgeBallGameController : MonoBehaviour
     [Header("LOSER PLATFORM")]
     public List<GameObject> blueLosersList;
     public List<GameObject> purpleLosersList;
+    
+    [Header("CORNERS")]
+    [SerializeField]
+    private Transform cornersContainer;
+    private List<Transform> corners;
+    private float cornerReachDistance = 3f;
 
     [Header("UI Audio")]
     public AudioClip FlagHitClip;
@@ -105,10 +110,10 @@ public class DodgeBallGameController : MonoBehaviour
         public int TeamID;
     }
     
-    [Header("Log")]
+    [Header("Gamelog")]
     public GameLogger gameLogger;
 
-    //private bool fMRI_Initialized;
+    private bool fMRI_Initialized;
     private bool m_Initialized;
     public List<PlayerInfo> Team0Players;
     public List<PlayerInfo> Team1Players;
@@ -169,6 +174,7 @@ public class DodgeBallGameController : MonoBehaviour
 
         SetActiveLosers(blueLosersList, 0);
         SetActiveLosers(purpleLosersList, 0);
+        InitializeCorners();
 
         //Poof Particles
         if (usePoofParticlesOnElimination)
@@ -179,7 +185,7 @@ public class DodgeBallGameController : MonoBehaviour
             }
         }
         m_Initialized = true;
-        //fMRI_Initialized = false;   // Will be initialized when fMRI is ready
+        fMRI_Initialized = false;   // Will be initialized when fMRI is ready
         
         ResetScene();
     }
@@ -335,12 +341,6 @@ public class DodgeBallGameController : MonoBehaviour
         if (m_GameEnded) return;
         m_GameEnded = true;
         
-        gameLogger = GetComponent<GameLogger>(); 
-        gameLogger.winner = winningTeam; //Who won?
-        gameLogger.playerBlueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
-        gameLogger.playerPurpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
-        gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
-        
         StartCoroutine(ShowWinScreenThenReset(winningTeam, delaySeconds));
     }
 
@@ -465,6 +465,9 @@ public class DodgeBallGameController : MonoBehaviour
         var ThrowAgentGroup = hitTeamID == 1 ? m_Team0AgentGroup : m_Team1AgentGroup;
         float hitBonus = GameMode == GameModeType.Elimination ? EliminationHitBonus : CTFHitBonus;
         
+        //Get the game logger
+        gameLogger = GetComponent<GameLogger>();
+
         // Always drop the flag
         if (DropFlagImmediately)
         {
@@ -490,18 +493,33 @@ public class DodgeBallGameController : MonoBehaviour
                     
                     print($"Team {throwTeamID} Won");
                     hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
+                    
+                    //Log the hit  
+                    if (hit.teamID == 0) {logHit(hit, thrower, 4);}
+                    else if (hit.teamID == 1) { logHit(hit, thrower, 3);}
+                    
+                    //Log the results of the game
+                    gameLogger.winner = thrower.teamID; //Who won?
+                    gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
+                    gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
+                    gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
+                    
                     hit.DropAllBalls();
                     if (ShouldPlayEffects)
                     {
-                        // Don't poof the last agent
+                        // Don't poof the last agent in the scene
                         StartCoroutine(TumbleThenPoof(hit, false));
                     }
-                    
+
                     hit.EndEpisode();
                     thrower.EndEpisode();
-                    hit.gameObject.SetActive(false);
-                    thrower.gameObject.SetActive(false);
                     
+                    if (!ShouldPlayEffects)
+                    {
+                        hit.gameObject.SetActive(false);
+                        thrower.gameObject.SetActive(false);
+                    }
+
                     if (FindObjectsOfType<DodgeBallAgent>().Length == 0)
                     {
                         // Go through all the controllers and end the game accordingly when there are no agents left.
@@ -512,36 +530,60 @@ public class DodgeBallGameController : MonoBehaviour
                             {
                                 controller.ResetScene();    // Reset all other levels
                             }
+                            
                         }
-                        ResetScene();   // Reset this level
+                        // ResetScene();   // Reset this level
                     }
-                }
-                // The current agent was just killed but there are other agents
-                else
-                {
-                    // Additional effects for game mode
-                    if (ShouldPlayEffects)
-                    {
-                        StartCoroutine(TumbleThenPoof(hit));
-                    }
-                    else
-                    {
-                        hit.gameObject.SetActive(false);
-                    }
-                    hit.DropAllBalls();
+                    EndGame(throwTeamID);
                 }
             }
         }
         else
         {
             hit.HitPointsRemaining--;
+            
+            //Log the hit  
+            if (hit.teamID == 0) { logHit(hit, thrower, 4);}
+            else if (hit.teamID == 1) {logHit(hit, thrower, 3);}
+
             //Sets headband color after hit has been taken
-            hit.setHeadBandColor(hit.HitPointsRemaining);
+            hit.SetHeadBandColor(hit.HitPointsRemaining);
             thrower.AddReward(hitBonus);
         }
     }
+
+    public void logHit(DodgeBallAgent hit, DodgeBallAgent thrower, int n)
+    {
+        gameLogger.hit = hit.teamID;
+        gameLogger.thrower = thrower.teamID;
+        gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining;
+        gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining;
+        gameLogger.blueBalls = Team0Players[0].Agent.currentNumberOfBalls;
+        gameLogger.LogPlayerData(n);
+    }
     
+    private void InitializeCorners()
+    {
+        // Code to initialize the waypoints list
+        corners = new List<Transform>();
+        for (int i = 0; i < cornersContainer.childCount; i++)
+        {
+            corners.Add(cornersContainer.GetChild(i));
+        }
+    }
     
+    public int GetAgentCornerIndex(Transform agentTransform)
+    {
+        for (int i = 0; i < corners.Count; i++)
+        {
+            float distance = Vector3.Distance(agentTransform.position, corners[i].position);
+            if (distance < cornerReachDistance)
+            {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
 
     //Call this method when an agent picks up an enemy flag.
     public void FlagWasTaken(DodgeBallAgent agent)
@@ -683,7 +725,7 @@ public class DodgeBallGameController : MonoBehaviour
         foreach (var item in Team0Players)
         {
             item.Agent.HitPointsRemaining = PlayerMaxHitPoints;
-            item.Agent.setHeadBandColor(PlayerMaxHitPoints); //Expensive because DBGC.cs -> DBA.cs -> HeadBand.cs
+            item.Agent.SetHeadBandColor(PlayerMaxHitPoints); //Expensive because DBGC.cs -> DBA.cs -> HeadBand.cs
             item.Agent.gameObject.SetActive(true);
             item.Agent.ResetAgent();
             m_Team0AgentGroup.RegisterAgent(item.Agent);
@@ -691,7 +733,7 @@ public class DodgeBallGameController : MonoBehaviour
         foreach (var item in Team1Players)
         {
             item.Agent.HitPointsRemaining = PlayerMaxHitPoints;
-            item.Agent.setHeadBandColor(PlayerMaxHitPoints); // ^
+            item.Agent.SetHeadBandColor(PlayerMaxHitPoints); // ^
             item.Agent.gameObject.SetActive(true);
             item.Agent.ResetAgent();
             m_Team1AgentGroup.RegisterAgent(item.Agent);
@@ -708,8 +750,10 @@ public class DodgeBallGameController : MonoBehaviour
             Team1Flag.gameObject.SetActive(false);
         }
 
-        SetActiveLosers(blueLosersList, 0);
         SetActiveLosers(purpleLosersList, 0);
+        
+        gameLogger = GetComponent<GameLogger>();
+        gameLogger.LogPlayerData(6);
     }
 
     // Update is called once per frame
@@ -720,8 +764,6 @@ public class DodgeBallGameController : MonoBehaviour
             Initialize();
         }
         
-        //OUTCOMMENTED FOR TESTING PURPOSES, THIS IS 7T EXCLUSIVE CODE
-        /*
         if (!fMRI_Initialized && Input.GetKeyDown(KeyCode.S))   // User has started the game
         {
             fMRI_Initialized = true;
@@ -732,6 +774,5 @@ public class DodgeBallGameController : MonoBehaviour
             Time.timeScale = 0.0f;
             return;
         }
-        */
     }
 }

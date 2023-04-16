@@ -517,7 +517,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b0da1813c36914e678ba57f2790424e1, type: 2}
+  - {fileID: 2100000, guid: 246facd8810fbbe4381af6c359a45481, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -771,6 +771,7 @@ GameObject:
   - component: {fileID: 115153164802481591}
   - component: {fileID: 6990557895650846690}
   - component: {fileID: 6990557894678178272}
+  - component: {fileID: 591241111085697253}
   m_Layer: 0
   m_Name: DodgeballAgentPurple
   m_TagString: purpleAgent
@@ -878,6 +879,7 @@ MonoBehaviour:
   input: {fileID: 6990557895650846690}
   currentNumberOfBalls: 0
   currentlyHeldBalls: []
+  waypointsContainer: {fileID: 0}
   UseVectorObs: 1
   HomeBaseLocation: {fileID: 0}
   TeamFlag: {fileID: 0}
@@ -897,9 +899,13 @@ MonoBehaviour:
   StunnedCollider: {fileID: 1611457239460319867}
   FlagAnimator: {fileID: 5401863399974773532}
   VictoryDanceAnimation: {fileID: 7807778508822777961}
+  m_gameLogger: {fileID: 0}
   m_PlayerInitialized: 0
   m_BehaviorParameters: {fileID: 0}
+  useRuleBasedAgent: 0
+  useStillAgent: 0
   m_InputH: 0
+  rotationSpeed: 5
   m_ThrowInput: 0
   m_DashInput: 0
   m_StunTime: 0
@@ -971,7 +977,10 @@ MonoBehaviour:
   dashCoolDownTimer: 0
   agentIdleDragVelCoeff: 1
   MouseSensitivity: 10
+  mouseSmoothing: 0.5
   MouseSmoothTime: 0.01
+  rotateSpeed: 100
+  gameLogger: {fileID: 0}
   agentFallingSpeed: 80
   AnimateBodyMesh: 1
   walkingBounceCurve:
@@ -1219,6 +1228,28 @@ MonoBehaviour:
   RotateTowardsTarget: 1
   OnlyShootIfCanSeeTarget: 0
   m_Agent: {fileID: 0}
+--- !u!114 &591241111085697253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115153164802481586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 001f9653b9e8f0f4c8f9c42023af93ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameController: {fileID: 0}
+  winner: 0
+  blueLives: 0
+  purpleLives: 0
+  blueBalls: 0
+  hit: 0
+  thrower: 0
+  fileNameResults: 
+  fileNamePlayerData: 
+  winstr: 
 --- !u!1 &115153164857879341
 GameObject:
   m_ObjectHideFlags: 0

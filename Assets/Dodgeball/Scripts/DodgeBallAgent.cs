@@ -13,7 +13,6 @@ using Random = UnityEngine.Random;
 public class DodgeBallAgent : Agent
 {
     [Header("TEAM")]
-
     public int teamID;
     private AgentCubeMovement m_CubeMovement;
     public ThrowBall ThrowController;
@@ -31,6 +30,18 @@ public class DodgeBallAgent : Agent
     [Header("INVENTORY")]
     public int currentNumberOfBalls;
     public List<DodgeBall> currentlyHeldBalls;
+    
+    [Header("WAYPOINTS")]
+    [SerializeField]
+    private Transform waypointsContainer;
+    private List<Transform> waypoints;
+    private int currentWaypointIndex = 0;
+    private float waypointReachDistance = 7f;
+    private float agentSpeed = 5f;
+    
+    [Header("SENSORS")]
+    public RayPerceptionSensor wallRaycastSensor;
+    public RayPerceptionSensor backRaycastSensor;
 
     public bool UseVectorObs;
     public Transform HomeBaseLocation;
@@ -58,16 +69,21 @@ public class DodgeBallAgent : Agent
     
     [Header("ANIMATIONS")] public Animator FlagAnimator;
     public Animator VictoryDanceAnimation;
+    
+    [Header("Gamelog")]
+    public GameLogger m_gameLogger;
 
     [Header("OTHER")] public bool m_PlayerInitialized;
-    [HideInInspector]
     public BehaviorParameters m_BehaviorParameters;
+    public bool useRuleBasedAgent = false;
+    public bool useStillAgent = false;
 
     public float m_InputH;
     private Vector3 m_HomeBasePosition;
     private Vector3 m_HomeDirection;
     private float m_InputV;
     private float m_Rotate;
+    public float rotationSpeed = 5f;
     public float m_ThrowInput;
     public float m_DashInput;
     private bool m_FirstInitialize = true;
@@ -118,6 +134,8 @@ public class DodgeBallAgent : Agent
         AgentRb = GetComponent<Rigidbody>();
         input = GetComponent<DodgeBallAgentInput>();
         m_GameController = GetComponentInParent<DodgeBallGameController>();
+        
+        m_gameLogger = GetComponent<GameLogger>(); 
 
         //Make sure ThrowController is set up to play sounds
         ThrowController.PlaySound = m_GameController.ShouldPlayEffects;
@@ -224,7 +242,7 @@ public class DodgeBallAgent : Agent
         }
     }
 
-    public void setHeadBandColor(int hp)
+    public void SetHeadBandColor(int hp)
     {
         // Resources.Load<Material>("pink");
         switch (hp)  // Headband should change color when hit
@@ -271,7 +289,6 @@ public class DodgeBallAgent : Agent
             sensor.AddObservation(ballOneHot); //Held DBs Normalized
             sensor.AddObservation((float)HitPointsRemaining / (float)NumberOfTimesPlayerCanBeHit); //Remaining Hit Points Normalized
 
-            
             sensor.AddObservation(Vector3.Dot(AgentRb.velocity, AgentRb.transform.forward));
             sensor.AddObservation(Vector3.Dot(AgentRb.velocity, AgentRb.transform.right));
             sensor.AddObservation(transform.InverseTransformDirection(m_HomeDirection));
@@ -437,6 +454,17 @@ public class DodgeBallAgent : Agent
             ActiveBallsQueue.Dequeue();
             currentNumberOfBalls--;
             SetActiveBalls(currentNumberOfBalls);
+            
+            //Log data
+            if (m_BehaviorParameters.TeamId == 0)
+            {
+                m_gameLogger.blueBalls = currentNumberOfBalls;
+                m_gameLogger.LogPlayerData(1); //Log player throw
+            }
+            else if(m_BehaviorParameters.TeamId == 1)
+            {
+                m_gameLogger.LogPlayerData(5); //Log enemy throw
+            }
         }
     }
 
@@ -653,6 +681,7 @@ public class DodgeBallAgent : Agent
         {
             m_BallImpactAudioSource.PlayOneShot(m_GameController.BallPickupClip, .1f);
         }
+
         //update counter
         currentNumberOfBalls++;
         SetActiveBalls(currentNumberOfBalls);
@@ -661,21 +690,163 @@ public class DodgeBallAgent : Agent
         ActiveBallsQueue.Enqueue(db);
         db.BallIsInPlay(true);
         db.gameObject.SetActive(false);
-    }
 
-    //Used for human input
+        //Log data
+        if (m_BehaviorParameters.TeamId == 0) {
+            m_gameLogger.blueBalls = currentNumberOfBalls;
+            m_gameLogger.LogPlayerData(2); 
+        }
+    }
+    
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        if (disableInputCollectionInHeuristicCallback || m_IsStunned)
+        // if (disableInputCollectionInHeuristicCallback || m_IsStunned)
+        // {
+        //     return;
+        // }
+
+        //Use rule-based agent if enabled
+        if (useRuleBasedAgent)
         {
-            return;
+            RuleBasedHeuristic(actionsOut);
         }
-        var contActionsOut = actionsOut.ContinuousActions;
-        contActionsOut[0] = input.moveInput.y;
-        contActionsOut[1] = input.moveInput.x;
-        contActionsOut[2] = input.rotateInput * 3; //rotate
-        var discreteActionsOut = actionsOut.DiscreteActions;
-        discreteActionsOut[0] = input.CheckIfInputSinceLastFrame(ref input.m_throwPressed) ? 1 : 0; //dash
-        discreteActionsOut[1] = input.CheckIfInputSinceLastFrame(ref input.m_dashPressed) ? 1 : 0; //dash
+
+        if (useStillAgent)
+        {
+            stillAgentHeuristic(actionsOut);
+        }
+        //Used for human input
+        else
+        {
+            var contActionsOut = actionsOut.ContinuousActions;
+            contActionsOut[0] = input.moveInput.y;
+            contActionsOut[1] = input.moveInput.x;
+            contActionsOut[2] = input.rotateInput * 3; //rotate
+            var discreteActionsOut = actionsOut.DiscreteActions;
+            discreteActionsOut[0] = input.CheckIfInputSinceLastFrame(ref input.m_throwPressed) ? 1 : 0; //dash
+            discreteActionsOut[1] = input.CheckIfInputSinceLastFrame(ref input.m_dashPressed) ? 1 : 0; //dash
+        }
+    }
+
+    private void stillAgentHeuristic(in ActionBuffers actionsOut)
+    {
+        return;
+    }
+    private void RuleBasedHeuristic(in ActionBuffers actionsOut)
+    {
+        // Implement your custom rule-based logic to determine action values
+        // Set the action values in the actionsOut.ActionSegment<float> variable
+
+        if (waypoints == null || waypoints.Count == 0)
+        {
+            InitializeWaypoints();
+        }
+        
+        Vector3 targetPosition = waypoints[currentWaypointIndex].position;
+        MoveRuleBasedAgent(targetPosition, actionsOut);
+        
+        // // Check distance from waypoint
+        // float distanceToWaypoint = Vector3.Distance(transform.position, targetPosition);
+        // Debug.Log($"Distance to waypoint {currentWaypointIndex}: {distanceToWaypoint}");
+
+        if (Vector3.Distance(transform.position, targetPosition) < waypointReachDistance)
+        {
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; 
+        }
+    }
+    
+    private void InitializeWaypoints()
+    {
+        // Code to initialize the waypoints list
+        waypoints = new List<Transform>();
+        for (int i = 0; i < waypointsContainer.childCount; i++)
+        {
+            waypoints.Add(waypointsContainer.GetChild(i));
+        }
+        
+        // Shuffle the waypoints list
+        int waypointsCount = waypoints.Count;
+        for (int i = 0; i < waypointsCount - 1; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(i, waypointsCount);
+            Transform temp = waypoints[i];
+            waypoints[i] = waypoints[randomIndex];
+            waypoints[randomIndex] = temp;
+        }
+    }
+    
+    private Vector3 DetectEnemyPlayer(Vector3 direction, float detectionRadius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        Vector3 updatedDirection = direction;
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("blueAgent") || hitCollider.CompareTag("blueAgentFront"))
+            {
+                updatedDirection = (hitCollider.transform.position - transform.position).normalized;
+                break;
+            }
+        }
+
+        return updatedDirection;
+    }
+    
+    private Vector3 DetectBall(Vector3 targetDirection, float detectionRadius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        float minDistance = float.MaxValue;
+        Vector3 closestBallDirection = targetDirection;
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("dodgeBallPickup"))
+            {
+                float distanceToBall = Vector3.Distance(transform.position, hitCollider.transform.position);
+                if (distanceToBall < minDistance)
+                {
+                    minDistance = distanceToBall;
+                    closestBallDirection = (hitCollider.transform.position - transform.position).normalized;
+                }
+            }
+        }
+
+        return closestBallDirection;
+    }
+    
+    private void MoveRuleBasedAgent(Vector3 targetPosition, in ActionBuffers actionsOut)
+    {
+        
+        // //SPINNY CODE
+        // Vector3 direction = (targetPosition - transform.position).normalized;
+        // float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        // m_CubeMovement.Look(targetRotation);
+        // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
+        // m_CubeMovement.RunOnGround(moveDir);
+        
+        //Movement
+        Vector3 direction = (targetPosition - transform.position).normalized;
+    
+        // Detect enemy player and get updated target direction if enemy is within radius
+        float enemyDetectionRadius = 10f;
+        direction = DetectEnemyPlayer(direction, enemyDetectionRadius);
+    
+        // Detect ball and get updated target direction if ball is within a smaller radius
+        if (currentNumberOfBalls < 4)
+        {
+            float ballDetectionRadius = 5f;
+            direction = DetectBall(direction, ballDetectionRadius);
+        }
+    
+        // Calculate targetRotation based on the updated direction
+        float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+        // HANDLE ROTATION
+        float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
+        transform.rotation = Quaternion.Euler(0, smoothRotation, 0);
+    
+        // HANDLE XZ MOVEMENT
+        var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
+        m_CubeMovement.RunOnGround(moveDir);
     }
 }

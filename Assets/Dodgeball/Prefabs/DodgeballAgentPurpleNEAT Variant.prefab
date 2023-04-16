@@ -7,10 +7,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 115153163756134569, guid: b3d09458f82504dacbb8e7ee52763d1b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0f8dd0166137d734e985a072ff007239, type: 2}
     - target: {fileID: 115153164802481586, guid: b3d09458f82504dacbb8e7ee52763d1b,
         type: 3}
       propertyPath: m_Name
-      value: DodgeballAgentPurpleNEAT
+      value: DodgeballAgentPurpleNEAT Variant
       objectReference: {fileID: 0}
     - target: {fileID: 115153164802481590, guid: b3d09458f82504dacbb8e7ee52763d1b,
         type: 3}
