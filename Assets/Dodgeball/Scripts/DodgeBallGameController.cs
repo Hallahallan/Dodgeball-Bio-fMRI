@@ -768,6 +768,8 @@ public class DodgeBallGameController : MonoBehaviour
         {
             fMRI_Initialized = true;
             Time.timeScale = 1.0f;
+            //Log the S input
+            gameLogger.LogPlayerData(7);
         }
         else if (!fMRI_Initialized && !Input.GetKeyDown(KeyCode.S))
         {

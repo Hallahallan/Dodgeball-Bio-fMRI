@@ -99,6 +99,9 @@ public class GameLogger : MonoBehaviour
                 case 6:
                     eventType = "ResetScene";
                     break;
+                case 7:
+                    eventType = "S";
+                    break;
             }
 
             // Update all the latest values every time
