@@ -17,7 +17,7 @@ public class EyeLinkWebLinkUtil : MonoBehaviour
 	//public static StreamWriter writer;
 	//[Screen.fullScreen][1] = true;
 	//public static string path = "Assets/myIAS.ias";
-	public static string path = "myIASxb.ias";
+	public static string path = "AgentIASxb.ias";
 	//public static StreamWriter writer = new StreamWriter(openIASFile.path, true);
 	public static StreamWriter writer = File.CreateText(EyeLinkWebLinkUtil.path);
 	//using (StreamWriter writer = new StreamWriter(openIASFile.path, true));
