@@ -3886,6 +3886,11 @@ PrefabInstance:
       propertyPath: HurtVoiceAudioClip
       value: 
       objectReference: {fileID: 8300000, guid: d665b1923fff84cdc8206331ecbf91dc, type: 3}
+    - target: {fileID: 2725496699599259453, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
+        type: 3}
+      propertyPath: dashCoolDownTimer
+      value: 8.331252
+      objectReference: {fileID: 0}
     - target: {fileID: 2818958117034701299, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: m_Material
