@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
 using System.IO;
-using UnityEditor;
-using UnityEditor.Build.Content;
-using UnityEngine.Serialization;
 
 public class GameLogger : MonoBehaviour
 {
@@ -101,6 +98,9 @@ public class GameLogger : MonoBehaviour
                     break;
                 case 7:
                     eventType = "S";
+                    break;
+                case 8:
+                    eventType = "PlayerDash";
                     break;
             }
 
