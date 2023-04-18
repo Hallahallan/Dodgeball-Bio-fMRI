@@ -4409,7 +4409,7 @@ PrefabInstance:
     - target: {fileID: 5895108533257108470, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
       propertyPath: dashCoolDownDuration
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5895108533257108470, guid: 5cc1d375350254c0585ef6e96a4ed1e5,
         type: 3}
@@ -7451,7 +7451,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 2.4734726, y: 1}
+    m_SensorSize: {x: 2.4764397, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
