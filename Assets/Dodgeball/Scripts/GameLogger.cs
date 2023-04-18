@@ -99,6 +99,9 @@ public class GameLogger : MonoBehaviour
                 case 7:
                     eventType = "S";
                     break;
+                case 8:
+                    eventType = "PlayerDash";
+                    break;
             }
 
             // Update all the latest values every time

@@ -459,6 +459,10 @@ public class DodgeBallAgent : Agent
             if (m_DashInput > 0 && m_DashCoolDownReady)
             {
                 m_CubeMovement.Dash(moveDir);
+                if (m_BehaviorParameters.TeamId == 0)
+                {
+                    m_gameLogger.LogPlayerData(8); //Log player dash
+                }
             }
         }
     }
