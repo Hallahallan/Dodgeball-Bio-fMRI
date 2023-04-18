@@ -947,6 +947,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5895108533257108470, guid: a44e8d1d89a8fe044a56b65da089e18c,
         type: 3}
+      propertyPath: dashBoostForce
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5895108533257108470, guid: a44e8d1d89a8fe044a56b65da089e18c,
+        type: 3}
       propertyPath: dashCoolDownTimer
       value: 8.331252
       objectReference: {fileID: 0}
@@ -6062,7 +6067,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 2.4734726, y: 1}
+    m_SensorSize: {x: 3.114224, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -6078,7 +6083,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367967954}
-  m_LocalRotation: {x: -6.4054806e-10, y: 0.9962975, z: -0.0859729, w: -0.0000000074229956}
+  m_LocalRotation: {x: 2.0848121e-17, y: 0.9962975, z: -0.085972905, w: 4.408007e-16}
   m_LocalPosition: {x: 16, y: 3.7600002, z: 14.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10270,7 +10275,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8697938321410268827}
-  m_LocalRotation: {x: -6.4054806e-10, y: 0.9962975, z: -0.0859729, w: -0.0000000074229956}
+  m_LocalRotation: {x: 2.0848121e-17, y: 0.9962975, z: -0.085972905, w: 4.408007e-16}
   m_LocalPosition: {x: 16, y: 3.7600002, z: 14.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
