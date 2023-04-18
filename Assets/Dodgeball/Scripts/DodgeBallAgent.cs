@@ -853,6 +853,11 @@ public class DodgeBallAgent : Agent
         // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         // m_CubeMovement.RunOnGround(moveDir);
         
+        // Log target position, direction, and rotation
+        Debug.Log("Target position: " + targetPosition);
+        Debug.Log("Agent position: " + transform.position);
+        Debug.Log("Agent rotation: " + transform.rotation);
+        
         // Movement
         Vector3 direction = (targetPosition - transform.position).normalized;
         Vector3 rotationDirection = direction;
