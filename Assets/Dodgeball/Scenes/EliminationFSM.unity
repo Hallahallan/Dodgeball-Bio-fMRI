@@ -4562,6 +4562,11 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: d665b1923fff84cdc8206331ecbf91dc, type: 3}
     - target: {fileID: 4993607472596837024, guid: 8653081ca76ee5c4ab6f5662b6b0abec,
         type: 3}
+      propertyPath: NumberOfBallsToSpawn
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993607472596837024, guid: 8653081ca76ee5c4ab6f5662b6b0abec,
+        type: 3}
       propertyPath: Team1Players.Array.data[0].Agent
       value: 
       objectReference: {fileID: 793026956}
@@ -4638,12 +4643,12 @@ PrefabInstance:
     - target: {fileID: 7105821268231983314, guid: 8653081ca76ee5c4ab6f5662b6b0abec,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.36
+      value: -0.39
       objectReference: {fileID: 0}
     - target: {fileID: 7105821268231983314, guid: 8653081ca76ee5c4ab6f5662b6b0abec,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.33
+      value: -3.03
       objectReference: {fileID: 0}
     - target: {fileID: 8364318264098195072, guid: 8653081ca76ee5c4ab6f5662b6b0abec,
         type: 3}

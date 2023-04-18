@@ -427,7 +427,7 @@ public class DodgeBallAgent : Agent
             // Clamp and smooth rotation
             float maxRotationSpeed = 0.3f; // Change this value to adjust the maximum rotation speed
             m_Rotate = Mathf.Clamp(m_Rotate, -maxRotationSpeed, maxRotationSpeed);
-
+        
             float targetRotation = transform.eulerAngles.y + m_Rotate;
             float rotationSpeed = 0.3f; // Change this value to adjust the smoothness of the rotation
             float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
@@ -773,6 +773,7 @@ public class DodgeBallAgent : Agent
 
         if (Vector3.Distance(transform.position, targetPosition) < waypointReachDistance)
         {
+            ShuffleWayPoints();
             currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; 
         }
     }
@@ -785,7 +786,10 @@ public class DodgeBallAgent : Agent
         {
             waypoints.Add(waypointsContainer.GetChild(i));
         }
-        
+    }
+
+    private void ShuffleWayPoints()
+    {
         // Shuffle the waypoints list
         int waypointsCount = waypoints.Count;
         for (int i = 0; i < waypointsCount - 1; i++)
@@ -797,28 +801,29 @@ public class DodgeBallAgent : Agent
         }
     }
     
-    private Vector3 DetectEnemyPlayer(Vector3 direction, float detectionRadius)
+    private Vector3 DetectEnemyPlayerForRotation(Vector3 direction, float detectionRadius)
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
-        Vector3 updatedDirection = direction;
+        Vector3 rotationDirection = direction;
 
         foreach (Collider hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("blueAgent") || hitCollider.CompareTag("blueAgentFront"))
             {
-                updatedDirection = (hitCollider.transform.position - transform.position).normalized;
+                rotationDirection = (hitCollider.transform.position - transform.position).normalized;
                 break;
             }
         }
 
-        return updatedDirection;
+        return rotationDirection;
     }
     
-    private Vector3 DetectBall(Vector3 targetDirection, float detectionRadius)
+    private (Vector3, Vector3) DetectBall(Vector3 targetDirection, float detectionRadius)
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
         float minDistance = float.MaxValue;
         Vector3 closestBallDirection = targetDirection;
+        Vector3 closestBallRotationDirection = targetDirection;
 
         foreach (Collider hitCollider in hitColliders)
         {
@@ -829,12 +834,14 @@ public class DodgeBallAgent : Agent
                 {
                     minDistance = distanceToBall;
                     closestBallDirection = (hitCollider.transform.position - transform.position).normalized;
+                    closestBallRotationDirection = closestBallDirection;
                 }
             }
         }
 
-        return closestBallDirection;
+        return (closestBallDirection, closestBallRotationDirection);
     }
+
     
     private void MoveRuleBasedAgent(Vector3 targetPosition, in ActionBuffers actionsOut)
     {
@@ -846,22 +853,23 @@ public class DodgeBallAgent : Agent
         // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         // m_CubeMovement.RunOnGround(moveDir);
         
-        //Movement
+        // Movement
         Vector3 direction = (targetPosition - transform.position).normalized;
-    
-        // Detect enemy player and get updated target direction if enemy is within radius
-        float enemyDetectionRadius = 10f;
-        direction = DetectEnemyPlayer(direction, enemyDetectionRadius);
+        Vector3 rotationDirection = direction;
     
         // Detect ball and get updated target direction if ball is within a smaller radius
         if (currentNumberOfBalls < 4)
         {
             float ballDetectionRadius = 5f;
-            direction = DetectBall(direction, ballDetectionRadius);
+            (direction, rotationDirection) = DetectBall(direction, ballDetectionRadius);
         }
     
-        // Calculate targetRotation based on the updated direction
-        float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        // Detect enemy player and get updated rotation direction if enemy is within radius
+        float enemyDetectionRadius = 10f;
+        rotationDirection = DetectEnemyPlayerForRotation(rotationDirection, enemyDetectionRadius);
+    
+        // Calculate targetRotation based on the updated rotation direction
+        float targetRotation = Mathf.Atan2(rotationDirection.x, rotationDirection.z) * Mathf.Rad2Deg;
 
         // HANDLE ROTATION
         float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
