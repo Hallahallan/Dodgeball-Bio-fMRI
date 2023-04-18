@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Dodgeball/Scenes/TitleScreen.unity
     guid: 672594697b6cb407a8916064efa3b0b7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Dodgeball/Scenes/Elimination.unity
     guid: ec62cd1f220c34c02a90888cf6c16410
   - enabled: 0
@@ -23,6 +23,15 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Dodgeball/Scenes/BaseLineClean.unity
     guid: ac1bc2f006acab54d9f6802f17c18b6a
+  - enabled: 0
+    path: Assets/Dodgeball/Scenes/EliminationFSM.unity
+    guid: cfc8246885b44a54a905ff462bdac721
+  - enabled: 0
+    path: Assets/Dodgeball/Scenes/BaseLineStillOpponent.unity
+    guid: 873fde297130d4a4abdfea868006d1cd
+  - enabled: 1
+    path: Assets/Dodgeball/Scenes/EliminationNEAT.unity
+    guid: 9a61685aff3d23e48b231431849ff81c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 4d91049841035460f9654c1b5e05c046,
       type: 2}

@@ -766,6 +766,8 @@ public class DodgeBallGameController : MonoBehaviour
         
         if (!fMRI_Initialized && Input.GetKeyDown(KeyCode.S))   // User has started the game
         {
+            EyeLinkWebLinkUtil.sendString("SCANNER_SYNC");  // Tell the EyeLink software to start recording
+
             fMRI_Initialized = true;
             Time.timeScale = 1.0f;
             //Log the S input

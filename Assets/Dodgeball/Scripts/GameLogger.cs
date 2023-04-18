@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
 using System.IO;
-using UnityEditor;
-using UnityEditor.Build.Content;
-using UnityEngine.Serialization;
 
 public class GameLogger : MonoBehaviour
 {

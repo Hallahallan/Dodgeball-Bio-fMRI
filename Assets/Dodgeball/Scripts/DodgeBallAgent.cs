@@ -422,17 +422,17 @@ public class DodgeBallAgent : Agent
         m_InputH = continuousActions[1];
         m_Rotate = continuousActions[2];
 
-        //if (teamID == 1)    // Rotation capping/smoothing only affecting purple team during training (our AI)
-        //{
-        //    // Clamp and smooth rotation
-        //    float maxRotationSpeed = 0.3f; // Change this value to adjust the maximum rotation speed
-        //    m_Rotate = Mathf.Clamp(m_Rotate, -maxRotationSpeed, maxRotationSpeed);
-//
-        //    float targetRotation = transform.eulerAngles.y + m_Rotate;
-        //    float rotationSpeed = 0.3f; // Change this value to adjust the smoothness of the rotation
-        //    float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
-        //    transform.eulerAngles = new Vector3(transform.eulerAngles.x, smoothRotation, transform.eulerAngles.z);
-        //}
+        if (teamID == 1)    // Rotation capping/smoothing only affecting purple team during training (our AI)
+        {
+            // Clamp and smooth rotation
+            float maxRotationSpeed = 0.3f; // Change this value to adjust the maximum rotation speed
+            m_Rotate = Mathf.Clamp(m_Rotate, -maxRotationSpeed, maxRotationSpeed);
+
+            float targetRotation = transform.eulerAngles.y + m_Rotate;
+            float rotationSpeed = 0.3f; // Change this value to adjust the smoothness of the rotation
+            float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, smoothRotation, transform.eulerAngles.z);
+        }
 
         m_ThrowInput = (int)discreteActions[0];
         m_DashInput = (int)discreteActions[1];
