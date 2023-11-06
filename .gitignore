@@ -92,5 +92,10 @@ crashlytics-build.properties
 # Ignore build reports
 /Assets/BuildReports*
 
+# Ignore game logs
+Assets/Dodgeball/Logs/PlayerData/*
+Assets/Dodgeball/Logs/Results/*
+Assets/Dodgeball/Logs/Position/*
+
 # Mac file setting
 .DS_Store
