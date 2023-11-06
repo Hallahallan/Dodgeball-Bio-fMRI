@@ -27,7 +27,19 @@ public class GameLogger : MonoBehaviour
         fileNamePlayerData = "GameLog_Player_Data_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
         fileNamePosition = "GameLog_Position_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt";
 
-        InvokeRepeating("LogPosition", 2.0f, 1.0f);
+        string folderPath = Path.Combine(Application.dataPath, "Dodgeball/Logs/Position");
+        if (Directory.Exists(folderPath))
+        {
+            string path = Path.Combine(folderPath, fileNamePosition);
+            if (!File.Exists(path))
+            {
+                using (StreamWriter writer = File.AppendText(path))
+                {
+                    writer.WriteLine("Timestamp,(Position_Blue_X,Position_Blue_Y),Rotation_Blue,(Position_Purple_X,Position_Purple_Y),Rotation_Purple");
+                }
+                InvokeRepeating("LogPosition", 0.0f, 1.0f);
+            }
+        }
     }
     public void LogGameInfo()
     {
