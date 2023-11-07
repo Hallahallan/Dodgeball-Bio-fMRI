@@ -37,7 +37,7 @@ public class GameLogger : MonoBehaviour
                 {
                     writer.WriteLine("Timestamp,(Position_Blue_X,Position_Blue_Y),Rotation_Blue,(Position_Purple_X,Position_Purple_Y),Rotation_Purple");
                 }
-                InvokeRepeating("LogPosition", 0.0f, 1.0f);
+                InvokeRepeating("LogPosition", 0.0f, 0.1f); // Repeat LogPosition each 0.1 sec, start after 0 sec
             }
         }
     }
