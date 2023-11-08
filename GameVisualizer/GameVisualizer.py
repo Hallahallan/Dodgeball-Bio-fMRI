@@ -209,7 +209,6 @@ def showRun(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, 
     plt.show()
 
 
-
 def showRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, see_angles:bool = True) -> None:
     start_time, end_time = player_data.getStartEndTimes(game_num) # TODO change so gamne num 0 starts with event "S" instead of "ResetScene"
     duration = (end_time-start_time).total_seconds()
@@ -295,10 +294,9 @@ def showRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_
         )
     
     def update_time(val):
-        # line.set_ydata(f(t, amp_slider.val, freq_slider.val))
-        # fig.canvas.draw_idle()
         current_time = start_time+timedelta(0, val) # set new current time depending on value of slider
 
+        # Set what start time and end time to show
         new_start_time = current_time+timedelta(0, -shadow_time)
         new_end_time = current_time+timedelta(0, shadow_time)
 
@@ -307,6 +305,7 @@ def showRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_
         if new_end_time > end_time:
             new_end_time = end_time
 
+        # Get positions from the times
         game_pos_data_future = pos_data.getGamePos(current_time, new_end_time)
         game_pos_data_past = pos_data.getGamePos(new_start_time, current_time)
 
@@ -318,12 +317,14 @@ def showRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_
         future_lenght = len(blue_data_future)
         past_lenght = len(blue_data_past)
         
+        # Make color for the positions
         #plot_color = [colorFader("green", "red", n/future_lenght) for n in range(future_lenght)]
         blue_future_color = [colorFader("blue", "white", n/future_lenght) for n in range(future_lenght)]
         purple_future_color = [colorFader("purple", "white", n/future_lenght) for n in range(future_lenght)]
         blue_past_color = [colorFader("white", "blue",  n/past_lenght) for n in range(past_lenght)]
         purple_past_color = [colorFader("white", "purple",  n/past_lenght) for n in range(past_lenght)]
 
+        # Set new points in plot
         sc_blue_future.set_offsets(
             [[x, y] for x, y in zip([x for x, _, _ in blue_data_future][::-1], [y for _, y, _ in blue_data_future][::-1])]
         )
@@ -333,13 +334,13 @@ def showRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_
         )
         sc_purple_future.set_color(purple_future_color[::-1])
         sc_blue_past.set_offsets(
-            [[x, y] for x, y in zip([x for x, _, _ in blue_data_past][::-1], [y for _, y, _ in blue_data_past][::-1])]
+            [[x, y] for x, y in zip([x for x, _, _ in blue_data_past], [y for _, y, _ in blue_data_past])]
         )
-        sc_blue_past.set_color(blue_past_color[::-1])
+        sc_blue_past.set_color(blue_past_color)
         sc_purple_past.set_offsets(
-            [[x, y] for x, y in zip([x for x, _, _ in purple_data_past][::-1], [y for _, y, _ in purple_data_past][::-1])]
+            [[x, y] for x, y in zip([x for x, _, _ in purple_data_past], [y for _, y, _ in purple_data_past])]
         )
-        sc_purple_past.set_color(purple_past_color[::-1])
+        sc_purple_past.set_color(purple_past_color)
 
         fig.canvas.draw_idle()
     
@@ -354,7 +355,7 @@ position_data = PositionData(getLogData("Position"))
 results_data = getLogData("Results")
 
 #showRun(position_data, player_data, 0, True, False)
-showRunWithSliderTime(position_data, player_data, 0, True)
+showRunWithSliderTime(position_data, player_data, 0, False)
 
 print(f"Number of games: {player_data.numGames()}")
 #print(position_data.pos_list[0])
