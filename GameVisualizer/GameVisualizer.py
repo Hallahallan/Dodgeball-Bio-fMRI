@@ -5,10 +5,15 @@ import numpy as np
 from datetime import datetime, timedelta
 from math import cos, sin, pi
 
+# TODO: endre farger til mer tydelig forskjell. 
+# Endre dotter til piler med retninger (forskjellige piler, eks trekant og "båt")
+
 
 # year-month-day_hour-minutes-seconds : "yyyy-MM-dd_HH-mm-ss"
-date = "2023-11-09_17-40-48"  # time to invest
-game_num = 1
+date = "2023-11-22_13-58-01"  # time to plot #  2023-11-09_17-40-48
+game_type = "neat" # neat or fsm ...
+game_num = 0 # won't matter if show_all_games = True
+show_all_games = False
 
 timestamp_format = "%H:%M:%S.%f"
 
@@ -151,15 +156,20 @@ def drawBoard(fig, ax):
         [(32.0, -31.7), (30.9, -31.7), (29.8, -31.7), (28.7, -31.7), (27.6, -31.7), (26.5, -31.7)],
     ]
 
+    x_delta = 0
+    y_delta = 0
+    if game_type == "neat":
+        y_delta = 34
+
     #print(f"Bushes (num={len(bushes)}): {sorted(bushes, key=lambda x : x[1])}")
 
     boarder_and_bush_color = "#78B16A"
 
     for i in range(len(corners)):
-        plt.plot([corners[i-1][0], corners[i][0]], [corners[i-1][1], corners[i][1]], c=boarder_and_bush_color)
+        plt.plot([corners[i-1][0]+x_delta, corners[i][0]+x_delta], [corners[i-1][1]+y_delta, corners[i][1]+y_delta], c=boarder_and_bush_color)
 
     for i in range(len(bushes)):
-        plt.plot([x for x, _ in bushes[i]], [y for _, y in bushes[i]], c=boarder_and_bush_color)
+        plt.plot([x+x_delta for x, _ in bushes[i]], [y+y_delta for _, y in bushes[i]], c=boarder_and_bush_color)
 
 
 def showRun(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, see_angles:bool = True, only_agent:bool = False) -> None:
@@ -235,158 +245,23 @@ def showRun(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, 
     plt.show()
 
 
-def showShadowRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, see_angles:bool = True) -> None:
-    start_time, end_time = player_data.getStartEndTimes(game_num) # TODO change so gamne num 0 starts with event "S" instead of "ResetScene"
-    duration = (end_time-start_time).total_seconds()
-    shadow_time = 2 # how many seconds will show around the time set on the time slider
-    print(duration)
-
-    fig, ax = plt.subplots()
-    fig.subplots_adjust(bottom=0.25)
-
-    drawBoard(fig, ax)
-
-    # Slider to adjust the shown positions (dependent on the time) 
-    ax_time = fig.add_axes([0.25, 0.1, 0.65, 0.03])
-    time_slider = Slider(
-        ax=ax_time, 
-        label=f"Time",
-        valmin=0,
-        valmax=duration,
-        valinit=0
-    )
-
-    game_pos_data_future = pos_data.getGamePos(start_time, start_time+timedelta(0, shadow_time+2))
-    game_pos_data_past = [game_pos_data_future[0]]
-
-    blue_data_future = pos_data.positionList(True, game_pos_data_future)
-    purple_data_future = pos_data.positionList(False, game_pos_data_future)
-    blue_data_past = pos_data.positionList(True, game_pos_data_past)
-    purple_data_past = pos_data.positionList(False, game_pos_data_past)
-
-    future_lenght = len(blue_data_future)
-    past_lenght = len(blue_data_past)
-
-    plot_color = [colorFader("green", "red", n/future_lenght) for n in range(future_lenght)]
-    blue_future_color = [colorFader("blue", "white", n/future_lenght) for n in range(future_lenght)]
-    purple_future_color = [colorFader("purple", "white", n/future_lenght) for n in range(future_lenght)]
-    blue_past_color = [colorFader("blue", "white", n/past_lenght) for n in range(past_lenght)]
-    purple_past_color = [colorFader("purple", "white", n/past_lenght) for n in range(past_lenght)]
-
-    sc_blue_future = ax.scatter(
-        [x for x, _, _ in blue_data_future][::-1],
-        [y for _, y, _ in blue_data_future][::-1],
-        color=blue_future_color[::-1],
-        marker="o",
-    )
-    sc_purple_future = ax.scatter(
-        [x for x, _, _ in purple_data_future][::-1],
-        [y for _, y, _ in purple_data_future][::-1],
-        color=purple_future_color[::-1],
-        marker="o",
-    )
-    sc_blue_past = ax.scatter(
-        [x for x, _, _ in blue_data_past],
-        [y for _, y, _ in blue_data_past],
-        color=blue_past_color,
-        marker="o",
-    )
-    sc_purple_past = ax.scatter(
-        [x for x, _, _ in purple_data_past],
-        [y for _, y, _ in purple_data_past],
-        color=purple_past_color,
-        marker="o",
-    )
-
-    if see_angles:
-        arrow_length = 1
-        qv_blue = ax.quiver(
-            [x for x, _, _ in blue_data_future],
-            [y for _, y, _ in blue_data_future],
-            [arrow_length*sin(r*pi/180) for _, _, r in blue_data_future],
-            [arrow_length*cos(r*pi/180) for _, _, r in blue_data_future],
-            angles="xy",
-            color=plot_color,
-            headwidth="3",
-            label="Player"
-        )
-        qv_purple = ax.quiver(
-            [x for x, _, _ in purple_data_future], 
-            [y for _, y, _ in purple_data_future],
-            [arrow_length*sin(r*pi/180) for _, _, r in purple_data_future],
-            [arrow_length*cos(r*pi/180) for _, _, r in purple_data_future],
-            angles="xy",
-            color=plot_color,
-            headwidth="8",
-            label="Agent"
-        )
-    
-    def update_time(val):
-        current_time = start_time+timedelta(0, val) # set new current time depending on value of slider
-
-        # Set what start time and end time to show
-        new_start_time = current_time+timedelta(0, -shadow_time)
-        new_end_time = current_time+timedelta(0, shadow_time)
-
-        if new_start_time < start_time:
-            new_start_time = start_time
-        if new_end_time > end_time:
-            new_end_time = end_time
-
-        # Get positions from the times
-        game_pos_data_future = pos_data.getGamePos(current_time, new_end_time)
-        game_pos_data_past = pos_data.getGamePos(new_start_time, current_time)
-
-        blue_data_future = pos_data.positionList(True, game_pos_data_future)
-        purple_data_future = pos_data.positionList(False, game_pos_data_future)
-        blue_data_past = pos_data.positionList(True, game_pos_data_past)
-        purple_data_past = pos_data.positionList(False, game_pos_data_past)
-
-        future_lenght = len(blue_data_future)
-        past_lenght = len(blue_data_past)
-        
-        # Make color for the positions
-        # TODO update for angles
-        #plot_color = [colorFader("green", "red", n/future_lenght) for n in range(future_lenght)]
-        blue_future_color = [colorFader("blue", "white", n/future_lenght) for n in range(future_lenght)]
-        purple_future_color = [colorFader("purple", "white", n/future_lenght) for n in range(future_lenght)]
-        blue_past_color = [colorFader("white", "blue",  n/past_lenght) for n in range(past_lenght)]
-        purple_past_color = [colorFader("white", "purple",  n/past_lenght) for n in range(past_lenght)]
-
-        # Set new points in plot
-        sc_blue_future.set_offsets(
-            [[x, y] for x, y in zip([x for x, _, _ in blue_data_future][::-1], [y for _, y, _ in blue_data_future][::-1])]
-        )
-        sc_blue_future.set_color(blue_future_color[::-1])
-        sc_purple_future.set_offsets(
-            [[x, y] for x, y in zip([x for x, _, _ in purple_data_future][::-1], [y for _, y, _ in purple_data_future][::-1])]
-        )
-        sc_purple_future.set_color(purple_future_color[::-1])
-        sc_blue_past.set_offsets(
-            [[x, y] for x, y in zip([x for x, _, _ in blue_data_past], [y for _, y, _ in blue_data_past])]
-        )
-        sc_blue_past.set_color(blue_past_color)
-        sc_purple_past.set_offsets(
-            [[x, y] for x, y in zip([x for x, _, _ in purple_data_past], [y for _, y, _ in purple_data_past])]
-        )
-        sc_purple_past.set_color(purple_past_color)
-
-        fig.canvas.draw_idle()
-    
-    time_slider.on_changed(update_time)
-
-    plt.show()
-
-
-
 def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, see_angles:bool = True) -> None:
+    # purple - machine agent
+    # blue - human agent
+
     start_time, end_time = player_data.getStartEndTimes(game_num) # TODO change so gamne num 0 starts with event "S" instead of "ResetScene"
     duration = (end_time-start_time).total_seconds()
     shadow_time = 2 # how many seconds will show around the time set on the time slider
-    light_blue = "#ABCBD1"
-    dark_blue = "#00638F"
-    light_purple = "#D3BCE2"
-    dark_purple = "#410084"
+    light_blue = "#A4A7DD" # "#ABCBD1"
+    dark_blue = "#000AC3" # "#00638F"
+    blue_edge_color = "#FFFFFF"
+    light_purple = "#CCBE86" # "#D3BCE2"
+    dark_purple = "#C39C00" # "#410084"
+    purple_edge_color = "#000000"
+    line_width = 1
+    blue_arrow_size = 0.3
+    purple_arrow_size = 0.1
+    arrow_length = 10
 
 
     fig, ax = plt.subplots()
@@ -412,66 +287,74 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
     blue_data_past = pos_data.positionList(True, game_pos_data_past)
     purple_data_past = pos_data.positionList(False, game_pos_data_past)
 
+    past_lenght = shadow_time*10
+
+    while len(blue_data_past)<past_lenght:
+        blue_data_past.append(blue_data_past[0])
+    while len(purple_data_past)<past_lenght:
+        purple_data_past.append(purple_data_past[0])
+
     all_lenght = len(blue_data_all)
     past_lenght = len(blue_data_past)
 
-    plot_color = [colorFader("green", "red", n/past_lenght) for n in range(past_lenght)]
     blue_all_color = [light_blue for n in range(all_lenght)]
     purple_all_color = [light_purple for n in range(all_lenght)]
     blue_past_color = [colorFader(dark_blue, light_blue, n/past_lenght) for n in range(past_lenght)]
     purple_past_color = [colorFader(dark_purple, light_purple, n/past_lenght) for n in range(past_lenght)]
 
-    sc_blue_all = ax.scatter(
-        [x for x, _, _ in blue_data_all][::-1],
-        [y for _, y, _ in blue_data_all][::-1],
-        color=blue_all_color[::-1],
-        marker="o",
-        s=10,
+    
+    qv_blue = ax.quiver(
+        [x for x, _, _ in blue_data_all],
+        [y for _, y, _ in blue_data_all],
+        [arrow_length*sin(r*pi/180) for _, _, r in blue_data_all],
+        [arrow_length*cos(r*pi/180) for _, _, r in blue_data_all],
+        angles="xy",
+        color=blue_all_color,
+        headwidth="3",
+        label="Player",
         alpha=0.5,
+        sizes=[blue_arrow_size*5 for _ in blue_data_all]
     )
-    sc_purple_all = ax.scatter(
-        [x for x, _, _ in purple_data_all][::-1],
-        [y for _, y, _ in purple_data_all][::-1],
-        color=purple_all_color[::-1],
-        marker="o",
-        s=10,
+    qv_purple = ax.quiver(
+        [x for x, _, _ in purple_data_all], 
+        [y for _, y, _ in purple_data_all],
+        [arrow_length*sin(r*pi/180) for _, _, r in purple_data_all],
+        [arrow_length*cos(r*pi/180) for _, _, r in purple_data_all],
+        angles="xy",
+        color=purple_all_color,
+        headwidth="8",
+        label="Agent",
         alpha=0.5,
-    )
-    sc_blue_past = ax.scatter(
-        [x for x, _, _ in blue_data_past],
-        [y for _, y, _ in blue_data_past],
-        color=blue_past_color,
-        marker="o",
-    )
-    sc_purple_past = ax.scatter(
-        [x for x, _, _ in purple_data_past],
-        [y for _, y, _ in purple_data_past],
-        color=purple_past_color,
-        marker="o",
+        sizes=[purple_arrow_size*5 for _ in purple_data_all]
     )
 
-    if see_angles:
-        arrow_length = 1
-        qv_blue = ax.quiver(
-            [x for x, _, _ in blue_data_all],
-            [y for _, y, _ in blue_data_all],
-            [arrow_length*sin(r*pi/180) for _, _, r in blue_data_all],
-            [arrow_length*cos(r*pi/180) for _, _, r in blue_data_all],
-            angles="xy",
-            color=plot_color,
-            headwidth="3",
-            label="Player"
-        )
-        qv_purple = ax.quiver(
-            [x for x, _, _ in purple_data_all], 
-            [y for _, y, _ in purple_data_all],
-            [arrow_length*sin(r*pi/180) for _, _, r in purple_data_all],
-            [arrow_length*cos(r*pi/180) for _, _, r in purple_data_all],
-            angles="xy",
-            color=plot_color,
-            headwidth="8",
-            label="Agent"
-        )
+
+    qv_blue_past = ax.quiver(
+        [x for x, _, _ in blue_data_past],
+        [y for _, y, _ in blue_data_past],
+        [arrow_length*sin(r*pi/180) for _, _, r in blue_data_past],
+        [arrow_length*cos(r*pi/180) for _, _, r in blue_data_past],
+        angles="xy",
+        color=blue_past_color,
+        edgecolor=blue_edge_color,
+        linewidth=line_width,
+        headwidth="3",
+        label="Player",
+        sizes=[blue_arrow_size for _ in blue_data_past]
+    )
+    qv_purple_past = ax.quiver(
+        [x for x, _, _ in purple_data_past],
+        [y for _, y, _ in purple_data_past],
+        [arrow_length*sin(r*pi/180) for _, _, r in purple_data_past],
+        [arrow_length*cos(r*pi/180) for _, _, r in purple_data_past],
+        angles="xy",
+        color=purple_past_color,
+        edgecolor=purple_edge_color,
+        linewidth=line_width,
+        headwidth="8",
+        label="Player",
+        sizes=[purple_arrow_size for _ in purple_data_past]
+    )
     
     def update_time(val):
         current_time = start_time+timedelta(0, val) # set new current time depending on value of slider
@@ -490,25 +373,53 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
 
         blue_data_past = pos_data.positionList(True, game_pos_data_past)
         purple_data_past = pos_data.positionList(False, game_pos_data_past)
-
-        past_lenght = len(blue_data_past)
         
-        # Make color for the positions
-        # TODO update for angles
-        #plot_color = [colorFader("green", "red", n/future_lenght) for n in range(future_lenght)]
+        past_lenght = shadow_time*10
+
+        if len(blue_data_past)!=past_lenght:
+            if len(blue_data_past)==0:
+                return
+            while len(blue_data_past) < past_lenght:
+                blue_data_past.append(blue_data_past[0])
+            while len(blue_data_past) > past_lenght:
+                blue_data_past.pop(-1)
+        if len(purple_data_past)!=past_lenght:
+            if len(purple_data_past)==0:
+                return
+            while len(purple_data_past) < past_lenght:
+                purple_data_past.append(purple_data_past[0])
+            while len(purple_data_past) > past_lenght:
+                purple_data_past.pop(-1)
+        
         blue_past_color = [colorFader(light_blue, dark_blue,  n/past_lenght) for n in range(past_lenght)]
         purple_past_color = [colorFader(light_purple, dark_purple,  n/past_lenght) for n in range(past_lenght)]
 
         # Set new points in plot
-        sc_blue_past.set_offsets(
+        # Update blue (human)
+        qv_blue_past.set_offsets(
             [[x, y] for x, y in zip([x for x, _, _ in blue_data_past], [y for _, y, _ in blue_data_past])]
         )
-        sc_blue_past.set_color(blue_past_color)
-        sc_purple_past.set_offsets(
+        qv_blue_past.set_color(blue_past_color)
+        qv_blue_past.set_edgecolor(blue_edge_color)
+        qv_blue_past.set_UVC(
+            [arrow_length*sin(r*pi/180) for _, _, r in blue_data_past],
+            [arrow_length*cos(r*pi/180) for _, _, r in blue_data_past],
+        )
+        qv_blue_past.set_sizes([blue_arrow_size for _ in blue_data_past])
+
+        # Update purple (AI agent)
+        qv_purple_past.set_offsets(
             [[x, y] for x, y in zip([x for x, _, _ in purple_data_past], [y for _, y, _ in purple_data_past])]
         )
-        sc_purple_past.set_color(purple_past_color)
+        qv_purple_past.set_color(purple_past_color)
+        qv_purple_past.set_edgecolor(purple_edge_color)
+        qv_purple_past.set_UVC(
+            [arrow_length*sin(r*pi/180) for _, _, r in purple_data_past],
+            [arrow_length*cos(r*pi/180) for _, _, r in purple_data_past],
+        )
+        qv_purple_past.set_sizes([purple_arrow_size for _ in purple_data_past])
 
+        # Update plot
         fig.canvas.draw_idle()
     
     time_slider.on_changed(update_time)
@@ -522,9 +433,14 @@ position_data = PositionData(getLogData("Position"))
 results_data = getLogData("Results")
 
 #showRun(position_data, player_data, 0, True, False)
-showFullRunWithSliderTime(position_data, player_data, game_num, False)
+#showFullRunWithSliderTime(position_data, player_data, game_num, False)
 
 print(f"Number of games: {player_data.numGames()}")
 #print(position_data.pos_list[0])
 #print(player_data.getStartEndTimes(0)) 
 
+if show_all_games:
+    for i in range(player_data.numGames()):
+        showFullRunWithSliderTime(position_data, player_data, i, False)
+else:
+    showFullRunWithSliderTime(position_data, player_data, game_num, False)
