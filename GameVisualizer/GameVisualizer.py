@@ -1,6 +1,6 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
+from matplotlib.widgets import Slider, CheckButtons
 import numpy as np
 from datetime import datetime, timedelta
 from math import cos, sin, pi
@@ -13,7 +13,7 @@ from math import cos, sin, pi
 date = "2023-11-22_13-58-01"  # time to plot #  2023-11-09_17-40-48
 game_type = "neat" # neat or fsm ...
 game_num = 0 # won't matter if show_all_games = True
-show_all_games = False
+show_all_games = True
 
 timestamp_format = "%H:%M:%S.%f"
 
@@ -172,6 +172,64 @@ def drawBoard(fig, ax):
         plt.plot([x+x_delta for x, _ in bushes[i]], [y+y_delta for _, y in bushes[i]], c=boarder_and_bush_color)
 
 
+def drawEvents(fig, ax, pos_data:list, player_data:PlayerData):
+    event_labels = ["EnemyThrewBall", "PlayerThrewBall", "HitEnemy", "TookDamage"]
+    event_markers = {"EnemyThrewBall":"^", "PlayerThrewBall":"o", "HitEnemy":"+", "TookDamage":"X"}
+    values = [True for _ in event_labels]
+
+    # xposition, yposition, width and height
+    ax_check = plt.axes([0.05, 0.6, 0.3, 0.3])
+    plt.chxbox = CheckButtons(ax_check, event_labels, values)
+
+    lines = []
+
+    event_pos_dict = {}
+    for event in event_labels:
+        event_pos_dict[event] = []
+
+    for event in player_data.event_list:
+        if event.timestamp >= pos_data[0].timestamp and event.timestamp <= pos_data[-1].timestamp and event.event_type in event_labels:
+            #print("Enemy" in event.event_type, event.event_type)
+            enemy = "Enemy" in event.event_type # Check if need position of enemy/AI or player/human
+
+            # Join event with closest position
+            closest_pos = None
+            time_diff = None
+
+            for pos in pos_data:
+                if closest_pos is None:
+                    closest_pos=pos
+                    time_diff=abs(event.timestamp - pos.timestamp)
+                else:
+                    if abs(event.timestamp - pos.timestamp) < time_diff:
+                        closest_pos=pos
+                        time_diff=abs(event.timestamp - pos.timestamp)
+                # if time_diff<0.05:
+                #     break
+            
+            event_pos_dict[event.event_type].append([closest_pos.pos_blue_x, closest_pos.pos_blue_y] if not enemy else [closest_pos.pos_purple_x, closest_pos.pos_purple_y])
+    
+    for event_type in event_pos_dict.keys():
+        p, = ax.plot(
+            [x for x, _ in event_pos_dict[event_type]],
+            [y for _, y in event_pos_dict[event_type]],
+            marker=event_markers[event_type],
+            markersize=8,
+            linewidth=0,
+            label=event_type,
+            alpha=0.7
+        )
+        lines.append(p)
+
+
+    def onClick(label):
+        index = event_labels.index(label)
+        lines[index].set_visible(not lines[index].get_visible())
+        fig.canvas.draw_idle()
+    
+    plt.chxbox.on_clicked(onClick)
+
+
 def showRun(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, see_angles:bool = True, only_agent:bool = False) -> None:
     start_time, end_time = player_data.getStartEndTimes(game_num)
     duration = (end_time-start_time).total_seconds()
@@ -245,7 +303,7 @@ def showRun(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, 
     plt.show()
 
 
-def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_num: int = 0, see_angles:bool = True) -> None:
+def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, game_num: int = 0) -> None:
     # purple - machine agent
     # blue - human agent
 
@@ -265,7 +323,7 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
 
 
     fig, ax = plt.subplots()
-    fig.subplots_adjust(bottom=0.25)
+    fig.subplots_adjust(bottom=0.25, left=0.45)
 
     drawBoard(fig, ax)
 
@@ -286,6 +344,8 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
     purple_data_all = pos_data.positionList(False, game_pos_data_all)
     blue_data_past = pos_data.positionList(True, game_pos_data_past)
     purple_data_past = pos_data.positionList(False, game_pos_data_past)
+
+    drawEvents(fig, ax, game_pos_data_all, player_data)
 
     past_lenght = shadow_time*10
 
@@ -352,7 +412,7 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
         edgecolor=purple_edge_color,
         linewidth=line_width,
         headwidth="8",
-        label="Player",
+        label="Agent",
         sizes=[purple_arrow_size for _ in purple_data_past]
     )
     
@@ -424,6 +484,10 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
     
     time_slider.on_changed(update_time)
 
+
+    # xposition, yposition, width and height
+    # ax_check = plt.axes([0.05, 0.5, 0.3, 0.3])
+    ax.legend(bbox_to_anchor=(-0.2, 0.5))
     plt.show()
 
 
@@ -441,6 +505,6 @@ print(f"Number of games: {player_data.numGames()}")
 
 if show_all_games:
     for i in range(player_data.numGames()):
-        showFullRunWithSliderTime(position_data, player_data, i, False)
+        showFullRunWithSliderTime(position_data, player_data, i)
 else:
-    showFullRunWithSliderTime(position_data, player_data, game_num, False)
+    showFullRunWithSliderTime(position_data, player_data, game_num)
