@@ -62,7 +62,7 @@ public class DodgeBallGameController : MonoBehaviour
     [Header("LOSER PLATFORM")]
     public List<GameObject> blueLosersList;
     public List<GameObject> purpleLosersList;
-    
+
     [Header("CORNERS")]
     [SerializeField]
     private Transform cornersContainer;
@@ -109,7 +109,7 @@ public class DodgeBallGameController : MonoBehaviour
         [HideInInspector]
         public int TeamID;
     }
-    
+
     [Header("Gamelog")]
     public GameLogger gameLogger;
 
@@ -186,7 +186,7 @@ public class DodgeBallGameController : MonoBehaviour
         }
         m_Initialized = true;
         fMRI_Initialized = false;   // Will be initialized when fMRI is ready
-        
+
         ResetScene();
     }
 
@@ -340,7 +340,7 @@ public class DodgeBallGameController : MonoBehaviour
     {
         if (m_GameEnded) return;
         m_GameEnded = true;
-        
+
         StartCoroutine(ShowWinScreenThenReset(winningTeam, delaySeconds));
     }
 
@@ -464,7 +464,7 @@ public class DodgeBallGameController : MonoBehaviour
         var HitAgentGroup = hitTeamID == 1 ? m_Team1AgentGroup : m_Team0AgentGroup;
         var ThrowAgentGroup = hitTeamID == 1 ? m_Team0AgentGroup : m_Team1AgentGroup;
         float hitBonus = GameMode == GameModeType.Elimination ? EliminationHitBonus : CTFHitBonus;
-        
+
         //Get the game logger
         gameLogger = GetComponent<GameLogger>();
 
@@ -490,20 +490,20 @@ public class DodgeBallGameController : MonoBehaviour
                 {
                     thrower.AddReward(2.0f - m_TimeBonus * (float)m_ResetTimer / MaxEnvironmentSteps);
                     hit.AddReward(-1.0f);
-                    
+
                     print($"Team {throwTeamID} Won");
                     hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
-                    
+
                     //Log the hit  
-                    if (hit.teamID == 0) {logHit(hit, thrower, 4);}
-                    else if (hit.teamID == 1) { logHit(hit, thrower, 3);}
-                    
+                    if (hit.teamID == 0) { logHit(hit, thrower, 4); }
+                    else if (hit.teamID == 1) { logHit(hit, thrower, 3); }
+
                     //Log the results of the game
                     gameLogger.winner = thrower.teamID; //Who won?
                     gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
                     gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
                     gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
-                    
+
                     hit.DropAllBalls();
                     if (ShouldPlayEffects)
                     {
@@ -513,7 +513,7 @@ public class DodgeBallGameController : MonoBehaviour
 
                     hit.EndEpisode();
                     thrower.EndEpisode();
-                    
+
                     if (!ShouldPlayEffects)
                     {
                         hit.gameObject.SetActive(false);
@@ -530,7 +530,7 @@ public class DodgeBallGameController : MonoBehaviour
                             {
                                 controller.ResetScene();    // Reset all other levels
                             }
-                            
+
                         }
                         // ResetScene();   // Reset this level
                     }
@@ -541,10 +541,10 @@ public class DodgeBallGameController : MonoBehaviour
         else
         {
             hit.HitPointsRemaining--;
-            
+
             //Log the hit  
-            if (hit.teamID == 0) { logHit(hit, thrower, 4);}
-            else if (hit.teamID == 1) {logHit(hit, thrower, 3);}
+            if (hit.teamID == 0) { logHit(hit, thrower, 4); }
+            else if (hit.teamID == 1) { logHit(hit, thrower, 3); }
 
             //Sets headband color after hit has been taken
             hit.SetHeadBandColor(hit.HitPointsRemaining);
@@ -561,7 +561,7 @@ public class DodgeBallGameController : MonoBehaviour
         gameLogger.blueBalls = Team0Players[0].Agent.currentNumberOfBalls;
         gameLogger.LogPlayerData(n);
     }
-    
+
     private void InitializeCorners()
     {
         // Code to initialize the waypoints list
@@ -571,7 +571,7 @@ public class DodgeBallGameController : MonoBehaviour
             corners.Add(cornersContainer.GetChild(i));
         }
     }
-    
+
     public int GetAgentCornerIndex(Transform agentTransform)
     {
         for (int i = 0; i < corners.Count; i++)
@@ -751,7 +751,7 @@ public class DodgeBallGameController : MonoBehaviour
         }
 
         SetActiveLosers(purpleLosersList, 0);
-        
+
         gameLogger = GetComponent<GameLogger>();
         gameLogger.LogPlayerData(6);
     }
@@ -763,7 +763,7 @@ public class DodgeBallGameController : MonoBehaviour
         {
             Initialize();
         }
-        
+
         if (!fMRI_Initialized && Input.GetKeyDown(KeyCode.S))   // User has started the game
         {
             EyeLinkWebLinkUtil.sendString("SCANNER_SYNC");  // Tell the EyeLink software to start recording
