@@ -31,7 +31,7 @@ public class DodgeBallAgent : Agent
     [Header("INVENTORY")]
     public int currentNumberOfBalls;
     public List<DodgeBall> currentlyHeldBalls;
-    
+
     [Header("WAYPOINTS")]
     [SerializeField]
     private Transform waypointsContainer;
@@ -39,7 +39,7 @@ public class DodgeBallAgent : Agent
     private int currentWaypointIndex = 0;
     private float waypointReachDistance = 7f;
     private float agentSpeed = 5f;
-    
+
     [Header("SENSORS")]
     public RayPerceptionSensor wallRaycastSensor;
     public RayPerceptionSensor backRaycastSensor;
@@ -67,10 +67,10 @@ public class DodgeBallAgent : Agent
     public ParticleSystem StunnedEffect;
     public Transform Flag;
     public Transform StunnedCollider;
-    
+
     [Header("ANIMATIONS")] public Animator FlagAnimator;
     public Animator VictoryDanceAnimation;
-    
+
     [Header("Gamelog")]
     public GameLogger m_gameLogger;
 
@@ -125,7 +125,7 @@ public class DodgeBallAgent : Agent
     {
         //Disable logging
         Debug.unityLogger.logEnabled = true;
-        
+
         thisObject = GameObject.FindObjectsOfType<GameObject>().Where(obj => obj.name == "AgentCube")
             .Where(obj => obj.tag == "purpleAgent").ToArray()[0];
 
@@ -133,8 +133,8 @@ public class DodgeBallAgent : Agent
         m_StunnedAudioSource = gameObject.AddComponent<AudioSource>();
         m_StunnedAudioSource.spatialBlend = 1;
         m_StunnedAudioSource.maxDistance = 250;
-        
-        
+
+
         //SETUP IMPACT AS
         m_BallImpactAudioSource = gameObject.AddComponent<AudioSource>();
         m_BallImpactAudioSource.spatialBlend = 1;
@@ -144,13 +144,13 @@ public class DodgeBallAgent : Agent
         m_OtherAgentsBuffer = bufferSensors[0];
         m_CubeMovement = GetComponent<AgentCubeMovement>();
         m_BehaviorParameters = gameObject.GetComponent<BehaviorParameters>();
-        
-       
+
+
         AgentRb = GetComponent<Rigidbody>();
         input = GetComponent<DodgeBallAgentInput>();
         m_GameController = GetComponentInParent<DodgeBallGameController>();
-        
-        m_gameLogger = GetComponent<GameLogger>(); 
+
+        m_gameLogger = GetComponent<GameLogger>();
 
         //Make sure ThrowController is set up to play sounds
         ThrowController.PlaySound = m_GameController.ShouldPlayEffects;
@@ -159,7 +159,7 @@ public class DodgeBallAgent : Agent
         {
             m_StartingPos = transform.position;
             m_StartingRot = transform.rotation;
-           
+
             //If we don't have a home base, just use the starting position.
             if (HomeBaseLocation is null)
             {
@@ -318,66 +318,66 @@ public class DodgeBallAgent : Agent
         //sensor.AddObservation(0);
 
         // FOLLOWING CODE IS SPECIFIC TO CAPTURE THE FLAG AND MORE THAN 1V1
-        
-         List<DodgeBallGameController.PlayerInfo> teamList;
-         List<DodgeBallGameController.PlayerInfo> opponentsList;
-         if (m_BehaviorParameters.TeamId == 0)
-         {
-             teamList = m_GameController.Team0Players;
-             opponentsList = m_GameController.Team1Players;
-         }
-         else
-         {
-             teamList = m_GameController.Team1Players;
-             opponentsList = m_GameController.Team0Players;
-         }
-         
-         foreach (var info in teamList)
-         {
-             if (info.Agent != this && info.Agent.gameObject.activeInHierarchy)
-             {
-                 m_OtherAgentsBuffer.AppendObservation(GetOtherAgentData(info));
-             }
-             if (info.Agent.HasEnemyFlag) // If anyone on my team has the enemy flag
-             {
-                 AddReward(m_TeamHasFlagBonus);
-             }
-         }
-         //Only opponents who picked up the flag are visible
-         var currentFlagPosition = TeamFlag.transform.position;
-         int numEnemiesRemaining = 0;
-         bool enemyHasFlag = false;
-         foreach (var info in opponentsList)
-         {
-             if (info.Agent.gameObject.activeInHierarchy)
-             {
-                 numEnemiesRemaining++;
-             }
-             if (info.Agent.HasEnemyFlag)
-             {
-                 enemyHasFlag = true;
-                 currentFlagPosition = info.Agent.transform.position;
-                 AddReward(m_OpponentHasFlagPenalty); // If anyone on the opposing team has a flag
-             }
-         }
-         
-         var portionOfEnemiesRemaining = (float)numEnemiesRemaining / (float)opponentsList.Count;
 
-         
-         //Different observation for different mode. Enemy Has Flag is only relevant to CTF
-         if (m_GameController.GameMode == DodgeBallGameController.GameModeType.CaptureTheFlag)
-         {
-             sensor.AddObservation(enemyHasFlag);
-         }
-         else
-         {
-             sensor.AddObservation(numEnemiesRemaining);
-         }
-         
+        List<DodgeBallGameController.PlayerInfo> teamList;
+        List<DodgeBallGameController.PlayerInfo> opponentsList;
+        if (m_BehaviorParameters.TeamId == 0)
+        {
+            teamList = m_GameController.Team0Players;
+            opponentsList = m_GameController.Team1Players;
+        }
+        else
+        {
+            teamList = m_GameController.Team1Players;
+            opponentsList = m_GameController.Team0Players;
+        }
 
-         //Location to flag
-         sensor.AddObservation(GetRelativeCoordinates(currentFlagPosition));
-        
+        foreach (var info in teamList)
+        {
+            if (info.Agent != this && info.Agent.gameObject.activeInHierarchy)
+            {
+                m_OtherAgentsBuffer.AppendObservation(GetOtherAgentData(info));
+            }
+            if (info.Agent.HasEnemyFlag) // If anyone on my team has the enemy flag
+            {
+                AddReward(m_TeamHasFlagBonus);
+            }
+        }
+        //Only opponents who picked up the flag are visible
+        var currentFlagPosition = TeamFlag.transform.position;
+        int numEnemiesRemaining = 0;
+        bool enemyHasFlag = false;
+        foreach (var info in opponentsList)
+        {
+            if (info.Agent.gameObject.activeInHierarchy)
+            {
+                numEnemiesRemaining++;
+            }
+            if (info.Agent.HasEnemyFlag)
+            {
+                enemyHasFlag = true;
+                currentFlagPosition = info.Agent.transform.position;
+                AddReward(m_OpponentHasFlagPenalty); // If anyone on the opposing team has a flag
+            }
+        }
+
+        var portionOfEnemiesRemaining = (float)numEnemiesRemaining / (float)opponentsList.Count;
+
+
+        //Different observation for different mode. Enemy Has Flag is only relevant to CTF
+        if (m_GameController.GameMode == DodgeBallGameController.GameModeType.CaptureTheFlag)
+        {
+            sensor.AddObservation(enemyHasFlag);
+        }
+        else
+        {
+            sensor.AddObservation(numEnemiesRemaining);
+        }
+
+
+        //Location to flag
+        sensor.AddObservation(GetRelativeCoordinates(currentFlagPosition));
+
     }
 
     //Get normalized position relative to agent's current position.
@@ -427,7 +427,7 @@ public class DodgeBallAgent : Agent
             // Clamp and smooth rotation
             float maxRotationSpeed = 0.3f; // Change this value to adjust the maximum rotation speed
             m_Rotate = Mathf.Clamp(m_Rotate, -maxRotationSpeed, maxRotationSpeed);
-        
+
             float targetRotation = transform.eulerAngles.y + m_Rotate;
             float rotationSpeed = 0.3f; // Change this value to adjust the smoothness of the rotation
             float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
@@ -476,14 +476,14 @@ public class DodgeBallAgent : Agent
             ActiveBallsQueue.Dequeue();
             currentNumberOfBalls--;
             SetActiveBalls(currentNumberOfBalls);
-            
+
             //Log data
             if (m_BehaviorParameters.TeamId == 0)
             {
                 m_gameLogger.blueBalls = currentNumberOfBalls;
                 m_gameLogger.LogPlayerData(1); //Log player throw
             }
-            else if(m_BehaviorParameters.TeamId == 1)
+            else if (m_BehaviorParameters.TeamId == 1)
             {
                 m_gameLogger.LogPlayerData(5); //Log enemy throw
             }
@@ -550,7 +550,7 @@ public class DodgeBallAgent : Agent
             m_BallImpactAudioSource.PlayOneShot(m_GameController.BallImpactClip1, 1f);
         }
     }
-    
+
     public void PlayStunnedVoice()
     {
         if (m_GameController.ShouldPlayEffects)
@@ -714,12 +714,17 @@ public class DodgeBallAgent : Agent
         db.gameObject.SetActive(false);
 
         //Log data
-        if (m_BehaviorParameters.TeamId == 0) {
+        if (m_BehaviorParameters.TeamId == 0)
+        {
             m_gameLogger.blueBalls = currentNumberOfBalls;
-            m_gameLogger.LogPlayerData(2); 
+            m_gameLogger.LogPlayerData(2); // PlayerPickedUpBall
+        }
+        else
+        {
+            m_gameLogger.LogPlayerData(9); // EnemyPickedUpBall
         }
     }
-    
+
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         // if (disableInputCollectionInHeuristicCallback || m_IsStunned)
@@ -763,10 +768,10 @@ public class DodgeBallAgent : Agent
         {
             InitializeWaypoints();
         }
-        
+
         Vector3 targetPosition = waypoints[currentWaypointIndex].position;
         MoveRuleBasedAgent(targetPosition, actionsOut);
-        
+
         // // Check distance from waypoint
         // float distanceToWaypoint = Vector3.Distance(transform.position, targetPosition);
         // Debug.Log($"Distance to waypoint {currentWaypointIndex}: {distanceToWaypoint}");
@@ -774,10 +779,10 @@ public class DodgeBallAgent : Agent
         if (Vector3.Distance(transform.position, targetPosition) < waypointReachDistance)
         {
             ShuffleWayPoints();
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; 
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
         }
     }
-    
+
     private void InitializeWaypoints()
     {
         // Code to initialize the waypoints list
@@ -800,7 +805,7 @@ public class DodgeBallAgent : Agent
             waypoints[randomIndex] = temp;
         }
     }
-    
+
     private Vector3 DetectEnemyPlayerForRotation(Vector3 direction, float detectionRadius)
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
@@ -817,7 +822,7 @@ public class DodgeBallAgent : Agent
 
         return rotationDirection;
     }
-    
+
     private (Vector3, Vector3) DetectBall(Vector3 targetDirection, float detectionRadius)
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
@@ -842,44 +847,44 @@ public class DodgeBallAgent : Agent
         return (closestBallDirection, closestBallRotationDirection);
     }
 
-    
+
     private void MoveRuleBasedAgent(Vector3 targetPosition, in ActionBuffers actionsOut)
     {
-        
+
         // //SPINNY CODE
         // Vector3 direction = (targetPosition - transform.position).normalized;
         // float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         // m_CubeMovement.Look(targetRotation);
         // var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         // m_CubeMovement.RunOnGround(moveDir);
-        
+
         // Movement
         Vector3 direction = (targetPosition - transform.position).normalized;
         Vector3 rotationDirection = direction;
-    
+
         // Detect ball and get updated target direction if ball is within a smaller radius
         if (currentNumberOfBalls < 4)
         {
             float ballDetectionRadius = 5f;
             (direction, rotationDirection) = DetectBall(direction, ballDetectionRadius);
         }
-    
+
         // Detect enemy player and get updated rotation direction if enemy is within radius
         float enemyDetectionRadius = 10f;
         rotationDirection = DetectEnemyPlayerForRotation(rotationDirection, enemyDetectionRadius);
-    
+
         // Calculate targetRotation based on the updated rotation direction
         float targetRotation = Mathf.Atan2(rotationDirection.x, rotationDirection.z) * Mathf.Rad2Deg;
 
         // HANDLE ROTATION
         float smoothRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation, Time.fixedDeltaTime * rotationSpeed);
         transform.rotation = Quaternion.Euler(0, smoothRotation, 0);
-    
+
         // HANDLE XZ MOVEMENT
         var moveDir = transform.TransformDirection(new Vector3(direction.x * agentSpeed, 0, direction.z * agentSpeed));
         m_CubeMovement.RunOnGround(moveDir);
     }
-    
+
     void Update()
     {
         if (true)

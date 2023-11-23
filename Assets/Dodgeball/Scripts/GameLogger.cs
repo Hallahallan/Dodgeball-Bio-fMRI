@@ -98,7 +98,7 @@ public class GameLogger : MonoBehaviour
                     eventType = "PlayerThrewBall";
                     break;
                 case 2:
-                    eventType = "PickedUpBall";
+                    eventType = "PlayerPickedUpBall";
                     break;
                 case 3:
                     eventType = "HitEnemy";
@@ -117,6 +117,9 @@ public class GameLogger : MonoBehaviour
                     break;
                 case 8:
                     eventType = "PlayerDash";
+                    break;
+                case 9:
+                    eventType = "EnemyPickedUpBall";
                     break;
             }
 

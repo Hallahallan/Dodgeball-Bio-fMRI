@@ -8,10 +8,10 @@ from math import cos, sin, pi
 
 
 # year-month-day_hour-minutes-seconds : "yyyy-MM-dd_HH-mm-ss"
-date = "2023-11-22_13-58-01"  # time to plot #  2023-11-09_17-40-48
-game_type = "neat" # neat or fsm ...
+date = "2023-11-23_14-16-09"  # time to plot #  2023-11-09_17-40-48
+game_type = "fsm" # neat or fsm ...
 game_num = 2 # won't matter if show_all_games = True
-show_all_games = False
+show_all_games = True
 
 timestamp_format = "%H:%M:%S.%f"
 
@@ -171,9 +171,17 @@ def drawBoard(fig, ax):
 
 
 def drawEvents(fig, ax, pos_data:list, player_data:PlayerData):
-    event_labels = ["EnemyThrewBall", "PlayerThrewBall", "HitEnemy", "TookDamage"]
-    event_markers = {"EnemyThrewBall":"^", "PlayerThrewBall":"o", "HitEnemy":"+", "TookDamage":"X"}
-    values = [True for _ in event_labels]
+    event_labels = ["EnemyThrewBall", "PlayerThrewBall", "HitEnemy", "TookDamage", "PlayerPickedUpBall", "EnemyPickedUpBall"]
+    # with eventtype:(markern, markeredgewidth, color)
+    event_markers = {
+        "EnemyThrewBall":("2", 4, "#58863F"), 
+        "PlayerThrewBall":("1", 4, "#8D7603"), 
+        "HitEnemy":("+", 4, "#00C162"), 
+        "TookDamage":("X", 1, "#C52B1A"),
+        "EnemyPickedUpBall":("^", 1, "#8C40DD"),
+        "PlayerPickedUpBall":("v", 1, "#C7588A")
+        }
+    values = [True for _ in event_markers.keys()]
 
     # xposition, yposition, width and height
     ax_check = plt.axes([0.05, 0.6, 0.3, 0.3])
@@ -186,8 +194,9 @@ def drawEvents(fig, ax, pos_data:list, player_data:PlayerData):
         event_pos_dict[event] = []
 
     for event in player_data.event_list:
-        if event.timestamp >= pos_data[0].timestamp and event.timestamp <= pos_data[-1].timestamp and event.event_type in event_labels:
-            #print("Enemy" in event.event_type, event.event_type)
+        # Check if timestamp in game time and if we have an eventmarker for the event type
+        if event.timestamp >= pos_data[0].timestamp and event.timestamp <= pos_data[-1].timestamp and event.event_type in event_markers.keys():
+            
             enemy = "Enemy" in event.event_type # Check if need position of enemy/AI or player/human
 
             # Join event with closest position
@@ -211,13 +220,17 @@ def drawEvents(fig, ax, pos_data:list, player_data:PlayerData):
         p, = ax.plot(
             [x for x, _ in event_pos_dict[event_type]],
             [y for _, y in event_pos_dict[event_type]],
-            marker=event_markers[event_type],
+            marker=event_markers[event_type][0],
             markersize=8,
+            markeredgewidth=event_markers[event_type][1],
             linewidth=0,
             label=event_type,
-            alpha=0.7
+            alpha=0.7,
+            color=event_markers[event_type][2]
         )
         lines.append(p)
+    
+    print(event_pos_dict)
 
 
     def onClick(label):
@@ -308,11 +321,11 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
     start_time, end_time = player_data.getStartEndTimes(game_num) # TODO change so gamne num 0 starts with event "S" instead of "ResetScene"
     duration = (end_time-start_time).total_seconds()
     shadow_time = 2 # how many seconds will show around the time set on the time slider
-    light_blue = "#A4A7DD" # "#ABCBD1"
-    dark_blue = "#000AC3" # "#00638F"
-    blue_edge_color = "#FFFFFF"
-    light_purple = "#CCBE86" # "#D3BCE2"
-    dark_purple = "#C39C00" # "#410084"
+    light_blue = "#FFC854" # "#ABCBD1"
+    dark_blue = "#FF7A01" # "#00638F"
+    blue_edge_color = "#000000"
+    light_purple = "#608B8F" # "#D3BCE2"
+    dark_purple = "#004BE1" # "#410084"
     purple_edge_color = "#000000"
     line_width = 1
     blue_arrow_size = 0.3
@@ -370,7 +383,7 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
         color=blue_all_color,
         headwidth="3",
         label="Player",
-        alpha=0.5,
+        alpha=0.2,
         sizes=[blue_arrow_size*5 for _ in blue_data_all]
     )
     qv_purple = ax.quiver(
@@ -382,7 +395,7 @@ def showFullRunWithSliderTime(pos_data: PositionData, player_data: PlayerData, g
         color=purple_all_color,
         headwidth="8",
         label="Agent",
-        alpha=0.5,
+        alpha=0.2,
         sizes=[purple_arrow_size*5 for _ in purple_data_all]
     )
 
