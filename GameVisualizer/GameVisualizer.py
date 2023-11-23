@@ -5,15 +5,13 @@ import numpy as np
 from datetime import datetime, timedelta
 from math import cos, sin, pi
 
-# TODO: endre farger til mer tydelig forskjell. 
-# Endre dotter til piler med retninger (forskjellige piler, eks trekant og "båt")
 
 
 # year-month-day_hour-minutes-seconds : "yyyy-MM-dd_HH-mm-ss"
 date = "2023-11-22_13-58-01"  # time to plot #  2023-11-09_17-40-48
 game_type = "neat" # neat or fsm ...
-game_num = 0 # won't matter if show_all_games = True
-show_all_games = True
+game_num = 2 # won't matter if show_all_games = True
+show_all_games = False
 
 timestamp_format = "%H:%M:%S.%f"
 
